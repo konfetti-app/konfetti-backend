@@ -13,6 +13,7 @@ docker-compose.override.yml
 .Spotlight-V100
 .Trashes
 .vscode/
+.idea
 
 # Logs
 logs
