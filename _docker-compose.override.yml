@@ -1,0 +1,17 @@
+version: '2'
+services:
+  konfetti_backend:
+    environment:
+      - NODE_ENV=development
+      - RUNS_IN_DOCKER=true
+      - JWT_SECRET=shhhhh
+    build: .
+    ports:
+      - "3000:3000"
+  mongo:
+    logging:
+      driver: "none"
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb/data:/data/db

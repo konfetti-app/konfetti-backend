@@ -4,10 +4,9 @@ services:
     environment:
       - NODE_ENV=production
       - RUNS_IN_DOCKER=true
-      - JWT_SECRET=shhhhh
     build: .
     ports:
-      - "3000"
+      - "3000:3000"
     volumes:
       - .:/home/app
       - /home/app/node_modules
