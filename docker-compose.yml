@@ -1,0 +1,31 @@
+version: '2'
+services:
+  konfetti_backend:
+    environment:
+      - NODE_ENV=production
+      - RUNS_IN_DOCKER=true
+      - JWT_SECRET=shhhhh
+    build: .
+    ports:
+      - "3000"
+    volumes:
+      - .:/home/app
+      - /home/app/node_modules
+    depends_on:
+      - "mongo"
+  mongo:
+    image: mongo
+    logging:
+      driver: "none"
+    volumes:
+      - ./mongodb/data:/data/db
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   links:
+  #     - "konfettiBackend:konfettiBackend"
+  #   volumes: # its a good idea to (re-)generate and store the Certificates outside of docker and mount in the locations.  config on file-name level is done in ./nginx/nginx.conf. everything else here: https://certbot.eff.org/#ubuntuxenial-nginx
+  #     - ./nginx:/etc/nginx
+  #     - /etc/letsencrypt:/etc/letsencrypt

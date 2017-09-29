@@ -1,0 +1,100 @@
+{
+	"variables": [],
+	"info": {
+		"name": "konfetti",
+		"_postman_id": "446f8274-ba54-5cce-b41e-02b0769ec6d8",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get users",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"username": "patrick",
+						"password": "test",
+						"saveHelperData": true,
+						"showPassword": false
+					}
+				},
+				"url": "localhost:3000/users/",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic cGF0cmljazp0ZXN0",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "list all users"
+			},
+			"response": []
+		},
+		{
+			"name": "add user",
+			"request": {
+				"url": "localhost:3000/users/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"patrick\", \"password\":\"test\"}"
+				},
+				"description": "add a new user"
+			},
+			"response": []
+		},
+		{
+			"name": "getNewToken",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"username": "patrick",
+						"password": "test",
+						"saveHelperData": true,
+						"showPassword": false
+					}
+				},
+				"url": "localhost:3000/users/getNewToken",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic cGF0cmljazp0ZXN0",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "get new JWT"
+			},
+			"response": []
+		},
+		{
+			"name": "get users via JWT",
+			"request": {
+				"url": "localhost:3000/users/listJWT",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE1MDU0OTA3MzB9.eQrTrup2pj4xN2oC7yFA9ePVYXHcQPIchQ9wRH2omiI",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "JWT: list all users"
+			},
+			"response": []
+		}
+	]
+}
