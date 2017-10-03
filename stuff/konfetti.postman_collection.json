@@ -8,93 +8,165 @@
 	},
 	"item": [
 		{
-			"name": "get users",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "patrick",
-						"password": "test",
-						"saveHelperData": true,
-						"showPassword": false
-					}
+			"name": "api",
+			"description": "",
+			"item": [
+				{
+					"name": "authenticate",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "patrick",
+								"password": "test",
+								"saveHelperData": true,
+								"showPassword": false
+							}
+						},
+						"url": "localhost:3000/api/authenticate",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic cGF0cmljazp0ZXN0",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "authenticate (basic auth)"
+					},
+					"response": []
 				},
-				"url": "localhost:3000/users/",
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic cGF0cmljazp0ZXN0",
-						"description": ""
-					}
-				],
-				"body": {},
-				"description": "list all users"
-			},
-			"response": []
+				{
+					"name": "get users",
+					"request": {
+						"url": "localhost:3000/api/users",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "get user listing"
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "add user",
-			"request": {
-				"url": "localhost:3000/users/add",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"username\": \"patrick\", \"password\":\"test\"}"
+			"name": "users",
+			"description": "",
+			"item": [
+				{
+					"name": "get users",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "patrick",
+								"password": "test",
+								"saveHelperData": true,
+								"showPassword": false
+							}
+						},
+						"url": "localhost:3000/users/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic cGF0cmljazp0ZXN0",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "list all users"
+					},
+					"response": []
 				},
-				"description": "add a new user"
-			},
-			"response": []
-		},
-		{
-			"name": "getNewToken",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": {
-						"username": "patrick",
-						"password": "test",
-						"saveHelperData": true,
-						"showPassword": false
-					}
+				{
+					"name": "add user",
+					"request": {
+						"url": "localhost:3000/users/add",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"patrick\", \"password\":\"test\"}"
+						},
+						"description": "add a new user"
+					},
+					"response": []
 				},
-				"url": "localhost:3000/users/getNewToken",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic cGF0cmljazp0ZXN0",
-						"description": ""
-					}
-				],
-				"body": {},
-				"description": "get new JWT"
-			},
-			"response": []
-		},
-		{
-			"name": "get users via JWT",
-			"request": {
-				"url": "localhost:3000/users/listJWT",
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE1MDU0OTA3MzB9.eQrTrup2pj4xN2oC7yFA9ePVYXHcQPIchQ9wRH2omiI",
-						"description": ""
-					}
-				],
-				"body": {},
-				"description": "JWT: list all users"
-			},
-			"response": []
+				{
+					"name": "getNewToken",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "patrick",
+								"password": "test",
+								"saveHelperData": true,
+								"showPassword": false
+							}
+						},
+						"url": "localhost:3000/users/getNewToken",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic cGF0cmljazp0ZXN0",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "get new JWT"
+					},
+					"response": []
+				},
+				{
+					"name": "get users via JWT",
+					"request": {
+						"url": "localhost:3000/users/listJWT",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE1MDU0OTA3MzB9.eQrTrup2pj4xN2oC7yFA9ePVYXHcQPIchQ9wRH2omiI",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "JWT: list all users"
+					},
+					"response": []
+				},
+				{
+					"name": "outdated_JWT get users via ",
+					"request": {
+						"url": "localhost:3000/users/listJWT",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1NTg0MjQsImV4cCI6MTUwNTU1ODYwNH0.Nj50IXxBb50wqt-5g-skSS7LdtO39IHmK3WqcQAcQHw",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "outdated_JWT: list all users"
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
