@@ -12,7 +12,7 @@ const User = mongoose.model('User');
     authenticate via basic auth against /api/authenticate and receive a JWT
 
     afterwards, call endpoints with JWT in Header ("Authorization" : "Bearer <token>")
-    Also see suplied postman collection for how to construct the Authorization Header
+    Also see supplied postman collection in /stuff/ for how to construct the Authorization Header
 */
 
 

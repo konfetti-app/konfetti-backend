@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 const UserSchema = new mongoose.Schema({
   type: {
@@ -10,7 +11,7 @@ const UserSchema = new mongoose.Schema({
     first: String,
     last: String
   },
-  username: {
+  username: { // should this be a globally valid email-address?
     type: String,
     required: true,
     index: {
@@ -19,16 +20,34 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
-    index: {
-      unique: true
-    }
+    required: true
   },
-  email: String,
-  //   parentOrganisation: {type: mongoose.Schema.Types.ObjectId,
-  // 	  ref: 'Organisation'
-  //   },
-  isAdmin: {
+  spokenLanguages: { // ['de', 'en', 'ar']
+    type: Array,
+    default: []
+  },
+  preferredLanguage: { // e.g.: 'en'
+    type: String
+  } ,
+  lastSeen: { // timestamp
+    type: Number,
+    default: moment(new Date).unix(),
+  },
+  created: { // timestamp
+    type: Number,
+    default: moment(new Date).unix(),
+  },
+  push: { // Array of Strings
+    tokens: []
+  },
+  passwordReset: { // wann? // resetcode?
+
+  },
+  neighbourhoods: [{ // Array of neighbourhoods
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Neighbourhood'   
+  }],
+  isAdmin: { // system level
     type: Boolean,
     default: false
   },
