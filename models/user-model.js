@@ -76,4 +76,13 @@ UserSchema.statics.addUser = function(data, callback) {
   });
 };
 
+UserSchema.statics.getAllUsers = function (callback) {
+  const User = mongoose.model('User');
+  User.find().exec(function (err, users) {
+    if (err) console.log(err);
+    // callback(users);
+    callback(err, users);
+  });
+}
+
 mongoose.model('User', UserSchema);

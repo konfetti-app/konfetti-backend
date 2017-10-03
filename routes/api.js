@@ -19,10 +19,10 @@ const User = mongoose.model('User');
 /* GET users listing via token auth. */
 router.get('/users', passport.authenticate('jwt', { session: false }), function(req, res, next) {
   console.log(req.body);
-  User.find().exec(function (err, users) {
+  User.getAllUsers((err, users) => {
     if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
     else res.status(200).json({code: 200, status: 'success', data: {users: users}});
-  });
+  })
 });
 
 /* POST authenticate. */
