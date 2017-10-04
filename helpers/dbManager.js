@@ -12,7 +12,7 @@ db.once('open', function() {
 function requireModels(){
   module.exports = function(){
     var mongoose = require('mongoose');
-    var files = [ 'user-model.js' ];
+    var files = [ 'user-model.js', 'code-model.js', 'neighbourhood-model.js' ];
     var fn = 0;
     for(fn in files) {
 
