@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const jwt = require('../../helpers/jwt');
+const formatError = require('../../helpers/errors.js').formatError;
 
 /*
     api routes

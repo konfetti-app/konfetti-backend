@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const CodeSchema = new mongoose.Schema({
-    type: {
+    type: { // ['neighbour', 'reviewer', 'admin'] respect to neighbourhoods
         type: String,
         default: 'code'
     },
@@ -17,7 +17,7 @@ const CodeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'  
     },
-    actionType: { // ['neighbour', 'reviewer', 'admin'] respect to neighbourhoods
+    actionType: { // ['newNeighbour', 'newReviewer', 'newAdmin'] respect to neighbourhoods
 
     },
     leftCount: { // how often this code is redeamable: decreases when used, -1 is unlimited
@@ -34,6 +34,24 @@ const CodeSchema = new mongoose.Schema({
         }
     }
 });
+
+CodeSchema.static.createCode = function (opts, callback) { // opts should hold: neighbourhood, (amount,) leftCount, actionType
+    const Code = mongoose.model('Code');
+
+    //     // TODO: mark code as redeamed, add user to eighbourhood, grant priviliges
+
+}
+
+CodeSchema.static.redeamCode = function (token, callback) {
+    const Code = mongoose.model('Code');
+    Code.findOne({token: token}).exec(function (err, code) {
+      if (err) console.log(err);
+
+        // TODO: mark code as redeamed, add user to eighbourhood, grant priviliges
+
+      callback(err, result);
+    });
+}
 
 
 mongoose.model('Code', CodeSchema);

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const formatError = require('../../helpers/errors.js').formatError;
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
