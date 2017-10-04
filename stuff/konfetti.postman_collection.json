@@ -53,6 +53,23 @@
 						"description": "get user listing"
 					},
 					"response": []
+				},
+				{
+					"name": "getSingleUser",
+					"request": {
+						"url": "localhost:3000/api/users/patrick",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "get single user"
+					},
+					"response": []
 				}
 			]
 		},
