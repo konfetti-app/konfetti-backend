@@ -2,6 +2,7 @@ const passport = require('passport');
 const Strategy = require('passport-http').BasicStrategy;
 
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 function genHashedPassword (clearPassword) {
   let salt = bcrypt.genSaltSync(10);
@@ -22,6 +23,15 @@ const comparePassword = function (clearPassword, user) {
   });
 };
 
+// set lastSeen property of user upon successful auth 
+function updateLastSeen (username) {
+  const User = mongoose.model('User');
+  User.update({username: username},{$set: {lastSeen: moment(new Date).unix()}}, (err, data) => {
+    if (err) console.log(err);
+    console.log(`lastSeen timestamp updated for user ${username}`);
+  })
+}
+
 passport.use(new Strategy(
   function(username, password, cb) {
     User.findOne({"username" : username}, function(err, user) {
@@ -39,6 +49,7 @@ passport.use(new Strategy(
             console.log(`user ${user.username} is marked as disabled.`);
             return cb({type: 'auth', status: 403, message: 'user is marked as disabled.'}, false);
           } else { // may proceed
+            updateLastSeen(user.username);
             return cb(null, user);
           }
         }
@@ -62,6 +73,7 @@ passport.use(new Strategy(
       }
       if (user) {
         if (!user.disabled) {
+          updateLastSeen(user.username);
           return done(null, user);
         } else {
           console.log(`user ${user.username} is marked as disabled.`);

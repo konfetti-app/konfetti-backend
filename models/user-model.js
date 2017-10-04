@@ -63,7 +63,7 @@ function genHashedPassword (clearPassword) {
   return hash;
 }
 
-UserSchema.statics.addUser = function(data, callback) {
+UserSchema.statics.addUser = function (data, callback) {
   const User = mongoose.model('User');
   let user = new User({
     username : data.username,
@@ -76,11 +76,18 @@ UserSchema.statics.addUser = function(data, callback) {
   });
 };
 
+UserSchema.statics.getSingleUser = function (username, callback) {
+  const User = mongoose.model('User');
+  User.findOne({username: username}).populate('neighbourhoods').exec(function (err, user) {
+    if (err) console.log(err);
+    callback(err, user);
+  });
+}
+
 UserSchema.statics.getAllUsers = function (callback) {
   const User = mongoose.model('User');
   User.find().exec(function (err, users) {
     if (err) console.log(err);
-    // callback(users);
     callback(err, users);
   });
 }
