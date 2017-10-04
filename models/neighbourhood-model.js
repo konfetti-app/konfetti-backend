@@ -62,7 +62,6 @@ NeighbourhoodSchema.statics.createNeighbourhood = function (data, user, callback
     console.log(`creating new neighbourhood ${JSON.stringify(data)} for user ${JSON.stringify(user)}`);
     const Neighbourhood = mongoose.model('Neighbourhood');
     let neighbourhood = new Neighbourhood({
-        username : user.username,
         name : data.name,
         admins : [user._id],
         members : [user._id],
