@@ -72,7 +72,7 @@
 					"response": []
 				},
 				{
-					"name": "getSingleUser",
+					"name": "getSingleUser (w/ populated neighbourhoods)",
 					"request": {
 						"url": "localhost:3000/api/users/patrick",
 						"method": "GET",
@@ -132,7 +132,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"type\":\"addNeighbour\",\n\t\"neighbourhood\":\"59d4f88177416a5db030ddc8\",\n\t\"token\":\"123\",\n\t\"leftCount\":\"50\"\n}"
+							"raw": "{\n\t\"actionType\":\"newNeighbour\",\n\t\"neighbourhood\":\"59d4f88177416a5db030ddc8\",\n\t\"token\":\"123\",\n\t\"leftCount\":\"50\"\n}"
 						},
 						"description": "add new Codes"
 					},
@@ -160,6 +160,31 @@
 							"raw": ""
 						},
 						"description": "redeams a token: in this case \"123\""
+					},
+					"response": []
+				},
+				{
+					"name": "redeamToken (Anonymous)",
+					"request": {
+						"url": "localhost:3000/api/codes/123/anonymous",
+						"method": "POST",
+						"header": [
+							{
+								"description": "",
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							},
+							{
+								"description": "",
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "redeams a token: in this case \"123\"\n\nThis route is not authenticated. should create a user and add to neighbourhood"
 					},
 					"response": []
 				}

@@ -62,6 +62,7 @@ CodeSchema.statics.createCode = function (data, user, callback) { // data should
 CodeSchema.statics.redeamCode = function (token, user, callback) {
     const Code = mongoose.model('Code');
     const Neighbourhood = mongoose.model('Neighbourhood');
+    const User = mongoose.model('User');
     Code.findOne({token: token}).exec((err, code) => {
       if (err) console.log(err);
       if (code.leftCount !== 0) { // token is valid
@@ -77,12 +78,17 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
                 if (user) {
                     Neighbourhood.addNeighbour(user, code.neighbourhood, callback(err, doc));
                 } else {
-                    // TODO: create user, then subscribe to neighbourhood, then return both
-                    console.log('no user');
+                    User.addUser({}, (err, user) => {
+                        // TODO: this returns User.neighbourhoods : [] due to async. User is member of the neighbourhood.
+                        // in this case, lastRedeamed.byUser is not set, because we don't have the user when checking validity.
+                        console.log(`no user, added new user ${user._id}`);
+                        Code.findOneAndUpdate({_id: code._id}, {$set:{lastRedeamed: {byUser: user._id, date: moment(new Date).unix()}}}, {upsert: true},() =>{if (err) console.log(err)})
+                        Neighbourhood.addNeighbour(user, code.neighbourhood, callback(err, {code: doc, user: user}));
+                    });
                 }
                 break;
                 default:
-                console.log(`*** unknown actionType redeaming code ${code._id}`)
+                console.log(`*** unknown actionType while redeaming code ${code._id}`)
             }
 
 

@@ -44,8 +44,13 @@ router.post('/:token', passport.authenticate('jwt', { session: false }), functio
 router.post('/:token/anonymous', function(req, res, next) {
     console.log('processing token (anonymous): '+ req.params.token);
     Code.redeamCode(req.params.token, null, (err, result) => {
-        if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
-        else res.status(200).json({code: 200, status: 'ok', data: {result}});
+        if (err) {
+            res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
+        } else if (result.user) {
+            res.status(201).json({code: 201, status: 'created', data: result});
+        } else {
+            res.status(200).json({code: 200, status: 'ok', data: result});
+        }
     });
 });
 
