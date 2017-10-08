@@ -24,7 +24,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
         else res.status(201).json({code: 201, status: 'created', data: {result}});
         });
     } else {
-        res.status(403).json({code: 403, status: 'error', errors: ['not allowed.']})
+        res.status(403).json({code: 403, status: 'error', errors: ['not allowed to create new neighbourhoods']})
     }
 });
 
