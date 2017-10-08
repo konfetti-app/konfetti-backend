@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const moment = require('moment');
+const shortid = require('shortid');
 
 const UserSchema = new mongoose.Schema({
   type: {
@@ -65,10 +66,12 @@ function genHashedPassword (clearPassword) {
 
 UserSchema.statics.addUser = function (data, callback) {
   const User = mongoose.model('User');
+  let now = moment(new Date).unix();
   let user = new User({
-    username : data.username,
-    password : genHashedPassword(data.password),
-    name : data.name
+    username : data.username ? data.username : 'konfettiUser-' + shortid.generate(),
+    password : data.password ? genHashedPassword(data.password) : genHashedPassword(now.toString()), //If we create an anonymous user (i.e. no password provided), the password is the timestamp of creation.
+    name : data.name,
+    created : now
   }).save((err, user) => {
     if (err) console.log(err);
     // console.log(`hashedPassword: ${genHashedPassword(data.password)}`);
