@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 
 const CodeSchema = new mongoose.Schema({
-    type: { // ['neighbour', 'reviewer', 'admin'] respect to neighbourhoods
+    type: {
         type: String,
         default: 'code'
     },
@@ -47,7 +47,6 @@ CodeSchema.statics.createCode = function (data, user, callback) { // data should
     const Code = mongoose.model('Code');
     // console.log(`creating new code(s) ${JSON.stringify(data)} for user ${JSON.stringify(user)}`);
     let code = new Code({
-        type : data.type,
         neighbourhood : data.neighbourhood,
         token : data.token, // String (vanity!) or generate  something
         created: {byUser : user._id},
@@ -62,17 +61,32 @@ CodeSchema.statics.createCode = function (data, user, callback) { // data should
 
 CodeSchema.statics.redeamCode = function (token, user, callback) {
     const Code = mongoose.model('Code');
-    Code.findOne({token: token}).exec(function (err, code) {
+    const Neighbourhood = mongoose.model('Neighbourhood');
+    Code.findOne({token: token}).exec((err, code) => {
       if (err) console.log(err);
       if (code.leftCount !== 0) { // token is valid
         code.leftCount = code.leftCount -1;
-        code.lastRedeamed = {byUser: user._id, date: moment(new Date).unix()}
+        code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()}
         code.save((err, doc) => {
 
             // TODO: complete logic on what habbens now...
             //       first: add user to a neighbourhood 
 
-            callback(err, doc);
+            switch(doc.actionType) {
+                case 'newNeighbour':
+                if (user) {
+                    Neighbourhood.addNeighbour(user, code.neighbourhood, callback(err, doc));
+                } else {
+                    // TODO: create user, then subscribe to neighbourhood, then return both
+                    console.log('no user');
+                }
+                break;
+                default:
+                console.log(`*** unknown actionType redeaming code ${code._id}`)
+            }
+
+
+            
         })
       } else {
         callback('token is already redeamed', null);

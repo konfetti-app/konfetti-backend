@@ -40,6 +40,15 @@ router.post('/:token', passport.authenticate('jwt', { session: false }), functio
     });
 });
 
+/* POST redeam code (anonymous) */
+router.post('/:token/anonymous', function(req, res, next) {
+    console.log('processing token (anonymous): '+ req.params.token);
+    Code.redeamCode(req.params.token, null, (err, result) => {
+        if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
+        else res.status(200).json({code: 200, status: 'ok', data: {result}});
+    });
+});
+
 /* GET neigbourhood listing via token auth. */
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
@@ -47,6 +56,6 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
       if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
       else res.status(200).json({code: 200, status: 'success', data: {neighbourhoods: neighbourhoods}});
     })
-  });
+});
 
 module.exports = router;
