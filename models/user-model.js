@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const moment = require('moment');
 const shortid = require('shortid');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_');
 
 const UserSchema = new mongoose.Schema({
   type: {
@@ -32,7 +33,7 @@ const UserSchema = new mongoose.Schema({
   } ,
   lastSeen: { // timestamp
     type: Number,
-    default: moment(new Date).unix(),
+    default: undefined,
   },
   created: { // timestamp
     type: Number,
