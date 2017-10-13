@@ -94,7 +94,7 @@ NeighbourhoodSchema.statics.addNeighbour = function (user, neighbourhoodId, call
             (err, user) => {
                 if (err) console.log(err);
                 console.log(`added neighbourhood ${neighbourhoodId} to user ${user._id}`);
-                // callback(err, user);
+                callback(err, user);
             });
         
       });

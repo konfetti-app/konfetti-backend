@@ -65,35 +65,35 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
     const User = mongoose.model('User');
     Code.findOne({token: token}).exec((err, code) => {
       if (err) console.log(err);
-      if (code.leftCount !== 0) { // token is valid
-        code.leftCount = code.leftCount -1;
-        code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()}
-        code.save((err, doc) => {
-
-            // TODO: complete logic on what habbens now...
-            //       first: add user to a neighbourhood 
-
-            switch(doc.actionType) {
+      if (!code) {
+        callback('token not found', null);
+      } else if (code.leftCount !== 0) { // token found and token is valid
+            switch(code.actionType) {
                 case 'newNeighbour':
                 if (user) {
-                    Neighbourhood.addNeighbour(user, code.neighbourhood, callback(err, doc));
+                    Neighbourhood.addNeighbour(user, code.neighbourhood, () => {
+                        code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
+                        code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()}
+                        code.save((err, doc) => {
+                            callback(err, {code: doc, user: user});
+                        });
+                    });
                 } else {
                     User.addUser({}, (err, user) => {
-                        // TODO: this returns User.neighbourhoods : [] due to async. User is member of the neighbourhood.
-                        // in this case, lastRedeamed.byUser is not set, because we don't have the user when checking validity.
                         console.log(`no user, added new user ${user._id}`);
-                        Code.findOneAndUpdate({_id: code._id}, {$set:{lastRedeamed: {byUser: user._id, date: moment(new Date).unix()}}}, {upsert: true},() =>{if (err) console.log(err)})
-                        Neighbourhood.addNeighbour(user, code.neighbourhood, callback(err, {code: doc, user: user}));
+                        Neighbourhood.addNeighbour(user, code.neighbourhood, () => {
+                            code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
+                            code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()}
+                            code.save((err, doc) => {
+                                callback(err, {code: doc, user: user})
+                            });
+                        });
                     });
                 }
                 break;
                 default:
                 console.log(`*** unknown actionType while redeaming code ${code._id}`)
             }
-
-
-            
-        })
       } else {
         callback('token is already redeamed', null);
       }
