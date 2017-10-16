@@ -27,6 +27,20 @@ router.post('/:userId', passport.authenticate('jwt', { session: false }), functi
   } 
 });
 
+/* GET trigger user password reset. (not authenticated) */
+router.get('/:userId/resetPassword', function(req, res, next) {
+    User.triggerPasswordReset(req.params.userId, req.body, (err, user) => {
+      if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+      else res.status(200).json({code: 200, status: 'success'});
+    })
+});
+router.post('/resetPassword/:magicKey', function(req, res, next) {
+  User.setPassword(req.params.magicKey, req.body, (err, user) => {
+    if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+    else res.status(200).json({code: 200, status: 'success'});
+  })
+});
+
 
 /* GET users listing via token auth. */
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {

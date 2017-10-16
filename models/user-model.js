@@ -46,8 +46,8 @@ const UserSchema = new mongoose.Schema({
   push: { // Array of Strings
     tokens: []
   },
-  passwordReset: { // wann? // resetcode?
-
+  passwordReset: {
+    type: String
   },
   neighbourhoods: [{ // Array of neighbourhoods
     type: mongoose.Schema.Types.ObjectId,
@@ -79,6 +79,43 @@ UserSchema.statics.updateUserData = function (userId, data, callback) {
       if (err) console.log(err);
       callback(err, savedUser);
     });
+  });
+}
+
+function randomValueBase64 (len) {
+  return crypto.randomBytes(Math.ceil(len * 3 / 4))
+      .toString('base64')   // convert to base64 format
+      .slice(0, len)        // return required number of characters
+      .replace(/\+/g, '0')  // replace '+' with '0'
+      .replace(/\//g, '0'); // replace '/' with '0'
+}
+
+UserSchema.statics.triggerPasswordReset = function (userId, data, callback) {
+  const User = mongoose.model('User');
+  User.findOne({_id: userId}).exec((err, user) => {
+    if (err) console.log(err);
+    user.passwordReset = randomValueBase64(36);
+    user.save((err, savedUser) => {
+      if (err) console.log(err);
+      callback(err, null); // dont return a user here (unauthenticated route).
+    });
+  });
+}
+UserSchema.statics.setPassword = function (magicKey, data, callback) {
+  const User = mongoose.model('User');
+  User.findOne({passwordReset: magicKey}).exec((err, user) => {
+    if (err) console.log(err);
+    if (user) {
+      user.passwordReset = undefined;
+      user.password = genHashedPassword(data.password);
+      user.save((err, savedUser) => {
+        if (err) console.log(err);
+        callback(err, null); // dont return a user here (unauthenticated route).
+      });
+    } else {
+      callback('not found', null);
+    }
+
   });
 }
 
