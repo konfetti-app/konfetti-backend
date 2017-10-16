@@ -92,7 +92,8 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
                 }
                 break;
                 default:
-                console.log(`*** unknown actionType while redeaming code ${code._id}`)
+                console.log(`*** unknown actionType while redeaming code ${code._id}`);
+                callback('unknown actionType', null);
             }
       } else {
         callback('token is already redeamed', null);
