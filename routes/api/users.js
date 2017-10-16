@@ -15,6 +15,18 @@ const User = mongoose.model('User');
     Also see supplied postman collection in /stuff/ for how to construct the Authorization Header
 */
 
+/* POST users update profile via token auth. */
+router.post('/:userId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  if (req.user._id.toString() === req.params.userId) {
+    User.updateUserData(req.params.userId, req.body, (err, user) => {
+      if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+      else res.status(200).json({code: 200, status: 'success', data: {user: user}});
+    })
+  } else {
+    res.status(500).json({code: 500, status: 'error', errors: ['not allowed.']});
+  } 
+});
+
 
 /* GET users listing via token auth. */
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {

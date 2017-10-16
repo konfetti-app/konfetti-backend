@@ -1,10 +1,9 @@
 {
-	"variables": [],
 	"info": {
 		"name": "konfetti",
 		"_postman_id": "446f8274-ba54-5cce-b41e-02b0769ec6d8",
 		"description": "",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -16,23 +15,48 @@
 					"request": {
 						"auth": {
 							"type": "basic",
-							"basic": {
-								"username": "patrick",
-								"password": "test",
-								"saveHelperData": true,
-								"showPassword": false
-							}
+							"basic": [
+								{
+									"key": "username",
+									"value": "patrick",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "test",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
 						},
-						"url": "localhost:3000/api/authenticate",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Basic cGF0cmljazp0ZXN0",
-								"description": ""
+								"value": "Basic cGF0cmljazp0ZXN0"
 							}
 						],
 						"body": {},
+						"url": {
+							"raw": "localhost:3000/api/authenticate",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"authenticate"
+							]
+						},
 						"description": "authenticate (basic auth)"
 					},
 					"response": []
@@ -40,16 +64,25 @@
 				{
 					"name": "get users",
 					"request": {
-						"url": "localhost:3000/api/users",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo",
-								"description": ""
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
 						"body": {},
+						"url": {
+							"raw": "localhost:3000/api/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users"
+							]
+						},
 						"description": "get user listing"
 					},
 					"response": []
@@ -57,16 +90,26 @@
 				{
 					"name": "getAllNeighbourhoods",
 					"request": {
-						"url": "localhost:3000/api/neighbourhoods/",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo",
-								"description": ""
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
 						"body": {},
+						"url": {
+							"raw": "localhost:3000/api/neighbourhoods/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"neighbourhoods",
+								""
+							]
+						},
 						"description": "get user listing"
 					},
 					"response": []
@@ -74,16 +117,26 @@
 				{
 					"name": "getSingleUser (w/ populated neighbourhoods)",
 					"request": {
-						"url": "localhost:3000/api/users/patrick",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo",
-								"description": ""
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
 						"body": {},
+						"url": {
+							"raw": "localhost:3000/api/users/patrick",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users",
+								"patrick"
+							]
+						},
 						"description": "get single user"
 					},
 					"response": []
@@ -91,23 +144,32 @@
 				{
 					"name": "createNeighbourhood",
 					"request": {
-						"url": "localhost:3000/api/neighbourhoods/",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo",
-								"description": ""
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\"name\":\"Testgruppe\"}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/neighbourhoods/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"neighbourhoods",
+								""
+							]
 						},
 						"description": "add new Neighbourhood"
 					},
@@ -116,23 +178,32 @@
 				{
 					"name": "createCode",
 					"request": {
-						"url": "localhost:3000/api/codes/",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo",
-								"description": ""
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							},
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"actionType\":\"newNeighbour\",\n\t\"neighbourhood\":\"59d4f88177416a5db030ddc8\",\n\t\"token\":\"123\",\n\t\"leftCount\":\"50\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/codes/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"codes",
+								""
+							]
 						},
 						"description": "add new Codes"
 					},
@@ -141,41 +212,13 @@
 				{
 					"name": "redeamToken",
 					"request": {
-						"url": "localhost:3000/api/codes/123",
 						"method": "POST",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo",
-								"description": ""
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"description": "redeams a token: in this case \"123\""
-					},
-					"response": []
-				},
-				{
-					"name": "redeamToken (Anonymous)",
-					"request": {
-						"url": "localhost:3000/api/codes/123/anonymous",
-						"method": "POST",
-						"header": [
-							{
-								"description": "",
 								"key": "Authorization",
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							},
 							{
-								"description": "",
 								"key": "Content-Type",
 								"value": "application/json"
 							}
@@ -184,7 +227,88 @@
 							"mode": "raw",
 							"raw": ""
 						},
+						"url": {
+							"raw": "localhost:3000/api/codes/123",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"codes",
+								"123"
+							]
+						},
+						"description": "redeams a token: in this case \"123\""
+					},
+					"response": []
+				},
+				{
+					"name": "redeamToken (Anonymous)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/api/codes/123/anonymous",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"codes",
+								"123",
+								"anonymous"
+							]
+						},
 						"description": "redeams a token: in this case \"123\"\n\nThis route is not authenticated. should create a user and add to neighbourhood"
+					},
+					"response": []
+				},
+				{
+					"name": "updateUserDetails",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"patrick\",\n\t\"preferredLanguage\":\"de\",\n\t\"spokenLanguages\":[\"en\",\"de\",\"ar\"],\n\t\"description\":\"I'm a very active user!\",\n\t\"password\": \"test\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/users/59e0bb5f8fad942ea8b46704",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users",
+								"59e0bb5f8fad942ea8b46704"
+							]
+						},
+						"description": "updates password of user patrick to test (again)."
 					},
 					"response": []
 				}
@@ -199,23 +323,48 @@
 					"request": {
 						"auth": {
 							"type": "basic",
-							"basic": {
-								"username": "patrick",
-								"password": "test",
-								"saveHelperData": true,
-								"showPassword": false
-							}
+							"basic": [
+								{
+									"key": "username",
+									"value": "patrick",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "test",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
 						},
-						"url": "localhost:3000/users/",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Basic cGF0cmljazp0ZXN0",
-								"description": ""
+								"value": "Basic cGF0cmljazp0ZXN0"
 							}
 						],
 						"body": {},
+						"url": {
+							"raw": "localhost:3000/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								""
+							]
+						},
 						"description": "list all users"
 					},
 					"response": []
@@ -223,18 +372,27 @@
 				{
 					"name": "add user",
 					"request": {
-						"url": "localhost:3000/users/add",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\"username\": \"patrick\", \"password\":\"test\"}"
+						},
+						"url": {
+							"raw": "localhost:3000/users/add",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"add"
+							]
 						},
 						"description": "add a new user"
 					},
@@ -245,23 +403,48 @@
 					"request": {
 						"auth": {
 							"type": "basic",
-							"basic": {
-								"username": "patrick",
-								"password": "test",
-								"saveHelperData": true,
-								"showPassword": false
-							}
+							"basic": [
+								{
+									"key": "username",
+									"value": "patrick",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "test",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
 						},
-						"url": "localhost:3000/users/getNewToken",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Basic cGF0cmljazp0ZXN0",
-								"description": ""
+								"value": "Basic cGF0cmljazp0ZXN0"
 							}
 						],
 						"body": {},
+						"url": {
+							"raw": "localhost:3000/users/getNewToken",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"getNewToken"
+							]
+						},
 						"description": "get new JWT"
 					},
 					"response": []
@@ -269,16 +452,25 @@
 				{
 					"name": "get users via JWT",
 					"request": {
-						"url": "localhost:3000/users/listJWT",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE1MDU0OTA3MzB9.eQrTrup2pj4xN2oC7yFA9ePVYXHcQPIchQ9wRH2omiI",
-								"description": ""
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE1MDU0OTA3MzB9.eQrTrup2pj4xN2oC7yFA9ePVYXHcQPIchQ9wRH2omiI"
 							}
 						],
 						"body": {},
+						"url": {
+							"raw": "localhost:3000/users/listJWT",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"listJWT"
+							]
+						},
 						"description": "JWT: list all users"
 					},
 					"response": []
@@ -286,16 +478,25 @@
 				{
 					"name": "outdated_JWT get users via ",
 					"request": {
-						"url": "localhost:3000/users/listJWT",
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1NTg0MjQsImV4cCI6MTUwNTU1ODYwNH0.Nj50IXxBb50wqt-5g-skSS7LdtO39IHmK3WqcQAcQHw",
-								"description": ""
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1NTg0MjQsImV4cCI6MTUwNTU1ODYwNH0.Nj50IXxBb50wqt-5g-skSS7LdtO39IHmK3WqcQAcQHw"
 							}
 						],
 						"body": {},
+						"url": {
+							"raw": "localhost:3000/users/listJWT",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"listJWT"
+							]
+						},
 						"description": "outdated_JWT: list all users"
 					},
 					"response": []
@@ -303,11 +504,9 @@
 				{
 					"name": "add anonymous user",
 					"request": {
-						"url": "localhost:3000/users/add",
 						"method": "POST",
 						"header": [
 							{
-								"description": "",
 								"key": "Content-Type",
 								"value": "application/json"
 							}
@@ -315,6 +514,17 @@
 						"body": {
 							"mode": "raw",
 							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/users/add",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"add"
+							]
 						},
 						"description": "add a new user without providing username and/or password: \nusername will look like \"konfettiUser-HkkHDKw2W\"\npassword is date of creation (User.created)\n\n-> you will get both as return value."
 					},
