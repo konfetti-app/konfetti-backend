@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
     first: String,
     last: String
   },
-  username: { // should this be a globally valid email-address?
+  username: { 
     type: String,
     required: true,
     index: {
@@ -24,6 +24,9 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  email: { // should this be a globally valid email-address? - TODO: If so: validate.
+    type: String
   },
   description: {
     type: String
@@ -74,6 +77,7 @@ UserSchema.statics.updateUserData = function (userId, data, callback) {
     user.preferredLanguage = data.preferredLanguage;
     user.spokenLanguages = data.spokenLanguages;
     user.description = data.description;
+    user.email = data.email;
     if (data.password) user.password = genHashedPassword(data.password);
     user.save((err, savedUser) => {
       if (err) console.log(err);
@@ -90,9 +94,9 @@ function randomValueBase64 (len) {
       .replace(/\//g, '0'); // replace '/' with '0'
 }
 
-UserSchema.statics.triggerPasswordReset = function (userId, data, callback) {
+UserSchema.statics.triggerPasswordReset = function (email, data, callback) {
   const User = mongoose.model('User');
-  User.findOne({_id: userId}).exec((err, user) => {
+  User.findOne({email: email}).exec((err, user) => {
     if (err) console.log(err);
     user.passwordReset = randomValueBase64(36);
     user.save((err, savedUser) => {

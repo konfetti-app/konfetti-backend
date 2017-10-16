@@ -153,7 +153,7 @@
 						],
 						"body": {},
 						"url": {
-							"raw": "localhost:3000/api/users/59e0bb5f8fad942ea8b46704/resetPassword",
+							"raw": "localhost:3000/api/users/patrick-konfetti-test-user@isnogood.de/resetPassword",
 							"host": [
 								"localhost"
 							],
@@ -161,7 +161,7 @@
 							"path": [
 								"api",
 								"users",
-								"59e0bb5f8fad942ea8b46704",
+								"patrick-konfetti-test-user@isnogood.de",
 								"resetPassword"
 							]
 						},
@@ -322,7 +322,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\":\"patrick\",\n\t\"preferredLanguage\":\"de\",\n\t\"spokenLanguages\":[\"en\",\"de\",\"ar\"],\n\t\"description\":\"I'm a very active user!\",\n\t\"password\": \"test\"\n}"
+							"raw": "{\n\t\"username\":\"patrick\",\n\t\"preferredLanguage\":\"de\",\n\t\"spokenLanguages\":[\"en\",\"de\",\"ar\"],\n\t\"description\":\"I'm a very active user!\",\n\t\"password\": \"test\",\n\t\"email\": \"patrick-konfetti-test-user@isnogood.de\"\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/users/59e0bb5f8fad942ea8b46704",
@@ -444,7 +444,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"patrick\", \"password\":\"test\"}"
+							"raw": "{\"username\": \"patrick\", \"password\":\"test\", \"email\":\"patrick-konfetti-test-user@isnogood.de\"}"
 						},
 						"url": {
 							"raw": "localhost:3000/users/add",
