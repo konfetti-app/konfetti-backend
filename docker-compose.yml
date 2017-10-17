@@ -4,6 +4,8 @@ services:
     environment:
       - NODE_ENV=production
       - RUNS_IN_DOCKER=true
+      - MAILGUN_API_KEY=set-api-key-in-docker-compose.override.yml
+      - BASEURL=http://localhost:3000
     build: .
     ports:
       - "3000:3000"

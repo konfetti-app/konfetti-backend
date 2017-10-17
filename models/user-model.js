@@ -96,11 +96,15 @@ function randomValueBase64 (len) {
 
 UserSchema.statics.triggerPasswordReset = function (email, data, callback) {
   const User = mongoose.model('User');
+
+  const sendPasswordEmail = require('../helpers/passwordReset').sendPasswordEmail;
+
   User.findOne({email: email}).exec((err, user) => {
     if (err) console.log(err);
     user.passwordReset = randomValueBase64(36);
     user.save((err, savedUser) => {
       if (err) console.log(err);
+      sendPasswordEmail(user.email, user.passwordReset);
       callback(err, null); // dont return a user here (unauthenticated route).
     });
   });
@@ -117,7 +121,7 @@ UserSchema.statics.setPassword = function (magicKey, data, callback) {
         callback(err, null); // dont return a user here (unauthenticated route).
       });
     } else {
-      callback('not found', null);
+      callback('magicKey not found', null);
     }
 
   });

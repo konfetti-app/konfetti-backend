@@ -2,4 +2,7 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p #{title}
+  if err 
+    pre #{err}
+    p Please contact us, if you feel this is wrong.
