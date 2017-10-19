@@ -57,7 +57,7 @@ CodeSchema.statics.createCode = function (data, user, callback) { // data should
         callback(err, result);
       });
 
-}
+};
 
 CodeSchema.statics.redeamCode = function (token, user, callback) {
     const Code = mongoose.model('Code');
@@ -73,7 +73,7 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
                 if (user) {
                     Neighbourhood.addNeighbour(user, code.neighbourhood, () => {
                         code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
-                        code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()}
+                        code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
                         code.save((err, doc) => {
                             callback(err, {code: doc, user: user});
                         });
@@ -83,9 +83,9 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
                         console.log(`no user, added new user ${user._id}`);
                         Neighbourhood.addNeighbour(user, code.neighbourhood, () => {
                             code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
-                            code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()}
+                            code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
                             code.save((err, doc) => {
-                                callback(err, {code: doc, user: user})
+                                callback(err, {code: doc, user: user});
                             });
                         });
                     });
@@ -99,7 +99,7 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
         callback('token is already redeamed', null);
       }
     });
-}
+};
 
 
 mongoose.model('Code', CodeSchema);

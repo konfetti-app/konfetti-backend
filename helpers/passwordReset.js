@@ -1,7 +1,7 @@
 // passwordReset helper
 
-var mailgun = require('mailgun.js');
-var mg = mailgun.client({username: 'api', key: process.env.MAILGUN_API_KEY || 'key-yourkeyhere'});
+const mailgun = require('mailgun.js');
+const mg = mailgun.client({username: 'api', key: process.env.MAILGUN_API_KEY || 'key-yourkeyhere'});
 
 function sendPasswordEmail (email, magicKey) {
     console.log(`sending password reset link to ${email}`);

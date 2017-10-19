@@ -56,7 +56,7 @@ NeighbourhoodSchema.post('save', function(doc) { // TODO propably also triggers 
             if (err) console.log(err);
             console.log(`added new neighbourhood ${doc._id} to user ${user._id}`);
         });   
-})
+});
 
 NeighbourhoodSchema.statics.createNeighbourhood = function (data, user, callback) {
     console.log(`creating new neighbourhood ${JSON.stringify(data)} for user ${JSON.stringify(user)}`);
@@ -72,7 +72,7 @@ NeighbourhoodSchema.statics.createNeighbourhood = function (data, user, callback
         if (err) console.log(err);
         callback(err, result);
       });
-}
+};
 
 NeighbourhoodSchema.statics.getAllNeighbourhoods = function (callback) {
     const Neighbourhood = mongoose.model('Neighbourhood');
@@ -80,7 +80,7 @@ NeighbourhoodSchema.statics.getAllNeighbourhoods = function (callback) {
         if (err) console.log(err);
         callback(err, res);
       });
-}
+};
 
 NeighbourhoodSchema.statics.addNeighbour = function (user, neighbourhoodId, callback) {
     const Neighbourhood = mongoose.model('Neighbourhood');
@@ -98,7 +98,7 @@ NeighbourhoodSchema.statics.addNeighbour = function (user, neighbourhoodId, call
             });
         
       });
-}
+};
 
 
 mongoose.model('Neighbourhood', NeighbourhoodSchema);

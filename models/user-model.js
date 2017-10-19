@@ -84,7 +84,7 @@ UserSchema.statics.updateUserData = function (userId, data, callback) {
       callback(err, savedUser);
     });
   });
-}
+};
 
 function randomValueBase64 (len) {
   return crypto.randomBytes(Math.ceil(len * 3 / 4))
@@ -104,11 +104,12 @@ UserSchema.statics.triggerPasswordReset = function (email, data, callback) {
     user.passwordReset = randomValueBase64(36);
     user.save((err, savedUser) => {
       if (err) console.log(err);
-      sendPasswordEmail(user.email, user.passwordReset);
+      sendPasswordEmail(savedUser.email, savedUser.passwordReset);
       callback(err, null); // dont return a user here (unauthenticated route).
     });
   });
-}
+};
+
 UserSchema.statics.setPassword = function (magicKey, data, callback) {
   const User = mongoose.model('User');
   User.findOne({passwordReset: magicKey}).exec((err, user) => {
@@ -125,7 +126,7 @@ UserSchema.statics.setPassword = function (magicKey, data, callback) {
     }
 
   });
-}
+};
 
 function genHashedPassword (clearPassword) {
   let salt = bcrypt.genSaltSync(10);
@@ -153,7 +154,7 @@ UserSchema.statics.getSingleUser = function (username, callback) {
     if (err) console.log(err);
     callback(err, user);
   });
-}
+};
 
 UserSchema.statics.getAllUsers = function (callback) {
   const User = mongoose.model('User');
@@ -161,6 +162,6 @@ UserSchema.statics.getAllUsers = function (callback) {
     if (err) console.log(err);
     callback(err, users);
   });
-}
+};
 
 mongoose.model('User', UserSchema);

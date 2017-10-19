@@ -1,0 +1,18 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": false
+        }
+    },
+    "rules": {
+        "semi": 2,
+        "no-var": 1,
+        "unicode-bom": 2,
+        "no-unused-vars": "warn",
+        "no-unused-expressions": "warn",
+        "require-await": "error",
+        "no-global-assign": "error"
+    }
+}

@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+/* GET and POST routes for password reset. */
 router.get('/passwordReset/:magicKey', function(req, res, next) {
   res.render('passwordReset', { title: 'Konfetti password reset', formAction: (process.env.BASEURL || 'http://localhost:3000/passwordReset/') + req.params.magicKey, magicKey: req.params.magicKey });
 });
@@ -22,8 +23,7 @@ router.post('/passwordReset/:magicKey', function(req, res, next) {
     } else {
       res.render('index', { title: 'Password changed!' });
     }
-  })
-  // res.render('index', { title: 'Password changed!' });
+  });
 });
 
 module.exports = router;
