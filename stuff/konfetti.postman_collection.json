@@ -185,7 +185,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\":\"Testgruppe\"}"
+							"raw": "{\n\t\"name\":\"GeoGroup\",\n\t\"geoData\":{\n\t\t\"longitude\":52.521633,\n\t\t\"latitude\":13.411088,\n\t\t\"radius\":2.5\n\t}\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/neighbourhoods/",

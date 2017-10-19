@@ -40,7 +40,16 @@ const NeighbourhoodSchema = new mongoose.Schema({
     reviewLevel: { // TODO: define review model
 
     },
-    geoData: { // TODO: define geodata model
+    geoData: {
+        longitude: {
+            type: Number
+        },
+        latitude: {
+            type: Number
+        },
+        radius: {
+            type: Number
+        }
 
     },
     activeModules: { // Array of Strings, special features on this neighbourhood
@@ -67,7 +76,8 @@ NeighbourhoodSchema.statics.createNeighbourhood = function (data, user, callback
         members : [user._id],
         reviewers : [user._id],
         created: {byUser : user._id},
-        activeModules: data.activeModules || [] // TODO define and validate
+        activeModules: data.activeModules || [], // TODO define and validate
+        geoData: data.geoData
       }).save((err, result) => {
         if (err) console.log(err);
         callback(err, result);
