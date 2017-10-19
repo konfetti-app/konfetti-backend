@@ -28,9 +28,9 @@ router.get('/listJWT', passport.authenticate('jwt', { session: false }), functio
 /* POST create new user. */
 router.post('/add', function(req, res, next) {
   // console.log(req.body);
-  User.addUser(req.body, (err, result) => {
+  User.addUser(req.body, (err, user) => {
     if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
-    else res.status(201).json({code: 201, status: 'created', data: {result}});
+    else res.status(201).json({code: 201, status: 'created', data: {user: user}});
   });
 
 });
