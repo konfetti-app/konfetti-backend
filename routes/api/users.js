@@ -52,7 +52,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
   });
 });
 
-/* GET single user with populated neighbourhoods via token auth. */
+/* GET single user with populated neighbourhoods (trimmed to user perspective) via token auth. */
 router.get('/:username', passport.authenticate('jwt', { session: false }), function(req, res, next) {
   console.log(req.body);
   if (req.params.username === req.user.username || req.user.isAdmin) { // only the logged in user or a sys-admin may get his full user object

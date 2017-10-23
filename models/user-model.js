@@ -124,7 +124,6 @@ UserSchema.statics.setPassword = function (magicKey, data, callback) {
     } else {
       callback('magicKey not found', null);
     }
-
   });
 };
 
@@ -148,11 +147,42 @@ UserSchema.statics.addUser = function (data, callback) {
   });
 };
 
-UserSchema.statics.getSingleUser = function (username, callback) {
+UserSchema.statics.getSingleUserFullyPopulated = function (username, callback) {
   const User = mongoose.model('User');
   User.findOne({username: username}).populate('neighbourhoods').exec(function (err, user) {
     if (err) console.log(err);
     callback(err, user);
+  });
+};
+
+UserSchema.statics.getSingleUser = function (username, callback) {
+  const User = mongoose.model('User');
+  User.findOne({username: username}).populate('neighbourhoods')
+  .then((user) => {
+    return new Promise(async (resolve, reject) => {
+      function userHasRole(element) {
+        return String(element) === String(user._id);
+      }
+      let resultUser = user.toObject();
+      await resultUser.neighbourhoods.forEach((neighbourhood, index, array) => {
+        
+        neighbourhood.reviewers = {
+          isReviewer : neighbourhood.reviewers.some(userHasRole),
+          count: neighbourhood.reviewers.length
+        };
+        neighbourhood.members = {
+          isMember: neighbourhood.members.some(userHasRole),
+          count: neighbourhood.members.length
+        };
+        neighbourhood.admins = {
+          isAdmin: neighbourhood.admins.some(userHasRole),
+          count: neighbourhood.admins.length
+        };
+        resolve(resultUser);
+      });     
+    })
+    .then((user) => {callback(null, user);})
+    .catch((reason) => {console.log(reason)});
   });
 };
 
