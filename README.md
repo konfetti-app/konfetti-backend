@@ -34,6 +34,10 @@ An example docker-compose.override.yml file for development is provided as _dock
 * Socket.io content is triggerd via mongodb pubish/subscribe 
 * This is work in progress and is in no way secure for production yet.
 
+## API
+
+You can find a detailed description of available api-routes here: [API-docs](API.md)
+
 ## Join
 
 The find out more about the project and our motivation, visit [https://konfettiapp.de](https://konfettiapp.de).
