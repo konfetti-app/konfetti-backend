@@ -14,9 +14,9 @@ const router = express.Router();
 
 const fs = require('fs');
 fs.readdirSync(__dirname+'/api').forEach(function(file) {
-  console.log('Loading api-route: ' +file)
+  console.log('Loading api-route: ' +file);
   let name = file.substr(0, file.indexOf('.'));
   router.use('/' + name, require('./api/' + file));
 });
 
-module.exports = router
+module.exports = router;
