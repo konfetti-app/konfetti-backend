@@ -18,14 +18,23 @@ const Thread = mongoose.model('Thread');
 /* POST create new thread within a neigbourhood. */
 router.post('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
-    if (req.user.isAdmin) {
-        Thread.createNeighbourhood(req.body, req.user, (err, thread) => {
+    if (req.body.parentNeighbourhood) {
+        Thread.createThread(req.body, req.user, (err, thread) => {
         if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
         else res.status(201).json({code: 201, status: 'created', data: {thread: thread}});
         });
     } else {
-        res.status(403).json({code: 403, status: 'error', errors: ['not allowed to create new threads']});
+        res.status(500).json({code: 500, status: 'error', errors: ['missing parentNeighbourhood']});
     }
+});
+
+/* GET thread by id. */
+router.get('/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    // console.log(req.body);
+    Thread.findOne({_id : req.params.id}, (err, thread) => {
+        if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+        else res.status(200).json({code: 200, status: 'success', data: {thread: thread}});
+    });
 });
 
 /* GET all (active) threads within a neigbourhood. */

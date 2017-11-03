@@ -12,10 +12,10 @@ const ThreadSchema = new mongoose.Schema({
         // unique: true,
         // index: true
     },
-    // admins: [{ // Array of admins for this neighbourhood
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User'  
-    // }],
+    parentNeighbourhood: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Neighbourhood'  
+    },
     // members: [{ // Array of members for this neighbourhood
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'User'  
@@ -34,7 +34,7 @@ const ThreadSchema = new mongoose.Schema({
             default: false
         },
         date: {
-            type: Number,
+            type: Number, // TODO: map approval states (not defined yet)
             default: moment(new Date).unix()
         },
         byUser: {
@@ -54,6 +54,19 @@ const ThreadSchema = new mongoose.Schema({
     }
 });
 
+ThreadSchema.statics.createThread = function (data, user, callback) {
+    console.log(`creating new tread ${JSON.stringify(data)} for user ${JSON.stringify(user._id)}`);
+    const Thread = mongoose.model('Thread');
+    let thread = new Thread({
+        title : data.title,
+        parentNeighbourhood : data.parentNeighbourhood,
+        created: {byUser : user._id},
+      }).save((err, result) => {
+        if (err) console.log(err);
+        callback(err, result);
+      });
+};
+
 ThreadSchema.statics.addNewPostToThread = function (user, threadId, content, callback) {
     const Thread = mongoose.model('Thread');
     const Post = mongoose.model('Post');
@@ -69,7 +82,6 @@ ThreadSchema.statics.addNewPostToThread = function (user, threadId, content, cal
                 console.log(`added neighbourhood ${neighbourhoodId} to user ${user._id}`);
                 callback(err, user);
             });
-        
       });
 };
 

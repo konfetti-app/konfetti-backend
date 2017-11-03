@@ -18,13 +18,13 @@ const Post = mongoose.model('Post');
 /* POST create new post. */
 router.post('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
-    if (true) { // 
+    if (req.body.parentThread && req.body.text && req.body.title) { // 
         Post.createPost(req.body, req.user, (err, post) => {
         if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
         else res.status(201).json({code: 201, status: 'created', data: {post: post}});
         });
     } else {
-        res.status(403).json({code: 403, status: 'error', errors: ['not allowed to create new posts']});
+        res.status(500).json({code: 500, status: 'error', errors: ['missing fileds parentThread, text or title']});
     }
 });
 

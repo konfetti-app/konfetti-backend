@@ -54,6 +54,7 @@ PostSchema.statics.getPostById = function (postId, callback) {
 
 PostSchema.statics.createPost = function (data, user, callback) {
     const Post = mongoose.model('Post');
+    const Thread = mongoose.model('Thread');
 
     // TODO: check if user is allowed for neighbourhood (and thread, permisson model not yet defined)
 
@@ -69,8 +70,20 @@ PostSchema.statics.createPost = function (data, user, callback) {
           byUser: user._id
       }
     }).save((err, doc) => {
-      if (err) console.log(err);
-      callback(err, doc);
+      if (err) {
+        console.log('Error saving new post: ' + err.message);
+        callback(err, undefined);
+      } else {
+        Thread.findOneAndUpdate({_id: data.parentThread}, {$addToSet:{posts: doc._id}}, {upsert: true}, (err, thread) => {
+            if (err) console.log(err);
+            if (!thread) {
+                callback('parenttread not found', null);
+            } else {
+                console.log(`added post ${doc._id} to thread ${thread ? thread._id : undefined}`);
+                callback(err, doc);
+            }
+            });
+      }
     });
   };
 

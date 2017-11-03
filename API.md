@@ -98,7 +98,7 @@ POST /api/neighbourhoods/
 
 ### Posts
 
-create a new neighbourhood (user must be admin on system)
+create a new post (user must be admin on system)
 ```
 POST /api/posts/
 ```
