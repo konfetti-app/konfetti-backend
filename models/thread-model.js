@@ -57,13 +57,20 @@ const ThreadSchema = new mongoose.Schema({
 ThreadSchema.statics.createThread = function (data, user, callback) {
     console.log(`creating new tread ${JSON.stringify(data)} for user ${JSON.stringify(user._id)}`);
     const Thread = mongoose.model('Thread');
+    const Neighbourhood = mongoose.model('Neighbourhood');
     let thread = new Thread({
         title : data.title,
         parentNeighbourhood : data.parentNeighbourhood,
         created: {byUser : user._id},
-      }).save((err, result) => {
-        if (err) console.log(err);
-        callback(err, result);
+      }).save((err, thread) => {
+        Neighbourhood.findOneAndUpdate({_id: data.parentNeighbourhood}, {$addToSet:{threads: thread._id}}, {upsert: true}, (err, doc) => {
+                    if (err) console.log(err);
+                    console.log(`added thread ${thread._id} to neighbourhood ${doc._id}`);
+                    callback(err, thread);
+                  });
+
+    //     if (err) console.log(err);
+    //     
       });
 };
 

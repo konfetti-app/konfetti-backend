@@ -96,6 +96,20 @@ POST /api/neighbourhoods/
 
 ### Threads
 
+create a new thread
+```
+POST /api/threads/
+```
+|Key|Value|
+|---|-----|
+|title| String|
+|parentNeighbourhood| String (Id of parent neighbourhood)|
+
+get thread by id
+```
+GET /api/threads/:id
+```
+
 ### Posts
 
 create a new post (user must be admin on system)
@@ -104,12 +118,11 @@ POST /api/posts/
 ```
 |Key|Value|
 |---|-----|
-|name|String|
 |title| String|
 |text| String|
 |parentThread| String (Id of parent thread)|
 
-get postById
+get post by id
 ```
 GET /api/posts/:id
 ```

@@ -32,9 +32,23 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
     Neighbourhood.getAllNeighbourhoods((err, neighbourhoods) => {
-      if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-      else res.status(200).json({code: 200, status: 'success', data: {neighbourhoods: neighbourhoods}});
+        if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+        else res.status(200).json({code: 200, status: 'success', data: {neighbourhoods: neighbourhoods}});
     });
-  });
+});
+
+/* POST create new thread within a neigbourhood. */
+router.post('/:neighbourhoodId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    console.log(req.body);
+    if (req.user.isAdmin) { //TODO: check if user is member of neighbourhood
+        Neighbourhood.addThread(req.body, neighbourhoodId, req.user, (err, thread) => {
+        if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
+        else res.status(201).json({code: 201, status: 'created', data: {thread: thread}});
+        });
+    } else {
+        res.status(403).json({code: 403, status: 'error', errors: ['not allowed to create new threads']});
+    }
+});
+
 
 module.exports = router;
