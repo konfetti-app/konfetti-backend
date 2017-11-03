@@ -4,7 +4,7 @@ const passport = require('passport');
 const formatError = require('../../helpers/errors.js').formatError;
 
 const mongoose = require('mongoose');
-const Neighbourhood = mongoose.model('Neighbourhood');
+const Thread = mongoose.model('Thread');
 
 /*
     api routes
@@ -15,20 +15,29 @@ const Neighbourhood = mongoose.model('Neighbourhood');
     Also see supplied postman collection in /stuff/ for how to construct the Authorization Header
 */
 
-/* POST create new neigbourhood. */
+/* POST create new thread within a neigbourhood. */
 router.post('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
-    if (req.user.isAdmin) {
-        Neighbourhood.createNeighbourhood(req.body, req.user, (err, neighbourhood) => {
+    if (req.body.parentNeighbourhood) {
+        Thread.createThread(req.body, req.user, (err, thread) => {
         if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
-        else res.status(201).json({code: 201, status: 'created', data: {neighbourhood: neighbourhood}});
+        else res.status(201).json({code: 201, status: 'created', data: {thread: thread}});
         });
     } else {
-        res.status(403).json({code: 403, status: 'error', errors: ['not allowed to create new neighbourhoods']});
+        res.status(500).json({code: 500, status: 'error', errors: ['missing parentNeighbourhood']});
     }
 });
 
-/* GET neigbourhood listing via token auth. */
+/* GET thread by id. */
+router.get('/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    // console.log(req.body);
+    Thread.findOne({_id : req.params.id}, (err, thread) => {
+        if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+        else res.status(200).json({code: 200, status: 'success', data: {thread: thread}});
+    });
+});
+
+/* GET all (active) threads within a neigbourhood. */
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
     Neighbourhood.getAllNeighbourhoods((err, neighbourhoods) => {
@@ -36,19 +45,5 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
         else res.status(200).json({code: 200, status: 'success', data: {neighbourhoods: neighbourhoods}});
     });
 });
-
-/* POST create new thread within a neigbourhood. */
-router.post('/:neighbourhoodId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-    console.log(req.body);
-    if (req.user.isAdmin) { //TODO: check if user is member of neighbourhood
-        Neighbourhood.addThread(req.body, neighbourhoodId, req.user, (err, thread) => {
-        if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
-        else res.status(201).json({code: 201, status: 'created', data: {thread: thread}});
-        });
-    } else {
-        res.status(403).json({code: 403, status: 'error', errors: ['not allowed to create new threads']});
-    }
-});
-
 
 module.exports = router;

@@ -54,7 +54,11 @@ const NeighbourhoodSchema = new mongoose.Schema({
     },
     activeModules: { // Array of Strings, special features on this neighbourhood
         type: []
-    }
+    },
+    threads: [{ // Array of threads in this neighbourhood
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Thread'  
+    }]
 });
 
 NeighbourhoodSchema.post('save', function(doc) { // TODO propably also triggers on property update
@@ -106,9 +110,26 @@ NeighbourhoodSchema.statics.addNeighbour = function (user, neighbourhoodId, call
                 console.log(`added neighbourhood ${neighbourhoodId} to user ${user._id}`);
                 callback(err, user);
             });
-        
       });
 };
+
+// NeighbourhoodSchema.statics.addThread = function (data, neighbourhoodId, user, callback) {
+//     const Neighbourhood = mongoose.model('Neighbourhood');
+//     const Thread = mongoose.model('Thread');
+//     const User = mongoose.model('User');
+//     // Add user to neighbourhood - TODO: currently does not check if already member of this neighbourhood but does not add duplicates
+//     Neighbourhood.findOneAndUpdate({_id: neighbourhoodId}, {$addToSet:{members: user._id}}, {upsert: true}, (err, doc) => {
+//         if (err) console.log(err);
+//         console.log(`added user ${user._id} to neighbourhood ${doc._id}`);
+//         // Add neighbourhood to user
+//         User.findOneAndUpdate({_id: user._id}, {$addToSet:{neighbourhoods: doc._id}}, {upsert: true},
+//             (err, user) => {
+//                 if (err) console.log(err);
+//                 console.log(`added neighbourhood ${neighbourhoodId} to user ${user._id}`);
+//                 callback(err, user);
+//             });
+//       });
+// };
 
 
 mongoose.model('Neighbourhood', NeighbourhoodSchema);

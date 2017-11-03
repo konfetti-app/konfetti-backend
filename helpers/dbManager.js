@@ -5,13 +5,13 @@ mongoose.Promise = global.Promise;
 
 const db = mongoose.connection;
 db.once('open', function() {
-  console.log(`connected to ${mongoURL}.`)
+  console.log(`connected to ${mongoURL}.`);
 });
 
 function requireModels(){
   module.exports = function(){
     const mongoose = require('mongoose');
-    const files = [ 'user-model.js', 'code-model.js', 'neighbourhood-model.js' ];
+    const files = [ 'user-model.js', 'code-model.js', 'thread-model.js', 'neighbourhood-model.js', 'post-model.js' ];
     let fn = 0;
     for(fn in files) {
 

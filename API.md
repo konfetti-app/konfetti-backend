@@ -96,6 +96,37 @@ POST /api/neighbourhoods/
 
 ### Threads
 
+create a new thread
+```
+POST /api/threads/
+```
+|Key|Value|
+|---|-----|
+|title| String|
+|parentNeighbourhood| String (Id of parent neighbourhood)|
+
+get thread by id
+```
+GET /api/threads/:id
+```
+
+### Posts
+
+create a new post (user must be admin on system)
+```
+POST /api/posts/
+```
+|Key|Value|
+|---|-----|
+|title| String|
+|text| String|
+|parentThread| String (Id of parent thread)|
+
+get post by id
+```
+GET /api/posts/:id
+```
+
 ### Codes
 
 create a new token
@@ -118,4 +149,4 @@ redeem a token (unauthenticated - without supplying a valid JWT)
 ```
 POST /api/codes/:token/anonymous
 ```
-* note: Based on the action requested, it is possible to e.g. create a new user and immedately add this user to a neighbourhood (actionType : neuNeighbour). Upon success, the result contains the user and the neighbourhood.
+* note: Based on the action requested, it is possible to e.g. create a new user and immedately add this user to a neighbourhood (actionType : newNeighbour). Upon success, the result contains the user and the neighbourhood.
