@@ -12,6 +12,7 @@ services:
     volumes:
       - .:/home/app
       - /home/app/node_modules
+      - /home/app/uploads
     depends_on:
       - "mongo"
   mongo:
