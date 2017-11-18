@@ -24,6 +24,10 @@ const ThreadSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'  
     }],
+    assets: [{ // Array of assets (items in this thread)
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Asset'  
+    }],
     disabled: {
         type: Boolean,
         default: false

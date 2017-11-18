@@ -1,6 +1,9 @@
 #databases
 mongodb/
 
+#uploads
+uploads/
+
 #docker-compose overrides
 docker-compose.override.yml
 

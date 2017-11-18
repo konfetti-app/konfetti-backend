@@ -31,6 +31,10 @@ const UserSchema = new mongoose.Schema({
   description: {
     type: String
   },
+  avatar: { // Array of neighbourhoods
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Asset'   
+  },
   spokenLanguages: { // ['de', 'en', 'ar']
     type: Array,
     default: []

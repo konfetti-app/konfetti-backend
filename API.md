@@ -126,6 +126,31 @@ get post by id
 ```
 GET /api/posts/:id
 ```
+### Assets
+
+create a new avatar asset (immediatle replaces user's avatar-image)
+```
+POST /api/assets/avatar
+```
+|Key|Value|
+|---|-----|
+|avatar| binary-image|
+|parentNeighbourhood| String (Id of parent neighbourhood)|
+|parentThread| String (Id of parent thread)|
+
+create a general (image) asset
+```
+POST /api/assets/image
+```
+|Key|Value|
+|---|-----|
+|image| binary-image|
+|parentNeighbourhood| String (Id of parent neighbourhood)|
+|parentThread| String (Id of parent thread)|
+
+* note: Asset-uploads are done as form data. Data input is limited to 4MB. All POST-requests have to carry a valid JWT.
+
+After the upload succeeded, you will receive a 201 response containing a field data.asset.filename - you can then download the asset via an unauthenticated GET at /assets/:filename .
 
 ### Codes
 

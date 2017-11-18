@@ -238,6 +238,106 @@
 					"response": []
 				},
 				{
+					"name": "upload avatar image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"description": "",
+									"type": "file",
+									"src": "Bildschirmfoto 2017-10-18 um 17.28.02.png"
+								},
+								{
+									"key": "parentThread",
+									"value": "59fc912c052a83285157a264",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "parentNeighbourhood",
+									"value": "59e0bb768fad942ea8b46705",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/assets/avatar",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"assets",
+								"avatar"
+							]
+						},
+						"description": "upload avatar image"
+					},
+					"response": []
+				},
+				{
+					"name": "upload image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"description": "",
+									"type": "file",
+									"src": "Bildschirmfoto 2017-10-18 um 17.28.02.png"
+								},
+								{
+									"key": "parentThread",
+									"value": "59fc912c052a83285157a264",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "parentNeighbourhood",
+									"value": "59e0bb768fad942ea8b46705",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3000/api/assets/image",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"assets",
+								"image"
+							]
+						},
+						"description": "upload avatar image"
+					},
+					"response": []
+				},
+				{
 					"name": "redeamToken",
 					"request": {
 						"method": "POST",
