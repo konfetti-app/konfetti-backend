@@ -11,6 +11,10 @@ const NeighbourhoodSchema = new mongoose.Schema({
         unique: true,
         index: true
     },
+    assets: [{ // Array of assets (items in this thread)
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Asset'  
+    }],
     admins: [{ // Array of admins for this neighbourhood
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'  
