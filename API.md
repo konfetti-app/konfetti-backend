@@ -135,8 +135,6 @@ POST /api/assets/avatar
 |Key|Value|
 |---|-----|
 |avatar| binary-image|
-|parentNeighbourhood| String (Id of parent neighbourhood)|
-|parentThread| String (Id of parent thread)|
 
 create a general (image) asset
 ```
