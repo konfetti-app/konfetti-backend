@@ -4,7 +4,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const cors = require('cors')
+const cors = require('cors');
 cors({credentials: true, origin: true});
 
 // set up database and models
@@ -56,7 +56,7 @@ app.use(function(err, req, res, next) {
 
   // return errors as json1.1 responses
   // if error is authentication related, delay response for 2 seconds.
-  if (err.type === 'auth') {setTimeout(()=>{res.status(err.status || 500).json({code: err.status || 500, status: 'error', errors: [formatError(err)]})}, 2000)}
+  if (err.type === 'auth') {setTimeout(()=>{res.status(err.status || 500).json({code: err.status || 500, status: 'error', errors: [formatError(err)]});}, 2000);}
   else {res.status(err.status || 500).json({code: err.status || 500, status: 'error', errors: [formatError(err)]});}
   // res.render('error');
 });
