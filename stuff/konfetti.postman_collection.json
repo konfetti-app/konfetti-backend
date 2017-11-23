@@ -305,17 +305,25 @@
 									"key": "image",
 									"description": "",
 									"type": "file",
-									"src": "Bildschirmfoto 2017-10-18 um 17.28.02.png"
+									"src": "Katze.jpg"
 								},
 								{
 									"key": "parentThread",
 									"value": "59fc912c052a83285157a264",
 									"description": "",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "parentNeighbourhood",
 									"value": "59e0bb768fad942ea8b46705",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "parentPost",
+									"value": "5a16e8f84974cd2964cd4944",
 									"description": "",
 									"type": "text"
 								}

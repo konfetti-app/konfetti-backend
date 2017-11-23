@@ -35,6 +35,10 @@ const AssetSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Thread'  
     },
+    parentPost: { // reference to parentThread if one
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'  
+    },
     disabled: {
         type: Boolean,
         default: false
@@ -64,6 +68,7 @@ const AssetSchema = new mongoose.Schema({
 
 AssetSchema.statics.createAsset = function (data, file, user, callback) {
     const Asset = mongoose.model('Asset');
+    const Post = mongoose.model('Post');
     const Thread = mongoose.model('Thread');
     const Neighbourhood = mongoose.model('Neighbourhood');
     let now = moment(new Date).unix();
@@ -72,8 +77,9 @@ AssetSchema.statics.createAsset = function (data, file, user, callback) {
           title: data.title || '',
           text: data.text || ''
       },
-      parentThread : data.parentThread.length > 0 ? data.parentThread : undefined,
-      parentNeighbourhood : data.parentNeighbourhood.length > 0 ? data.parentNeighbourhood : undefined,
+      parentPost : data.parentPost && data.parentPost.length > 0 ? data.parentPost : undefined,
+      parentThread : data. parentThread && data.parentThread.length > 0 ? data.parentThread : undefined,
+      parentNeighbourhood : data.parentNeighbourhood && data.parentNeighbourhood.length > 0 ? data.parentNeighbourhood : undefined,
       created : {
           date: now,
           byUser: user._id
@@ -88,7 +94,7 @@ AssetSchema.statics.createAsset = function (data, file, user, callback) {
         console.log('Error saving new asset: ' + err.message);
         callback(err, undefined);
       } else {
-        if (data.parentThread.length > 0) {
+        if (data.parentThread && data.parentThread.length > 0) {
             Thread.findOneAndUpdate({_id: data.parentThread}, {$addToSet:{assets: doc._id}}, {upsert: true}, (err, thread) => {
                 if (err) console.log(err);
                 if (!thread) {
@@ -99,7 +105,7 @@ AssetSchema.statics.createAsset = function (data, file, user, callback) {
                 }
             });
         }
-        if (data.parentNeighbourhood.length > 0) {
+        if (data.parentNeighbourhood && data.parentNeighbourhood.length > 0) {
             console.log('data.parentNeighbourhood:'+data.parentNeighbourhood);
             Neighbourhood.findOneAndUpdate({_id: data.parentNeighbourhood}, {$addToSet:{assets: doc._id}}, {upsert: true}, (err, neighbourhood) => {
                 if (err) console.log(err);
@@ -107,6 +113,18 @@ AssetSchema.statics.createAsset = function (data, file, user, callback) {
                     return callback('parentNeighbourhood not found', null);
                 } else {
                     console.log(`added asset ${doc._id} to neighbourhood ${neighbourhood ? neighbourhood._id : undefined}`);
+                    // callback(err, doc);
+                }
+            });
+        }
+        if (data.parentPost && data.parentPost.length > 0) {
+            console.log('data.parentPost:'+data.parentPost);
+            Post.findOneAndUpdate({_id: data.parentPost}, {$addToSet:{assets: doc._id}}, {upsert: true}, (err, post) => {
+                if (err) console.log(err);
+                if (!post) {
+                    return callback('parentPost not found', null);
+                } else {
+                    console.log(`added asset ${doc._id} to post ${post ? post._id : undefined}`);
                     // callback(err, doc);
                 }
             });

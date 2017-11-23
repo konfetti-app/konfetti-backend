@@ -145,8 +145,9 @@ POST /api/assets/image
 |image| binary-image|
 |parentNeighbourhood| String (Id of parent neighbourhood)|
 |parentThread| String (Id of parent thread)|
+|parentPost| String (Id of parent post)|
 
-* note: Asset-uploads are done as form data. Data input is limited to 4MB. All POST-requests have to carry a valid JWT.
+* note: Asset-uploads are done as form data. Data input is limited to 4MB images must not exceed 1MB. All POST-requests have to carry a valid JWT.
 
 After the upload succeeded, you will receive a 201 response containing a field data.asset.filename - you can then download the asset via an unauthenticated GET at /assets/:filename .
 

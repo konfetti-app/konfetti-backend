@@ -21,6 +21,10 @@ const PostSchema = new mongoose.Schema({
             default: ''
         }
     },
+    assets: [{ // Array of assets (items in this post)
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Asset'  
+    }],
     parentThread: { // reference to parentThread
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Thread'  
