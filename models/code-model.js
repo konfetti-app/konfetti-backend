@@ -29,11 +29,11 @@ const CodeSchema = new mongoose.Schema({
     actionType: { // ['newNeighbour', 'newReviewer', 'newAdmin'] respect to neighbourhoods
 
     },
-    leftCount: { // how often this code is redeamable: decreases when used, -1 is unlimited
+    leftCount: { // how often this code is redeemable: decreases when used, -1 is unlimited
         type: Number,
         default: 1
     },
-    lastRedeamed: {
+    lastredeemed: {
         byUser: { // user who created the code
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'  
@@ -60,7 +60,7 @@ CodeSchema.statics.createCode = function (data, user, callback) { // data should
 
 };
 
-CodeSchema.statics.redeamCode = function (token, user, callback) {
+CodeSchema.statics.redeemCode = function (token, user, callback) {
     const Code = mongoose.model('Code');
     const Neighbourhood = mongoose.model('Neighbourhood');
     const User = mongoose.model('User');
@@ -74,7 +74,7 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
                 if (user) {
                     Neighbourhood.addNeighbour(user, code.neighbourhood, () => {
                         code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
-                        code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
+                        code.lastredeemed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
                         code.save((err, doc) => {
                             callback(err, {code: doc, user: user});
                         });
@@ -85,7 +85,7 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
                         console.log(`no user, added new user ${user._id}`);
                         Neighbourhood.addNeighbour(user, code.neighbourhood, () => {
                             code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
-                            code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
+                            code.lastredeemed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
                             code.save((err, doc) => {
                                 callback(err, {code: doc, user: user, clearPassword: clearPassword });
                             });
@@ -94,11 +94,11 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
                 }
                 break;
                 default:
-                console.log(`*** unknown actionType while redeaming code ${code._id}`);
+                console.log(`*** unknown actionType while redeeming code ${code._id}`);
                 callback('unknown actionType', null);
             }
       } else {
-        callback('token is already redeamed', null);
+        callback('token is already redeemed', null);
       }
     });
 };
