@@ -12,6 +12,12 @@ const AssetSchema = new mongoose.Schema({
     size: {
         type: Number
     },
+    width: {
+        type: Number
+    },
+    height: {
+        type: Number
+    },
     fieldname: {
         type: String,
     },
@@ -55,17 +61,6 @@ const AssetSchema = new mongoose.Schema({
     }
 });
 
-// PostSchema.statics.getPostById = function (postId, callback) {
-//     const Post = mongoose.model('Post');
-
-//     // TODO: check if user is allowed for neighbourhood (and thread, permisson model not yet defined)
-
-//     Post.findOne({_id: postId}).exec(function (err, res) {
-//         if (err) console.log(err);
-//         callback(err, res);
-//       });
-// };
-
 AssetSchema.statics.createAsset = function (data, file, user, callback) {
     const Asset = mongoose.model('Asset');
     const Post = mongoose.model('Post');
@@ -84,11 +79,13 @@ AssetSchema.statics.createAsset = function (data, file, user, callback) {
           date: now,
           byUser: user._id
       },
-      mimetype: file.mimetype,
-      filename: file.filename,
-      size: file.size,
-      fieldname: file.fieldname,
-      originalname: file.originalname
+      mimetype: file.original.mimetype,
+      filename: file.original.filename,
+      size: file.resized.size,
+      fieldname: file.original.fieldname,
+      originalname: file.original.originalname,
+      height: file.resized.height,
+      width: file.resized.width
     }).save((err, doc) => {
       if (err) {
         console.log('Error saving new asset: ' + err.message);
@@ -148,11 +145,13 @@ AssetSchema.statics.createAsset = function (data, file, user, callback) {
           date: now,
           byUser: user._id
       },
-      mimetype: file.mimetype,
-      filename: file.filename,
-      size: file.size,
-      fieldname: file.fieldname,
-      originalname: file.originalname
+      mimetype: file.original.mimetype,
+      filename: file.original.filename,
+      size: file.resized.size,
+      fieldname: file.original.fieldname,
+      originalname: file.original.originalname,
+      height: file.resized.height,
+      width: file.resized.width
     }).save((err, doc) => {
       if (err) {
         console.log('Error saving new asset: ' + err.message);
