@@ -47,10 +47,7 @@ const PostSchema = new mongoose.Schema({
 
 PostSchema.statics.getPostById = function (postId, callback) {
     const Post = mongoose.model('Post');
-
-    // TODO: check if user is allowed for neighbourhood (and thread, permisson model not yet defined)
-
-    Post.findOne({_id: postId}).exec(function (err, res) {
+    Post.findOne({_id: postId}).populate('assets').exec(function (err, res) {
         if (err) console.log(err);
         callback(err, res);
       });

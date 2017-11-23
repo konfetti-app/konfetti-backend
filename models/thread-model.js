@@ -96,4 +96,12 @@ ThreadSchema.statics.addNewPostToThread = function (user, threadId, content, cal
       });
 };
 
+ThreadSchema.statics.getThreadById = function (threadId, callback) {
+    const Thread = mongoose.model('Thread');
+    Thread.findOne({_id: threadId}).populate('assets').exec(function (err, res) {
+        if (err) console.log(err);
+        callback(err, res);
+      });
+};
+
 mongoose.model('Thread', ThreadSchema);

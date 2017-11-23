@@ -31,7 +31,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
 /* GET thread by id. */
 router.get('/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
-    Thread.findOne({_id : req.params.id}, (err, thread) => {
+    Thread.getThreadById({_id : req.params.id}, (err, thread) => {
         if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
         else res.status(200).json({code: 200, status: 'success', data: {thread: thread}});
     });
