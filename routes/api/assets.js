@@ -3,13 +3,25 @@ const router = express.Router();
 const passport = require('passport');
 const multer = require('multer');
 const formatError = require('../../helpers/errors.js').formatError;
+const path = require('path');
 
 const mongoose = require('mongoose');
 const Asset = mongoose.model('Asset');
 
 const UPLOAD_PATH = 'uploads';
 
-const upload = multer({ dest: `${UPLOAD_PATH}/` }); // multer configuration
+const upload = multer({ dest: `${UPLOAD_PATH}/`,
+    fileFilter: function (req, file, callback) {
+      let ext = path.extname(file.originalname);
+      if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') { // accept only images
+          return callback(new Error('Only images are allowed'));
+      }
+      callback(null, true);
+    },
+    limits:{
+      fileSize: 1024 * 1024 // limit to 1MB
+    }
+ }); // multer configuration
 
 // TODO: resize images. currently accepts 4MB everywhere.
 
