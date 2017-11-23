@@ -147,7 +147,7 @@ UserSchema.statics.addUser = function (data, callback) {
     created : now
   }).save((err, doc) => {
     if (err) console.log(err);
-    callback(err, doc);
+    callback(err, doc, data.password);
   });
 };
 

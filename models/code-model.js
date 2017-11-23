@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
+const crypto = require('crypto');
 
 const CodeSchema = new mongoose.Schema({
     type: {
@@ -79,13 +80,14 @@ CodeSchema.statics.redeamCode = function (token, user, callback) {
                         });
                     });
                 } else {
-                    User.addUser({}, (err, user) => {
+                    let clearPassword = crypto.randomBytes(16).toString('hex');
+                    User.addUser({password: clearPassword}, (err, user) => {
                         console.log(`no user, added new user ${user._id}`);
                         Neighbourhood.addNeighbour(user, code.neighbourhood, () => {
                             code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
                             code.lastRedeamed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
                             code.save((err, doc) => {
-                                callback(err, {code: doc, user: user});
+                                callback(err, {code: doc, user: user, clearPassword: clearPassword });
                             });
                         });
                     });
