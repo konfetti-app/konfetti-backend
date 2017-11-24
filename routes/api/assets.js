@@ -37,11 +37,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+function isImage (originalname) {
+  let ext = path.extname(originalname);
+  if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') { // accept only images
+    return false;
+  } else {
+    return true;
+  }
+}
+
 router.post('/avatar', upload.single('avatar'), passport.authenticate('jwt', { session: false }), function (req, res, next) {
   // console.log('storing new asset:' + JSON.stringify(req.file));
-  let ext = path.extname(req.file.originalname);
-  if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') { // accept only images
-    res.status(500).json({code: 500, status: 'error', errors: [formatError('Only images are allowed.')]});
+  if (!req.file || !isImage(req.file.originalname)) {
+    res.status(500).json({code: 500, status: 'error', errors: [formatError('Please supply an image file.')]});
   } else {
     sharp(`${UPLOAD_PATH}/temp/${req.file.filename}`).resize(AVATAR_IMAGE_SIZE).toFile(`${UPLOAD_PATH}/${req.file.filename}`)
     .then(resized => {
@@ -64,9 +72,8 @@ router.post('/avatar', upload.single('avatar'), passport.authenticate('jwt', { s
 
 router.post('/image', upload.single('image'), passport.authenticate('jwt', { session: false }), function (req, res, next) {
   // console.log('storing new asset:' + JSON.stringify(req.file));
-  let ext = path.extname(req.file.originalname);
-  if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') { // accept only images
-    res.status(500).json({code: 500, status: 'error', errors: [formatError('Only images are allowed.')]});
+  if (!req.file || !isImage(req.file.originalname)) {
+    res.status(500).json({code: 500, status: 'error', errors: [formatError('Please supply an image file.')]});
   } else {
     sharp(`${UPLOAD_PATH}/temp/${req.file.filename}`).resize(OTHER_IMAGE_SIZE).toFile(`${UPLOAD_PATH}/${req.file.filename}`)
     .then(resized => {
