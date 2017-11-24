@@ -173,4 +173,8 @@ redeem a token (unauthenticated - without supplying a valid JWT)
 ```
 POST /api/codes/:token/anonymous
 ```
+|Key|Value|
+|---|-----|
+|locale|String 'en'|
+
 * note: Based on the action requested, it is possible to e.g. create a new user and immedately add this user to a neighbourhood (actionType : newNeighbour). Upon success, the result contains the user and the neighbourhood.

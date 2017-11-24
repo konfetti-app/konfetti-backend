@@ -10,10 +10,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'user'
   },
-  name: {
-    first: String,
-    last: String
-  },
+  name: String,
   username: { 
     type: String,
     required: true,
@@ -77,6 +74,7 @@ UserSchema.statics.updateUserData = function (userId, data, callback) {
   // profileImage is _id in /assets (to be protected somehow) // TODO : image-store (fs)
   User.findOne({_id: userId}).exec((err, user) => {
     if (err) console.log(err);
+    user.name = data.name,
     user.username = data.username;
     user.preferredLanguage = data.preferredLanguage;
     user.spokenLanguages = data.spokenLanguages;
@@ -144,6 +142,8 @@ UserSchema.statics.addUser = function (data, callback) {
     username : data.username ? data.username : 'konfettiUser-' + shortid.generate(),
     password : data.password ? genHashedPassword(data.password) : genHashedPassword(now.toString()), //If we create an anonymous user (i.e. no password provided), the password is the timestamp of creation.
     name : data.name,
+    preferredLanguage: data.body.locale,
+    spokenLanguages: [data.body.locale],
     created : now
   }).save((err, doc) => {
     if (err) console.log(err);

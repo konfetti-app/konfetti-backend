@@ -60,11 +60,11 @@ CodeSchema.statics.createCode = function (data, user, callback) { // data should
 
 };
 
-CodeSchema.statics.redeemCode = function (token, user, callback) {
+CodeSchema.statics.redeemCode = function (data, user, callback) {
     const Code = mongoose.model('Code');
     const Neighbourhood = mongoose.model('Neighbourhood');
     const User = mongoose.model('User');
-    Code.findOne({token: token}).exec((err, code) => {
+    Code.findOne({token: data.token}).exec((err, code) => {
       if (err) console.log(err);
       if (!code) {
         callback('token not found', null);
@@ -81,7 +81,7 @@ CodeSchema.statics.redeemCode = function (token, user, callback) {
                     });
                 } else {
                     let clearPassword = crypto.randomBytes(16).toString('hex');
-                    User.addUser({password: clearPassword}, (err, user) => {
+                    User.addUser({password: clearPassword, body: data.body}, (err, user) => {
                         console.log(`no user, added new user ${user._id}`);
                         Neighbourhood.addNeighbour(user, code.neighbourhood, () => {
                             code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
