@@ -37,9 +37,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-function isImage (originalname) {
-  let ext = path.extname(originalname);
+function isImage (file) {
+  // console.log(JSON.stringify(file));
+  let ext = path.extname(file.originalname);
   if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') { // accept only images
+    fs.unlink(`${UPLOAD_PATH}/temp/${file.filename}`, (err) => {
+      if (err) throw err;
+      console.log(`successfully deleted not processed due to invalid extesion: ${UPLOAD_PATH}/temp/${file.filename}`);
+    });
     return false;
   } else {
     return true;
@@ -48,7 +53,7 @@ function isImage (originalname) {
 
 router.post('/avatar', upload.single('avatar'), passport.authenticate('jwt', { session: false }), function (req, res, next) {
   // console.log('storing new asset:' + JSON.stringify(req.file));
-  if (!req.file || !isImage(req.file.originalname)) {
+  if (!req.file || !isImage(req.file)) {
     res.status(500).json({code: 500, status: 'error', errors: [formatError('Please supply an image file.')]});
   } else {
     sharp(`${UPLOAD_PATH}/temp/${req.file.filename}`).resize(AVATAR_IMAGE_SIZE).toFile(`${UPLOAD_PATH}/${req.file.filename}`)
@@ -64,6 +69,10 @@ router.post('/avatar', upload.single('avatar'), passport.authenticate('jwt', { s
       // console.log(resized);
     })
     .catch(reason => {
+      fs.unlink(`${UPLOAD_PATH}/temp/${req.file.filename}`, (err) => {
+        if (err) throw err;
+        console.log(`successfully deleted file after exeption: ${UPLOAD_PATH}/temp/${req.file.filename}`);
+      });
       console.log(reason);
       res.status(500).json({code: 500, status: 'error', errors: [formatError(reason)]});
     });
@@ -72,7 +81,7 @@ router.post('/avatar', upload.single('avatar'), passport.authenticate('jwt', { s
 
 router.post('/image', upload.single('image'), passport.authenticate('jwt', { session: false }), function (req, res, next) {
   // console.log('storing new asset:' + JSON.stringify(req.file));
-  if (!req.file || !isImage(req.file.originalname)) {
+  if (!req.file || !isImage(req.file)) {
     res.status(500).json({code: 500, status: 'error', errors: [formatError('Please supply an image file.')]});
   } else {
     sharp(`${UPLOAD_PATH}/temp/${req.file.filename}`).resize(OTHER_IMAGE_SIZE).toFile(`${UPLOAD_PATH}/${req.file.filename}`)
@@ -88,6 +97,10 @@ router.post('/image', upload.single('image'), passport.authenticate('jwt', { ses
       // console.log(resized);
     })
     .catch(reason => {
+      fs.unlink(`${UPLOAD_PATH}/temp/${req.file.filename}`, (err) => {
+        if (err) throw err;
+        console.log(`successfully deleted file after exeption: ${UPLOAD_PATH}/temp/${req.file.filename}`);
+      });
       console.log(reason);
       res.status(500).json({code: 500, status: 'error', errors: [formatError(reason)]});
     });
