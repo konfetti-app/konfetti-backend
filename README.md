@@ -1,18 +1,14 @@
 # Konfetti Backend
 
 This is the work-in-progress rewrite of the Konfetti App backend.
-Find the current (production) version at [https://github.com/rootzoll/konfetti-app](https://github.com/rootzoll/konfetti-app)
+Find the App (frontend) at [https://github.com/konfetti-app/konfetti-app](https://github.com/konfetti-app/konfetti-app)
+and the current (production) version at [https://github.com/rootzoll/konfetti-app](https://github.com/rootzoll/konfetti-app)
 
 ## Usage
 
 To run the app, make sure docker is installed on your system on a version that includes docker-compose. Then bring it up with:
 ```
 $ docker-compose up
-```
-
-To trigger a rebuild after a code-change enter 
-```
-$ docker-compose up --build
 ```
 
 If that fails because of dependencies not being available, do a: 
