@@ -159,9 +159,9 @@ UserSchema.statics.getSingleUserFullyPopulated = function (username, callback) {
   });
 };
 
-UserSchema.statics.getSingleUser = function (username, callback) {
+UserSchema.statics.getSingleUser = function (userId, callback) {
   const User = mongoose.model('User');
-  User.findOne({username: username}).populate('neighbourhoods')
+  User.findOne({_id: userId}).populate('neighbourhoods')
   .then((user) => {
     return new Promise(async (resolve, reject) => {
       function userHasRole(element) {

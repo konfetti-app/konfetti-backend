@@ -60,9 +60,9 @@ POST /api/users/:userId
 |email|String 'john@doe.com'|
 |password|String|
 
-get a single user by username
+get a single user by id (with populated neighbourhoods)
 ```
-GET /api/users/:username
+GET /api/users/:userId
 ```
 
 request password rest for user (by email address)
