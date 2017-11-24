@@ -13,7 +13,10 @@ const path = require('path');
 const mongoose = require('mongoose');
 const Asset = mongoose.model('Asset');
 
+// defaults
 const UPLOAD_PATH = 'uploads';
+const AVATAR_IMAGE_SIZE = 768; // scaling target for avatar images (single value is width, X * X is witdth * hight)
+const OTHER_IMAGE_SIZE = 768; // scaling target for other images (single value is width, X * X is witdth * hight)
 
 const storage = multer.diskStorage({
   destination: `${UPLOAD_PATH}/temp/`,
@@ -40,7 +43,7 @@ router.post('/avatar', upload.single('avatar'), passport.authenticate('jwt', { s
   if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') { // accept only images
     res.status(500).json({code: 500, status: 'error', errors: [formatError('Only images are allowed.')]});
   } else {
-    sharp(`${UPLOAD_PATH}/temp/${req.file.filename}`).resize(768).toFile(`${UPLOAD_PATH}/${req.file.filename}`)
+    sharp(`${UPLOAD_PATH}/temp/${req.file.filename}`).resize(AVATAR_IMAGE_SIZE).toFile(`${UPLOAD_PATH}/${req.file.filename}`)
     .then(resized => {
       fs.unlink(`${UPLOAD_PATH}/temp/${req.file.filename}`, (err) => {
         if (err) throw err;
@@ -65,7 +68,7 @@ router.post('/image', upload.single('image'), passport.authenticate('jwt', { ses
   if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') { // accept only images
     res.status(500).json({code: 500, status: 'error', errors: [formatError('Only images are allowed.')]});
   } else {
-    sharp(`${UPLOAD_PATH}/temp/${req.file.filename}`).resize(768).toFile(`${UPLOAD_PATH}/${req.file.filename}`)
+    sharp(`${UPLOAD_PATH}/temp/${req.file.filename}`).resize(OTHER_IMAGE_SIZE).toFile(`${UPLOAD_PATH}/${req.file.filename}`)
     .then(resized => {
       fs.unlink(`${UPLOAD_PATH}/temp/${req.file.filename}`, (err) => {
         if (err) throw err;
