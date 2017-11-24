@@ -67,7 +67,8 @@ passport.use(new Strategy(
   // opts.audience = 'konfettiapp.de';
   opts.ignoreExpiration = false;
   passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.sub}, function(err, user) {
+    // console.log('JWT payload:' + JSON.stringify(jwt_payload));
+    User.findOne({username: jwt_payload.username}, function(err, user) {
       if (err) {
         return done(err, false);
       }

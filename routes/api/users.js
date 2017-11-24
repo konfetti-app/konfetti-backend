@@ -46,16 +46,20 @@ router.post('/resetPassword/:magicKey', function(req, res, next) {
 /* GET users listing via token auth. */
 router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
   console.log(req.body);
-  User.getAllUsers((err, users) => {
-    if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-    else res.status(200).json({code: 200, status: 'success', data: {users: users}});
-  });
+  if (req.user.isAdmin) { // only the logged in user or a sys-admin may get his full user object
+    User.getAllUsers((err, users) => {
+      if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+      else res.status(200).json({code: 200, status: 'success', data: {users: users}});
+    });
+  } else {
+    res.status(403).json({code: 403, status: 'error', errors: ['not allowed.']});
+  }
 });
 
 /* GET single user with populated neighbourhoods (trimmed to user perspective) via token auth. */
 router.get('/:userId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
   console.log(req.body);
-  if (req.params.userId === req.user._id || req.user.isAdmin) { // only the logged in user or a sys-admin may get his full user object
+  if (req.user._id.toString() === req.params.userId || req.user.isAdmin) { // only the logged in user or a sys-admin may get his full user object
     // console.log('congrats! same user.');
     User.getSingleUser(req.params.userId, (err, user) => {
       if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
