@@ -10,9 +10,12 @@ const ChatMessageSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    parentChannel: { // reference to parentChannel
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChatChannel'  
+    // parentChannel: { // reference to parentChannel
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'ChatChannel'  
+    // },
+    channel: {
+        type: String
     },
     // assets: [{ // Array of assets (items linked to this chatMessage)
     //     type: mongoose.Schema.Types.ObjectId,
@@ -34,7 +37,7 @@ const ChatMessageSchema = new mongoose.Schema({
     }
 });
 
-// ChatSchema.statics.getChatById = function (chatId, callback) {
+// ChatMessageSchema.statics.getChatById = function (chatId, callback) {
 //     const Chat = mongoose.model('Chat');
 //     Chat.findOne({_id: chatId}).populate('assets').exec(function (err, res) {
 //         if (err) console.log(err);
@@ -42,39 +45,42 @@ const ChatMessageSchema = new mongoose.Schema({
 //     });
 // };
 
-// ChatSchema.statics.createChat = function (data, user, callback) {
-//     const Chat = mongoose.model('Chat');
+ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, callback) {
+    // console.log(JSON.stringify(userId));
+    const ChatMessage = mongoose.model('ChatMessage');
+    const ChatChannel = mongoose.model('ChatChannel');
 //     const Thread = mongoose.model('Thread');
 
-//     // TODO: check if user is allowed for neighbourhood (and thread, permisson model not yet defined)
-
-//     let now = moment(new Date).unix();
-//     let newChat = new Chat({
+    let now = moment(new Date).unix();
+    let newChatMessage = new ChatMessage({
 //       content : {
 //           title: data.title || '',
 //           text: data.text || ''
 //       },
-//       parentThread : data.parentThread,
-//       created : {
-//           date: now,
-//           byUser: user._id
-//       }
-//     }).save((err, doc) => {
-//       if (err) {
-//         console.log('Error saving new chat: ' + err.message);
-//         callback(err, undefined);
-//       } else {
-//         Thread.findOneAndUpdate({_id: data.parentThread}, {$addToSet:{chats: doc._id}}, {upsert: true}, (err, thread) => {
-//             if (err) console.log(err);
-//             if (!thread) {
-//                 callback('parenttread not found', null);
-//             } else {
-//                 console.log(`added chat ${doc._id} to thread ${thread ? thread._id : undefined}`);
-//                 callback(err, doc);
-//             }
-//             });
-//       }
-//     });
-//   };
+      text : data,
+      channel : channel,
+      parentUser: userId,
+      date : now
+    //   created : {
+    //       date: now,
+    //       byUser: user._id
+    //   }
+    }).save((err, doc) => {
+      if (err) {
+        console.log('Error saving new chat: ' + err.message);
+        callback(err, undefined);
+      } else {
+        // ChatChannel.findOneAndUpdate({name: channel}, {$addToSet:{messages: doc._id}}, {upsert: true}, (err, channel) => {
+        //     if (err) console.log(err);
+        //     if (!channel) {
+        //         callback('parentChannel not found', null);
+        //     } else {
+        //         console.log(`added chatMessages ${doc._id} to Channel ${channel ? channel._id : undefined}`);
+        //         callback(err, doc);
+        //     }
+        //     });
+      }
+    });
+  };
 
 mongoose.model('ChatMessage', ChatMessageSchema);
