@@ -90,5 +90,5 @@ function onListening() {
 }
 
 // require everything socket.io (listening on same server instance).
-const socketInit = require('../helpers/sockets.js');
+const socketInit = require('../helpers/chats.js');
 socketInit.init(server);
