@@ -430,7 +430,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\":\"patrick\",\n\t\"preferredLanguage\":\"de\",\n\t\"spokenLanguages\":[\"en\",\"de\",\"ar\"],\n\t\"description\":\"I'm a very active user!\",\n\t\"password\": \"test\",\n\t\"email\": \"patrick-konfetti-test-user@isnogood.de\"\n}"
+							"raw": "{\n\t\"nickname\": \"icke\",\n\t\"username\": \"patrick\",\n\t\"preferredLanguage\":\"de\",\n\t\"spokenLanguages\":[\"en\",\"de\",\"ar\"],\n\t\"description\":\"I'm a very active user!\",\n\t\"password\": \"test\",\n\t\"email\": \"patrick-konfetti-test-user@isnogood.de\"\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/users/59e0bb5f8fad942ea8b46704",

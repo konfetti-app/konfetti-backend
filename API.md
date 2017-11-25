@@ -53,6 +53,7 @@ POST /api/users/:userId
 ```
 |Key|Value|
 |---|-----|
+|nickname|String|
 |username|String|
 |preferredLanguage|String 'en'|
 |spokenLanguages|Array ['en','de']|

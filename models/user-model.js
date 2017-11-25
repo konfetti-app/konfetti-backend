@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'user'
   },
-  name: String,
+  nickname: String,
   username: { 
     type: String,
     required: true,
@@ -74,7 +74,7 @@ UserSchema.statics.updateUserData = function (userId, data, callback) {
   // profileImage is _id in /assets (to be protected somehow) // TODO : image-store (fs)
   User.findOne({_id: userId}).exec((err, user) => {
     if (err) console.log(err);
-    user.name = data.name,
+    user.nickname = data.nickname,
     user.username = data.username;
     user.preferredLanguage = data.preferredLanguage;
     user.spokenLanguages = data.spokenLanguages;
