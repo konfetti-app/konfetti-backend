@@ -29,14 +29,12 @@ function updateLastSeen (username) {
   User.update({username: username},{$set: {lastSeen: moment(new Date).unix()}}, (err, data) => {
     if (err) console.log(err);
     console.log(`lastSeen timestamp updated for user ${username}`);
-  })
+  });
 }
 
 passport.use(new Strategy(
   function(username, password, cb) {
     User.findOne({"username" : username}, function(err, user) {
-
-
       if (err) { return cb(err); }
       if (!user) { return cb('user not found.', false); }
       comparePassword(password, user).then(res => {
@@ -49,7 +47,7 @@ passport.use(new Strategy(
             console.log(`user ${user.username} is marked as disabled.`);
             return cb({type: 'auth', status: 403, message: 'user is marked as disabled.'}, false);
           } else { // may proceed
-            updateLastSeen(user.username);
+            updateLastSeen(user.username); // lastSeen is timestamp of last successful authentication
             return cb(null, user);
           }
         }
@@ -74,7 +72,6 @@ passport.use(new Strategy(
       }
       if (user) {
         if (!user.disabled) {
-          updateLastSeen(user.username);
           return done(null, user);
         } else {
           console.log(`user ${user.username} is marked as disabled.`);
