@@ -39,7 +39,7 @@
 
     socket.on('connect', function () {
       socket
-      .emit('authenticate', {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo'}) //send the jwt
+      .emit('authenticate', {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJ1c2VySWQiOiI1OWUwYmI1ZjhmYWQ5NDJlYThiNDY3MDQiLCJpYXQiOjE1MTE2MzMyNjZ9.ZecbKb-ah8IBG9GPdtsfxRmhC_zjAu5yygnNoHoAn04'}) //send the jwt
       .on('authenticated', function () {
         console.log('authenticated.');
         socket.on('connection established', function(data){
