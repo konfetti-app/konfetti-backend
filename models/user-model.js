@@ -74,12 +74,12 @@ UserSchema.statics.updateUserData = function (userId, data, callback) {
   // profileImage is _id in /assets (to be protected somehow) // TODO : image-store (fs)
   User.findOne({_id: userId}).exec((err, user) => {
     if (err) console.log(err);
-    user.nickname = data.nickname,
-    user.username = data.username;
-    user.preferredLanguage = data.preferredLanguage;
-    user.spokenLanguages = data.spokenLanguages;
-    user.description = data.description;
-    user.email = data.email;
+    user.nickname = data.nickname || user.nickname,
+    user.username = data.username || user.username;
+    user.preferredLanguage = data.preferredLanguage || user.preferredLanguage;
+    user.spokenLanguages = data.spokenLanguages || user.spokenLanguages;
+    user.description = data.description || user.description;
+    user.email = data.email || user.email;
     if (data.password) user.password = genHashedPassword(data.password);
     user.save((err, savedUser) => {
       if (err) console.log(err);
