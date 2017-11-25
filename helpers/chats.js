@@ -21,7 +21,6 @@ function init(server) {
 
     //socket is authenticated, we are good to handle more events from it.
     console.log(`new socket connection: ${socket.decoded_token.username} ${socket.id}`);
-    // if (!clients[socket.id]) {
     socket.emit('connection established');
 
     socket.on('room selection', function(data){
@@ -49,6 +48,7 @@ function init(server) {
 
         socket.on('chat message', function(msg){
           console.log(`new message from io: ${socket.decoded_token.username} ${socket.id} ${msg}`);
+          ChatMessage.createChatMessage(msg, data.roomID, socket.decoded_token.userId);
           mubsubChannel.publish('chat message', msg);
         });
     
@@ -59,20 +59,7 @@ function init(server) {
           // clearInterval(interval);
           subscription.unsubscribe();
         });
-
-    // socket.on('subscribe', function(channelId) {
-    //     console.log(`subscribing ${socket.decoded_token.username} to channel ${channelId}`)
-    //     mubsubChannel.subscribe(channelId, function (message) {
-    //         console.log(`subscribed ${socket.decoded_token.username} to channel ${channelId}`);
-            
-    //       });
-    //       socket.on('chat message', function(msg){
-    //         console.log(`new message from io: ${socket.decoded_token.username} ${socket.id} ${msg}`);
-    //         mubsubChannel.publish(channelId, msg);
-    //       });
-    // });
   });
-// }
     
     
     

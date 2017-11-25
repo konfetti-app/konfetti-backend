@@ -6,6 +6,9 @@ const ChatChannelSchema = new mongoose.Schema({
         type: String,
         default: 'chatChannel'
     },
+    name: {
+        type: String,
+    },
     chatMessages: [{ // Array of messages (items in this channel)
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatMessage'  
@@ -31,13 +34,13 @@ const ChatChannelSchema = new mongoose.Schema({
 
 });
 
-// ChatSchema.statics.getChatById = function (chatId, callback) {
-//     const Chat = mongoose.model('Chat');
-//     Chat.findOne({_id: chatId}).populate('assets').exec(function (err, res) {
-//         if (err) console.log(err);
-//         callback(err, res);
-//     });
-// };
+ChatChannelSchema.statics.getChatById = function (chatId, callback) {
+    const ChatChannel = mongoose.model('ChatChannel');
+    ChatChannel.findOne({_id: chatId}).exec(function (err, res) {
+        if (err) console.log(err);
+        callback(err, res);
+    });
+};
 
 // ChatSchema.statics.createChat = function (data, user, callback) {
 //     const Chat = mongoose.model('Chat');
