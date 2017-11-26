@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-const issueToken = function (username) {
+const issueToken = function (user) {
   return new Promise((resolve, reject) => {
     const token = jwt.sign({
-      username: username,  // jwt configuration
+      username: user.username,  // jwt configuration
+      userId: user._id,
       iat: Math.floor(Date.now() / 1000) - 30 // date back 30 seconds
     },
     process.env.JWT_SECRET || 'shhhhh',
@@ -12,6 +13,6 @@ const issueToken = function (username) {
     });
     resolve(token);
   });
-}
+};
 
 exports.issueToken = issueToken;

@@ -15,7 +15,7 @@ const formatError = require('../../helpers/errors.js').formatError;
 
 router.post('/', passport.authenticate('basic', { session: false }), function(req, res, next) {
     // console.log(req.body);
-    jwt.issueToken(req.user.username)
+    jwt.issueToken(req.user)
     .then(token => {
       res.status(200).json({code: 200, status: 'success', data: {token: token}});
     })

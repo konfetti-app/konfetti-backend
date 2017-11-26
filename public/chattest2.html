@@ -25,6 +25,7 @@
 
   <script>
   $(function () {
+    // const socket = io('http://localhost:3000', {path: '/', transports: ['websocket', 'polling', 'flashsocket']});
     const socket = io();
 
     $('form').submit(function(){
@@ -39,9 +40,14 @@
 
     socket.on('connect', function () {
       socket
-      .emit('authenticate', {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo'}) //send the jwt
+      .emit('authenticate', {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvbmZldHRpVXNlci1TSnZwSXJPeGYiLCJ1c2VySWQiOiI1YTFhYzZiZjZhNTQ4YmZmOWYzZWFkOGMiLCJpYXQiOjE1MTE3MDQyNjB9.sBkMXnhWeJBv_9LlHKKqv0SjxGAVKjB41OX8ID9z-E0'}) //send the jwt
       .on('authenticated', function () {
         console.log('authenticated.');
+        socket.on('connection established', function(data){
+          socket.emit("room selection", {"roomID": "XYZ"});
+        });
+
+
         //do other things
       })
       .on('unauthorized', function(msg) {

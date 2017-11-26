@@ -26,9 +26,9 @@ An example docker-compose.override.yml file for development is provided as _dock
 
 * The server exposes an rest-api and socket.io on port 3000 
 * Authentication is based on http-basic-auth and JWT for both rest and socket.io. If you receive an http 403, you have to require a new token first. There is a JWT in /stuff/ which does not expire.
-* Examples are provided in /stuff/ (i.e. a Postman-collection containing example requests for adding the first user and for acquireing tokens and sample requests against the rest-api; an example for socket.io connections and authentication is located exposed at http://localhost:3000/sockettest.html)
+* Examples are provided in /stuff/ (i.e. a Postman-collection containing example requests for adding the first user and for acquireing tokens and sample requests against the rest-api; an example for socket.io connections and authentication is located exposed at http://localhost:3000/chattest.html)
 * Socket.io content is triggerd via mongodb pubish/subscribe 
-* This is work in progress and is in no way secure for production yet.
+* This is work in progress and is not ready for production yet.
 
 ## API
 
