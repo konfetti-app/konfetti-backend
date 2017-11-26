@@ -142,8 +142,8 @@ UserSchema.statics.addUser = function (data, callback) {
     username : data.username ? data.username : 'konfettiUser-' + shortid.generate(),
     password : data.password ? genHashedPassword(data.password) : genHashedPassword(now.toString()), //If we create an anonymous user (i.e. no password provided), the password is the timestamp of creation.
     name : data.name,
-    preferredLanguage: data.body.locale,
-    spokenLanguages: [data.body.locale],
+    preferredLanguage: data.body ? data.body.locale : 'en',
+    spokenLanguages: data.body ? [data.body.locale] : ['en'],
     created : now
   }).save((err, doc) => {
     if (err) console.log(err);
