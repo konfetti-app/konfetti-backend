@@ -72,7 +72,7 @@ UserSchema.statics.updateUserData = function (userId, data, callback) {
   // name, username, profileImage (store), language-settings, ...
   // notification-preferences
   // profileImage is _id in /assets (to be protected somehow) // TODO : image-store (fs)
-  User.findOne({_id: userId}).exec((err, user) => {
+  User.findOne({_id: userId}).populate('avatar').exec((err, user) => {
     if (err) console.log(err);
     user.nickname = data.nickname || user.nickname,
     user.username = data.username || user.username;
