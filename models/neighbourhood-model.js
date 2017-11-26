@@ -41,7 +41,7 @@ const NeighbourhoodSchema = new mongoose.Schema({
             ref: 'User'
         }
     },
-    reviewLevel: { // TODO: define review model
+    reviewLevel: { // moved to moduleConfig.
 
     },
     geoData: {
@@ -54,11 +54,11 @@ const NeighbourhoodSchema = new mongoose.Schema({
         radius: {
             type: Number
         }
-
     },
-    activeModules: { // Array of Strings, special features on this neighbourhood
-        type: []
-    },
+    activeModules: [{ // Array of Modules (and htier configurations) within this neighbourhood.
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ModuleConfig'  
+    }],
     threads: [{ // Array of threads in this neighbourhood
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Thread'  
