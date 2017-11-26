@@ -94,7 +94,7 @@ NeighbourhoodSchema.statics.createNeighbourhood = function (data, user, callback
 
 NeighbourhoodSchema.statics.getAllNeighbourhoods = function (callback) {
     const Neighbourhood = mongoose.model('Neighbourhood');
-    Neighbourhood.find().exec(function (err, res) {
+    Neighbourhood.find().populate('activeModules').exec(function (err, res) {
         if (err) console.log(err);
         callback(err, res);
       });
