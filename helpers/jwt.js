@@ -9,7 +9,7 @@ const issueToken = function (user) {
     },
     process.env.JWT_SECRET || 'shhhhh',
     {
-      // expiresIn: '1d', // expire in 1 day
+      expiresIn: '1d', // expire in 1 day
     });
     resolve(token);
   });

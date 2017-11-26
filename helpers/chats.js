@@ -7,7 +7,7 @@ const mubsubClient = mubsub(`mongodb://${process.env.RUNS_IN_DOCKER ? 'mongo' : 
 
 function init(server) {
   const io = require('socket.io')(server);
-  const socketioJwt = require('socketio-jwt')
+  const socketioJwt = require('socketio-jwt');
 
   const clients = {};
 
@@ -33,22 +33,16 @@ function init(server) {
         mubsubClient.on('error', console.error);
         mubsubChannel.on('error', console.error);
 
-        // //DEBUG
-        // let interval = setInterval(() => {
-        //   let date = Date();
-        //   console.log(`inserting new pubsub message: into room ${ data.roomID}: ${date}`);
-        //   mubsubChannel.publish('chat message', date);
-        // }, 60000); // every 60 sec
-        // // do shit and send.
-
         let subscription = mubsubChannel.subscribe('chat message', (msg) => {
-          console.log(`socket emitting to user: ${socket.decoded_token.username} socket: ${socket.id} room: ${ data.roomID}`)
+          console.log(`socket emitting to user: ${socket.decoded_token.username} socket: ${socket.id} room: ${ data.roomID}`);
           socket.emit('chat message', msg);
         });
 
         socket.on('chat message', function(msg){
           console.log(`new message from io: ${socket.decoded_token.username} ${socket.id} ${msg}`);
-          ChatMessage.createChatMessage(msg, data.roomID, socket.decoded_token.userId);
+          ChatChannel.createChatChannel(data.roomID, socket.decoded_token.userId, () => {
+            ChatMessage.createChatMessage(msg, data.roomID, socket.decoded_token.userId);
+          }); // TODO: this is a very expensive operation. Upon each message, the existence of the Channel is tested. 
           mubsubChannel.publish('chat message', msg);
         });
     
@@ -56,7 +50,6 @@ function init(server) {
           console.log(`client disconnected: ${socket.decoded_token.username} ${socket.id}`);
           delete clients[socket.id];
           socket.disconnect(true); // shutdown TCP connection
-          // clearInterval(interval);
           subscription.unsubscribe();
         });
   });

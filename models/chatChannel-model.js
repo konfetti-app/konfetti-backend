@@ -8,6 +8,8 @@ const ChatChannelSchema = new mongoose.Schema({
     },
     name: {
         type: String,
+        index: true,
+        unique: true
     },
     chatMessages: [{ // Array of messages (items in this channel)
         type: mongoose.Schema.Types.ObjectId,
@@ -42,39 +44,32 @@ ChatChannelSchema.statics.getChatById = function (chatId, callback) {
     });
 };
 
-// ChatSchema.statics.createChat = function (data, user, callback) {
-//     const Chat = mongoose.model('Chat');
-//     const Thread = mongoose.model('Thread');
+ChatChannelSchema.statics.createChatChannel = function (channelName, userId, callback) {
+    const ChatChannel = mongoose.model('ChatChannel');
+    ChatChannel.findOne({name: channelName})
+    .then((channel) => {
+        if (!channel) {
+            console.log('channelName not found. creating new channelName: ' + channelName);
+            let now = moment(new Date).unix();
+            let newChat = new ChatChannel({
+                name : channelName,
+                created : {
+                    date: now,
+                    byUser: userId
+                }
+            }).save((err, doc) => {
+              if (err) {
+                console.log('Error saving new chat: ' + err.message);
+                callback(err, undefined);
+              } else {
+                callback(undefined, doc);
+              }
+            });
+    } else { // channel is already present
+        callback(undefined, callback);
+    }
+  });
+};
 
-//     // TODO: check if user is allowed for neighbourhood (and thread, permisson model not yet defined)
-
-//     let now = moment(new Date).unix();
-//     let newChat = new Chat({
-//       content : {
-//           title: data.title || '',
-//           text: data.text || ''
-//       },
-//       parentThread : data.parentThread,
-//       created : {
-//           date: now,
-//           byUser: user._id
-//       }
-//     }).save((err, doc) => {
-//       if (err) {
-//         console.log('Error saving new chat: ' + err.message);
-//         callback(err, undefined);
-//       } else {
-//         Thread.findOneAndUpdate({_id: data.parentThread}, {$addToSet:{chats: doc._id}}, {upsert: true}, (err, thread) => {
-//             if (err) console.log(err);
-//             if (!thread) {
-//                 callback('parenttread not found', null);
-//             } else {
-//                 console.log(`added chat ${doc._id} to thread ${thread ? thread._id : undefined}`);
-//                 callback(err, doc);
-//             }
-//             });
-//       }
-//     });
-//   };
 
 mongoose.model('ChatChannel', ChatChannelSchema);
