@@ -34,7 +34,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
 /* POST redeem code */
 router.post('/:token', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log('processing token: '+ req.params.token);
-    Code.redeemCode(req.params.token, req.user || null, (err, result) => {
+    Code.redeemCode({token: req.params.token}, req.user || null, (err, result) => {
         if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
         else res.status(200).json({code: 200, status: 'ok', data: result});
     });
