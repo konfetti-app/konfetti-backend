@@ -69,6 +69,7 @@ CodeSchema.statics.redeemCode = function (data, user, callback) {
       if (!code) {
         callback('token not found', null);
       } else if (code.leftCount !== 0) { // token found and token is valid
+
             switch(code.actionType) {
                 case 'newNeighbour':
                 if (user) {
@@ -76,7 +77,9 @@ CodeSchema.statics.redeemCode = function (data, user, callback) {
                         code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
                         code.lastredeemed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
                         code.save((err, doc) => {
-                            callback(err, {code: doc, user: user});
+                            User.findOne({_id: user._id}).populate('neighbourhoods').exec((err, user) => {
+                                callback(err, {code: doc, user: user});
+                            });
                         });
                     });
                 } else {
@@ -87,7 +90,10 @@ CodeSchema.statics.redeemCode = function (data, user, callback) {
                             code.leftCount = code.leftCount -1; // decrease validation counter after redemption.
                             code.lastredeemed = {byUser: user ? user._id : undefined, date: moment(new Date).unix()};
                             code.save((err, doc) => {
-                                callback(err, {code: doc, user: user, clearPassword: clearPassword });
+                                User.findOne({_id: user._id}).populate('neighbourhoods').exec((err, user) => {
+                                    callback(err, {code: doc, user: user, clearPassword: clearPassword });
+                                });
+                                
                             });
                         });
                     });
@@ -97,6 +103,7 @@ CodeSchema.statics.redeemCode = function (data, user, callback) {
                 console.log(`*** unknown actionType while redeeming code ${code._id}`);
                 callback('unknown actionType', null);
             }
+            
       } else {
         callback('token is already redeemed', null);
       }
