@@ -178,4 +178,26 @@ POST /api/codes/:token/anonymous
 |---|-----|
 |locale|String 'en'|
 
+### Subscriptions
+
+subscribe
+```
+POST /api/subscriptions/
+```
+|Key|Value|
+|---|-----|
+|type|String 'chatChannel'|
+|id|String (Id of chatChannel (same as neighbourhood, post, etc.))|
+
+unsubscribe
+```
+POST /api/subscriptions/unsubscribe/:id
+```
+
+
+get subscriptions for current user
+```
+GET /api/subscriptions/
+```
+
 * note: Based on the action requested, it is possible to e.g. create a new user and immedately add this user to a neighbourhood (actionType : newNeighbour). Upon success, the result contains the user and the neighbourhood.

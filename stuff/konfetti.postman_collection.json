@@ -252,9 +252,9 @@
 							"formdata": [
 								{
 									"key": "avatar",
+									"value": "",
 									"description": "",
-									"type": "file",
-									"src": "Bildschirmfoto 2017-10-18 um 17.28.02.png"
+									"type": "file"
 								},
 								{
 									"key": "parentThread",
@@ -303,9 +303,9 @@
 							"formdata": [
 								{
 									"key": "image",
+									"value": "",
 									"description": "",
-									"type": "file",
-									"src": "Katze.jpg"
+									"type": "file"
 								},
 								{
 									"key": "parentThread",
@@ -616,6 +616,109 @@
 							]
 						},
 						"description": "request a Post by Id"
+					},
+					"response": []
+				},
+				{
+					"name": "getSubscriptions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"title\": \"hallo\",\n\"text\" : \"text body\",\n\"parentThread\" : \"59fc6c4fa27de71a10aef9d7\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/subscriptions/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"subscriptions",
+								""
+							]
+						},
+						"description": "get user's subscriptions"
+					},
+					"response": []
+				},
+				{
+					"name": "subscribeToChatChannel",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvbmZldHRpVXNlci1CSkRzZks5TWYiLCJ1c2VySWQiOiI1YTNkMDI5ZWQ0NTkyMjJhN2MxZGE1NzUiLCJpYXQiOjE1MTM5NDc5MjgsImV4cCI6MTUxNDAzNDMyOH0.Er068nQJS7ywgvUel8hR_RPp6jZ-lmf14nJGXeoTO3Y"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"type\": \"chatChannel\",\n\"id\" : \"5a1ac4269c2bf2f6b24e6bc9\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/subscriptions/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"subscriptions",
+								""
+							]
+						},
+						"description": "subscribe current user to a chatChannel"
+					},
+					"response": []
+				},
+				{
+					"name": "unsubscribe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvbmZldHRpVXNlci1CSkRzZks5TWYiLCJ1c2VySWQiOiI1YTNkMDI5ZWQ0NTkyMjJhN2MxZGE1NzUiLCJpYXQiOjE1MTM5NDc5MjgsImV4cCI6MTUxNDAzNDMyOH0.Er068nQJS7ywgvUel8hR_RPp6jZ-lmf14nJGXeoTO3Y"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"title\": \"hallo\",\n\"text\" : \"text body\",\n\"parentThread\" : \"59fc6c4fa27de71a10aef9d7\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/subscriptions/unsubscribe/5a1ac4269c2bf2f6b24e6bc9",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"subscriptions",
+								"unsubscribe",
+								"5a1ac4269c2bf2f6b24e6bc9"
+							]
+						},
+						"description": "unsubscribe current user from chatChannel"
 					},
 					"response": []
 				}

@@ -64,6 +64,10 @@ const UserSchema = new mongoose.Schema({
   disabled: {
     type: Boolean,
     default: false
+  },
+  subscriptions: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subscriptions' 
   }
 });
 
@@ -150,6 +154,23 @@ UserSchema.statics.addUser = function (data, callback) {
     callback(err, doc, data.password);
   });
 };
+
+UserSchema.pre('save', function(next) {
+  console.dir(this)
+  if (this.isNew) { // if isNew user, also create a subscription object
+    const Subscriptions = mongoose.model('Subscriptions');
+    let subscriptions = new Subscriptions({
+      parentUser : this._id,
+    }).save((err, doc) => {
+      if (err) console.log(err);
+      console.log('%s has been saved', doc._id);
+      this.subscriptions = doc._id;
+      next();
+    });
+    
+  }
+  
+});
 
 UserSchema.statics.getSingleUserFullyPopulated = function (username, callback) {
   const User = mongoose.model('User');
