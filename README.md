@@ -4,7 +4,7 @@ This is the work-in-progress rewrite of the Konfetti App backend.
 Find the App (frontend) at [https://github.com/konfetti-app/konfetti-app](https://github.com/konfetti-app/konfetti-app)
 and the current (production) version at [https://github.com/rootzoll/konfetti-app](https://github.com/rootzoll/konfetti-app)
 
-## Usage
+## Usage (Docker)
 
 To run the app, make sure docker is installed on your system on a version that includes docker-compose. Then bring it up with:
 ```
@@ -21,6 +21,14 @@ To run the server outside of a docker-container (for connecting a debugger), you
 $ docker-compose up -d mongo && node --inspect bin/www
 ```
 An example docker-compose.override.yml file for development is provided as _docker-compose.override.yml. Just rename that one to docker-compose.override.yml
+
+## Usage (Run Local)
+
+```
+$ npm install
+$ docker-compose up -d mongo
+$ node bin/www
+```
 
 ## Features
 
