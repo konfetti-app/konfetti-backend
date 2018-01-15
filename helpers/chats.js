@@ -40,9 +40,7 @@ function init(server) {
 
         socket.on('chat message', function(msg){
           console.log(`new message from io: ${socket.decoded_token.username} ${socket.id} ${msg}`);
-          ChatChannel.createChatChannel(data.roomID, socket.decoded_token.userId, () => {
             ChatMessage.createChatMessage(msg, data.roomID, socket.decoded_token.userId);
-          }); // TODO: this is a very expensive operation. Upon each message, the existence of the Channel is tested. 
           mubsubChannel.publish('chat message', msg);
         });
     

@@ -10,10 +10,10 @@ const ChatMessageSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    // parentChannel: { // reference to parentChannel
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'ChatChannel'  
-    // },
+    parentChannel: { // reference to parentChannel
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChatChannel'  
+    },
     channelName: {
         type: String
     },
@@ -55,7 +55,7 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
     let now = moment(new Date).unix();
     let newChatMessage = new ChatMessage({
       text : data,
-      channelName : channel,
+      parentChannel : channel,
       parentUser: userId,
       date : now 
     }).save((err, doc) => {
@@ -63,7 +63,7 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
         console.log('Error saving new chat: ' + err.message);
         callback(err, undefined);
       } else {
-        ChatChannel.findOneAndUpdate({name: doc.channelName}, {$addToSet:{chatMessages: doc._id, members: userId}}, {upsert: true}, (err, channel) => {
+        ChatChannel.findOneAndUpdate({_id: doc.parentChannel}, {$addToSet:{chatMessages: doc._id, members: userId}}, {upsert: true}, (err, channel) => {
             if (err) console.log(err);
             if (!channel) {
                 if(callback && typeof callback === "function") {
