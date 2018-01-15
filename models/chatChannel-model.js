@@ -9,7 +9,17 @@ const ChatChannelSchema = new mongoose.Schema({
     name: {
         type: String,
         index: true,
-        unique: true
+    },
+    description: {
+        type: String,
+    },
+    context: {
+        type: String,
+        index: true
+    },
+    parentNeighbourhood: { // reference to parentNeighbourhood if one
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Neighbourhood'  
     },
     chatMessages: [{ // Array of messages (items in this channel)
         type: mongoose.Schema.Types.ObjectId,
@@ -36,6 +46,14 @@ const ChatChannelSchema = new mongoose.Schema({
 
 });
 
+ChatChannelSchema.statics.getChatChannels = function (params, callback) {
+    const ChatChannel = mongoose.model('ChatChannel');
+    ChatChannel.find({context: params.context, parentNeighbourhood: params.parentNeighbourhood}).exec(function (err, res) {
+        if (err) console.log(err);
+        callback(err, res);
+    });
+};
+
 ChatChannelSchema.statics.getChatById = function (chatId, callback) {
     const ChatChannel = mongoose.model('ChatChannel');
     ChatChannel.findOne({_id: chatId}).exec(function (err, res) {
@@ -44,31 +62,55 @@ ChatChannelSchema.statics.getChatById = function (chatId, callback) {
     });
 };
 
-ChatChannelSchema.statics.createChatChannel = function (channelName, userId, callback) {
+// ChatChannelSchema.statics.createChatChannel = function (channelName, userId, callback) {
+//     const ChatChannel = mongoose.model('ChatChannel');
+//     ChatChannel.findOne({name: channelName})
+//     .then((channel) => {
+//         if (!channel) {
+//             console.log('channelName not found. creating new channelName: ' + channelName);
+//             let now = moment(new Date).unix();
+//             let newChat = new ChatChannel({
+//                 name : channelName,
+//                 created : {
+//                     date: now,
+//                     byUser: userId
+//                 }
+//             }).save((err, doc) => {
+//               if (err) {
+//                 console.log('Error saving new chat: ' + err.message);
+//                 callback(err, undefined);
+//               } else {
+//                 callback(undefined, doc);
+//               }
+//             });
+//     } else { // channel is already present
+//         callback(undefined, callback);
+//     }
+//   });
+// };
+
+
+ChatChannelSchema.statics.createChatChannel = function (data, user, callback) {
     const ChatChannel = mongoose.model('ChatChannel');
-    ChatChannel.findOne({name: channelName})
-    .then((channel) => {
-        if (!channel) {
-            console.log('channelName not found. creating new channelName: ' + channelName);
-            let now = moment(new Date).unix();
-            let newChat = new ChatChannel({
-                name : channelName,
-                created : {
-                    date: now,
-                    byUser: userId
-                }
-            }).save((err, doc) => {
-              if (err) {
-                console.log('Error saving new chat: ' + err.message);
-                callback(err, undefined);
-              } else {
-                callback(undefined, doc);
-              }
-            });
-    } else { // channel is already present
-        callback(undefined, callback);
-    }
-  });
+
+    let now = moment(new Date).unix();
+    let newChat = new ChatChannel({
+        name : data.name,
+        parentNeighbourhood: data.parentNeighbourhood,
+        context: data.context,
+        description: data.description,
+        created : {
+            date: now,
+            byUser: user._id
+        }
+    }).save((err, doc) => {
+        if (err) {
+        console.log('Error saving new chat: ' + err.message);
+        callback(err, undefined);
+        } else {
+        callback(undefined, doc);
+        }
+    });
 };
 
 

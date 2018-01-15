@@ -178,6 +178,25 @@ POST /api/codes/:token/anonymous
 |---|-----|
 |locale|String 'en'|
 
+### chats
+
+create 
+```
+POST /api/chats/
+```
+|Key|Value|
+|---|-----|
+|name|String|
+|description|String|
+|parentNeighbourhood|String neighbourhoodId|
+|context|String 'module_groupchat|
+
+get all channes with respect to Neighbourhood and context
+```
+GET /api/chats/:parentNeighbourhood/:context
+```
+(Note that :parentNeighbourhood is an _id and context is a String - both have to be present.)
+
 ### Subscriptions
 
 subscribe
