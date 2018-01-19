@@ -738,7 +738,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"name\": \"hallo-chat-2\",\n\"description\": \"my second chat\",\n\"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n\"context\": \"module_groupchat\"\n}"
+							"raw": "{\n\"name\": \"XYZ\",\n\"description\": \"my second chat\",\n\"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n\"context\": \"module_groupchat\"\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/chats/",
@@ -788,6 +788,36 @@
 							]
 						},
 						"description": "get ChatChannel resp/ parentneighbourhood and context"
+					},
+					"response": []
+				},
+				{
+					"name": "get chatMessagesSince",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "localhost:3000/api/chats/channel/5a5d10643c53d6eb482e2661/since/0",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"chats",
+								"channel",
+								"5a5d10643c53d6eb482e2661",
+								"since",
+								"0"
+							]
+						},
+						"description": "get chat messages for a channel since a timestamp"
 					},
 					"response": []
 				}

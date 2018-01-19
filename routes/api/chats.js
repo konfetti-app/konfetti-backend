@@ -32,5 +32,15 @@ router.get('/:parentNeighbourhood/:context', passport.authenticate('jwt', { sess
     });
 });
 
+/* GET chatMessages since timestamp for channel. */
+router.get('/channel/:chatChannelId/since/:since', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  // if no timestamp -> get all. result is array of ChatMessages.
+  // console.log(req.body);
+  ChatChannel.getChatMessagesSince(req.params.chatChannelId, req.params.since, (err, chatMessages) => {
+    if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+    else res.status(200).json({code: 200, status: 'success', data: {chatMessages: chatMessages}});
+  });
+});
+
 
 module.exports = router;

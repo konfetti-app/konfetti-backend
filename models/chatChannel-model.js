@@ -89,6 +89,14 @@ ChatChannelSchema.statics.getChatById = function (chatId, callback) {
 //   });
 // };
 
+ChatChannelSchema.statics.getChatMessagesSince = function (channel, since, callback) {
+    const ChatMessage = mongoose.model('ChatMessage');
+    // ChatMessage.findOne({_id:chatMessageId}).populate('parentUser', 'nickname avatar').populate('parentUser.avatar').then(chatMessage => {
+    ChatMessage.find({date : { $gt: since }}).limit(500).sort('date').populate({path: 'parentUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(chatMessage => {
+    // console.log('blubb:' + JSON.stringify(chatMessage));
+        callback(null, chatMessage);
+    });
+};
 
 ChatChannelSchema.statics.createChatChannel = function (data, user, callback) {
     const ChatChannel = mongoose.model('ChatChannel');

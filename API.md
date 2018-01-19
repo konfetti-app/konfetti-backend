@@ -191,11 +191,16 @@ POST /api/chats/
 |parentNeighbourhood|String neighbourhoodId|
 |context|String 'module_groupchat|
 
-get all channes with respect to Neighbourhood and context
+get all channels with respect to Neighbourhood and context
 ```
 GET /api/chats/:parentNeighbourhood/:context
 ```
 (Note that :parentNeighbourhood is an _id and context is a String - both have to be present.)
+
+get all messaged of a channel since a date (limited to 500 entries)
+```
+GET /api/chats/channel/:chatChannelId/since/:timestamp
+```
 
 ### Subscriptions
 
