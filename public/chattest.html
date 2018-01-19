@@ -33,8 +33,8 @@
       return false;
     });
     socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
-        console.log('new message from io: ' + socket.id + ' ' + msg);
+      $('#messages').append($('<li>').text(msg.text));
+        console.log('new message from io: ' + socket.id + ' ' + JSON.stringify(msg));
     });
 
     socket.on('connect', function () {

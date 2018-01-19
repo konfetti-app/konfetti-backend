@@ -34,14 +34,19 @@ function init(server) {
         mubsubChannel.on('error', console.error);
 
         let subscription = mubsubChannel.subscribe('chat message', (msg) => {
+          // console.log('notified about new message ' + msg);
+          ChatMessage.getChatMessage(msg, (err, chatMessage) => {
+            socket.emit('chat message', chatMessage);
+          });
+          // console.log(`chatMessage Object: ${JSON.stringify()}`);
           console.log(`socket emitting to user: ${socket.decoded_token.username} socket: ${socket.id} room: ${ data.roomID}`);
-          socket.emit('chat message', msg);
+          ;
         });
 
         socket.on('chat message', function(msg){
           console.log(`new message from io: ${socket.decoded_token.username} ${socket.id} ${msg}`);
             ChatMessage.createChatMessage(msg, data.roomID, socket.decoded_token.userId);
-          mubsubChannel.publish('chat message', msg);
+          // mubsubChannel.publish('chat message', msg);
         });
     
         socket.on('disconnect', function() {

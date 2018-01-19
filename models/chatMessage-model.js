@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
 
+const mubsub = require('mubsub');
+const mubsubClient = mubsub(`mongodb://${process.env.RUNS_IN_DOCKER ? 'mongo' : 'localhost'}/konfetti-mubsub`);
+
 const ChatMessageSchema = new mongoose.Schema({
     type: {
         type: String,
@@ -33,6 +36,12 @@ const ChatMessageSchema = new mongoose.Schema({
         type: Number,
         default: moment(new Date).unix(),
         index: true
+    },
+    avatar: {
+        type: Object
+    },
+    nickname: {
+        type: String
     }
 });
 
@@ -44,6 +53,16 @@ const ChatMessageSchema = new mongoose.Schema({
 //     });
 // };
 
+ChatMessageSchema.statics.getChatMessage = function (chatMessageId, callback) {
+    const ChatMessage = mongoose.model('ChatMessage');
+    // ChatMessage.findOne({_id:chatMessageId}).populate('parentUser', 'nickname avatar').populate('parentUser.avatar').then(chatMessage => {
+    ChatMessage.findOne({_id:chatMessageId}).populate({path: 'parentUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(chatMessage => {
+    // console.log('blubb:' + JSON.stringify(chatMessage));
+        callback(null, chatMessage);
+    });
+};
+
+
 ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, callback) {
     // console.log(JSON.stringify(userId));
     // console.log(JSON.stringify(channel));
@@ -51,18 +70,19 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
     const ChatMessage = mongoose.model('ChatMessage');
     const ChatChannel = mongoose.model('ChatChannel');
 //     const Thread = mongoose.model('Thread');
-
+   
     let now = moment(new Date).unix();
-    let newChatMessage = new ChatMessage({
-      text : data,
-      parentChannel : channel,
-      parentUser: userId,
-      date : now 
+    let newChatMessage = new ChatMessage({ // TODO: add user-data: nickname, avatar
+    text : data,
+    parentChannel : channel,
+    parentUser: userId,
+    date : now 
     }).save((err, doc) => {
-      if (err) {
+    if (err) {
         console.log('Error saving new chat: ' + err.message);
         callback(err, undefined);
-      } else {
+    } else {
+        mubsubClient.channel(channel).publish('chat message', doc._id);
         ChatChannel.findOneAndUpdate({_id: doc.parentChannel}, {$addToSet:{chatMessages: doc._id, members: userId}}, {upsert: true}, (err, channel) => {
             if (err) console.log(err);
             if (!channel) {
@@ -76,7 +96,7 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
                 }
             }
         });
-      }
+        }
     });
   };
   
