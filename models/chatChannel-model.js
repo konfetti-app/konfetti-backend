@@ -47,6 +47,9 @@ const ChatChannelSchema = new mongoose.Schema({
 });
 
 ChatChannelSchema.statics.getChatChannels = function (params, callback) {
+
+    // TODO: populate avatar pics and nicknames
+
     const ChatChannel = mongoose.model('ChatChannel');
     ChatChannel.find({context: params.context, parentNeighbourhood: params.parentNeighbourhood}).exec(function (err, res) {
         if (err) console.log(err);
@@ -95,6 +98,26 @@ ChatChannelSchema.statics.getChatMessagesSince = function (channel, since, callb
     ChatMessage.find({parentChannel: channel, date : { $gt: since }}).limit(500).sort('date').populate({path: 'parentUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(chatMessage => {
     // console.log('blubb:' + JSON.stringify(chatMessage));
         callback(null, chatMessage);
+    });
+};
+
+ChatChannelSchema.statics.deleteChatChannel = function (channel, user, callback) {
+    const ChatChannel = mongoose.model('ChatChannel');
+    ChatChannel.findOne({_id: channel}).populate({path: 'created.byUser'}).then(chatChannel => {
+        if (chatChannel.created.byUser.equals(user) || user.isAdmin) {
+            chatChannel.disabled = true;
+            chatChannel.save((err, doc) => {
+                if (err) {
+                    console.log('Error deleting chatChannel: ' + err.message);
+                    callback(err, undefined);
+                } else {
+                    console.log(`deleted chatChannel ${doc._id} on behalf of user ${user.email}`);
+                    callback(undefined, doc);
+                }
+            });
+        } else {
+            callback('You are not allowed to delete ths Channel', undefined);
+        }
     });
 };
 

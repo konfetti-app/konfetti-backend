@@ -820,6 +820,34 @@
 						"description": "get chat messages for a channel since a timestamp"
 					},
 					"response": []
+				},
+				{
+					"name": "delete chatChannel",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "localhost:3000/api/chats/channel/5a5d10643c53d6eb482e2661",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"chats",
+								"channel",
+								"5a5d10643c53d6eb482e2661"
+							]
+						},
+						"description": "delete a ChatChannel (actually mark it disabled for now)"
+					},
+					"response": []
 				}
 			]
 		},

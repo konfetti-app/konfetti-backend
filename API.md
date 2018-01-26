@@ -201,6 +201,10 @@ get all messaged of a channel since a date (limited to 500 entries)
 ```
 GET /api/chats/channel/:chatChannelId/since/:timestamp
 ```
+delete a ChatChannel (actually mark as disabled, must be authenticated user who created the channel or admin)
+```
+DELETE /api/chats/channel/:chatChannelId
+```
 
 ### Subscriptions
 
