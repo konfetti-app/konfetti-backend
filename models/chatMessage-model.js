@@ -15,7 +15,8 @@ const ChatMessageSchema = new mongoose.Schema({
     },
     parentChannel: { // reference to parentChannel
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChatChannel'  
+        ref: 'ChatChannel',
+        index: true
     },
     channelName: {
         type: String
