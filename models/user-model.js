@@ -73,9 +73,8 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.statics.updateUserData = function (userId, data, callback) {
   const User = mongoose.model('User');
-  // name, username, profileImage (store), language-settings, ...
+  // name, username, language-settings, ...
   // notification-preferences
-  // profileImage is _id in /assets (to be protected somehow) // TODO : image-store (fs)
   User.findOne({_id: userId}).populate('avatar').exec((err, user) => {
     if (err) console.log(err);
     user.nickname = data.nickname || user.nickname,
@@ -167,9 +166,9 @@ UserSchema.pre('save', function(next) {
       this.subscriptions = doc._id;
       next();
     });
-    
+  } else {
+    next();
   }
-  
 });
 
 UserSchema.statics.getSingleUserFullyPopulated = function (username, callback) {
