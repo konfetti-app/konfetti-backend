@@ -155,7 +155,7 @@ UserSchema.statics.addUser = function (data, callback) {
 };
 
 UserSchema.pre('save', function(next) {
-  console.dir(this)
+  // console.dir(this)
   if (this.isNew) { // if isNew user, also create a subscription object
     const Subscriptions = mongoose.model('Subscriptions');
     let subscriptions = new Subscriptions({
