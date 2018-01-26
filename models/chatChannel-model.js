@@ -48,10 +48,10 @@ const ChatChannelSchema = new mongoose.Schema({
 
 ChatChannelSchema.statics.getChatChannels = function (params, callback) {
 
-    // TODO: populate avatar pics and nicknames
+    // TODO: remove Messages from results
 
     const ChatChannel = mongoose.model('ChatChannel');
-    ChatChannel.find({context: params.context, parentNeighbourhood: params.parentNeighbourhood}).exec(function (err, res) {
+    ChatChannel.find({context: params.context, parentNeighbourhood: params.parentNeighbourhood}).populate({path: 'created.byUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).exec(function (err, res) {
         if (err) console.log(err);
         callback(err, res);
     });
