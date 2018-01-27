@@ -111,7 +111,7 @@ ChatChannelSchema.statics.deleteChatChannel = function (channel, user, callback)
                     console.log('Error deleting chatChannel: ' + err.message);
                     callback(err, undefined);
                 } else {
-                    console.log(`deleted chatChannel ${doc._id} on behalf of user ${user.email}`);
+                    console.log(`deleted chatChannel ${doc._id} on behalf of user ${user._id}`);
                     callback(undefined, doc);
                 }
             });
