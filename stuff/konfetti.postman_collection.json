@@ -703,7 +703,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"title\": \"hallo\",\n\"text\" : \"text body\",\n\"parentThread\" : \"59fc6c4fa27de71a10aef9d7\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "localhost:3000/api/subscriptions/unsubscribe/5a1ac4269c2bf2f6b24e6bc9",

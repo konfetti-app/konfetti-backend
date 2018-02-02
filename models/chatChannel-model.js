@@ -116,7 +116,7 @@ ChatChannelSchema.statics.deleteChatChannel = function (channel, user, callback)
                 }
             });
         } else {
-            callback('You are not allowed to delete ths Channel', undefined);
+            callback('You are not allowed to delete this Channel', undefined);
         }
     });
 };
