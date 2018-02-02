@@ -21,17 +21,17 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
     // if (req.user.isAdmin) {
         Subscriptions.subscribe(req.body, req.user, (err, subscriptions) => {
             if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
-            else res.status(200).json({code: 200, status: 'created', data: {subscriptions: subscriptions}});
+            else res.status(200).json({code: 200, status: 'ok', data: {subscriptions: subscriptions}});
         });
     // } else {
     //     res.status(403).json({code: 403, status: 'error', errors: ['not allowed to subscribe to this channel']});
     // }
 });
 
-router.post('/unsubscribe/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+router.delete('/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
         Subscriptions.unsubscribe(req.params.id, req.user, (err, subscriptions) => {
             if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
-            else res.status(200).json({code: 200, status: 'created', data: {subscriptions: subscriptions}});
+            else res.status(200).json({code: 200, status: 'ok', data: {subscriptions: subscriptions}});
         });
 });
 

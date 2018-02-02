@@ -660,7 +660,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvbmZldHRpVXNlci1CSkRzZks5TWYiLCJ1c2VySWQiOiI1YTNkMDI5ZWQ0NTkyMjJhN2MxZGE1NzUiLCJpYXQiOjE1MTM5NDc5MjgsImV4cCI6MTUxNDAzNDMyOH0.Er068nQJS7ywgvUel8hR_RPp6jZ-lmf14nJGXeoTO3Y"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							},
 							{
 								"key": "Content-Type",
@@ -669,7 +669,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"type\": \"chatChannel\",\n\"id\" : \"5a1ac4269c2bf2f6b24e6bc9\"\n}"
+							"raw": "{\n\"type\": \"chatChannel\",\n\"id\" : \"5a5d10643c53d6eb482e2661\"\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/subscriptions/",
@@ -690,11 +690,11 @@
 				{
 					"name": "unsubscribe",
 					"request": {
-						"method": "POST",
+						"method": "DELETE",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvbmZldHRpVXNlci1CSkRzZks5TWYiLCJ1c2VySWQiOiI1YTNkMDI5ZWQ0NTkyMjJhN2MxZGE1NzUiLCJpYXQiOjE1MTM5NDc5MjgsImV4cCI6MTUxNDAzNDMyOH0.Er068nQJS7ywgvUel8hR_RPp6jZ-lmf14nJGXeoTO3Y"
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							},
 							{
 								"key": "Content-Type",
@@ -706,7 +706,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:3000/api/subscriptions/unsubscribe/5a1ac4269c2bf2f6b24e6bc9",
+							"raw": "localhost:3000/api/subscriptions/5a5d10643c53d6eb482e2661",
 							"host": [
 								"localhost"
 							],
@@ -714,8 +714,7 @@
 							"path": [
 								"api",
 								"subscriptions",
-								"unsubscribe",
-								"5a1ac4269c2bf2f6b24e6bc9"
+								"5a5d10643c53d6eb482e2661"
 							]
 						},
 						"description": "unsubscribe current user from chatChannel"

@@ -219,7 +219,7 @@ POST /api/subscriptions/
 
 unsubscribe
 ```
-POST /api/subscriptions/unsubscribe/:id
+DELETE /api/subscriptions/:id
 ```
 
 

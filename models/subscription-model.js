@@ -37,21 +37,24 @@ SubscriptionsSchema.statics.subscribe = function (body, user, callback) { // req
 
         ChatChannel.findOne({_id: body.id}).exec(function (err, doc) {
             if (err) {
+                console.log(err);
                 callback(err, undefined);
             } else if (!doc) {
                 callback('chatChannel not found', undefined);
             } else {
-                Subscriptions.findOneAndUpdate({parentUser: user._id}, {$addToSet:{chatChannels: doc._id}}, {upsert: true, new: true},
-                    (err, subscriptions) => {
-                        if (err) console.log(err);
+                Subscriptions.findOneAndUpdate({parentUser: user._id}, {$addToSet:{chatChannels: doc._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                    if (err) {
+                        console.log(err);
+                        callback(err, undefined);
+                    } else {
                         console.log(`added channel subscription ${doc._id} to user ${user._id}`);
                         callback(err, subscriptions);
-                    });
+                    }
+                });
             }
-            if (err) console.log(err);
         });
     } else {
-        callback(undefined, 'invalid input');
+        callback('invalid input', undefined);
     }
 };
 
@@ -61,12 +64,16 @@ SubscriptionsSchema.statics.unsubscribe = function (someId, user, callback) { //
     if (someId && user._id) {
         Subscriptions.findOneAndUpdate({parentUser: user._id}, {$pull:{chatChannels: someId}}, {upsert: true, new: true},
             (err, subscriptions) => {
-                if (err) console.log(err);
-                console.log(`removed ${someId} from subscriptions ${subscriptions._id} for user ${user._id}`);
-                callback(err, subscriptions);
+                if (err) {
+                    console.log(err);
+                    callback(err, undefined);
+                } else {
+                    console.log(`removed ${someId} from subscriptions ${subscriptions._id} for user ${user._id}`);
+                    callback(undefined, subscriptions);
+                }
             });
     } else {
-        callback(undefined, 'invalid input');
+        callback('invalid input', undefined);
     }
 };
 
