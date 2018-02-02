@@ -38,6 +38,8 @@ SubscriptionsSchema.statics.subscribe = function (body, user, callback) { // req
         ChatChannel.findOne({_id: body.id}).exec(function (err, doc) {
             if (err) {
                 callback(err, undefined);
+            } else if (!doc) {
+                callback('chatChannel not found', undefined);
             } else {
                 Subscriptions.findOneAndUpdate({parentUser: user._id}, {$addToSet:{chatChannels: doc._id}}, {upsert: true, new: true},
                     (err, subscriptions) => {
