@@ -47,9 +47,10 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: moment(new Date).unix(),
   },
-  push: { // Array of Strings
-    tokens: []
-  },
+  pushTokens: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PushToken'
+    }],
   passwordReset: {
     type: String
   },

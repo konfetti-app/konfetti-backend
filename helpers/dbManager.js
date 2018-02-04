@@ -11,7 +11,7 @@ db.once('open', function() {
 function requireModels(){
   module.exports = function(){
     const mongoose = require('mongoose');
-    const files = [ 'user-model.js', 'code-model.js', 'thread-model.js', 'neighbourhood-model.js', 'post-model.js', 'asset-model.js', 'chatMessage-model.js', 'chatChannel-model.js', 'moduleConfig-model.js', 'subscription-model' ];
+    const files = [ 'user-model.js', 'code-model.js', 'thread-model.js', 'neighbourhood-model.js', 'post-model.js', 'asset-model.js', 'chatMessage-model.js', 'chatChannel-model.js', 'moduleConfig-model.js', 'subscription-model', 'pushToken-model.js'];
     let fn = 0;
     for(fn in files) {
 

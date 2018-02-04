@@ -5,6 +5,7 @@ const formatError = require('../../helpers/errors.js').formatError;
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const PushToken = mongoose.model('PushToken');
 
 /*
     api routes
@@ -14,6 +15,14 @@ const User = mongoose.model('User');
     afterwards, call endpoints with JWT in Header ("Authorization" : "Bearer <token>")
     Also see supplied postman collection in /stuff/ for how to construct the Authorization Header
 */
+
+/* POST add/update push token via token auth. */
+router.post('/addToken', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  PushToken.updateTokenForUser(req.user, req.body, (err, token) => {
+    if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+    else res.status(200).json({code: 200, status: 'success', data: {token: token}});
+  });
+});
 
 /* POST users update profile via token auth. */
 router.post('/:userId', passport.authenticate('jwt', { session: false }), function(req, res, next) {

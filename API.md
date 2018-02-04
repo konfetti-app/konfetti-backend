@@ -61,6 +61,14 @@ POST /api/users/:userId
 |email|String 'john@doe.com'|
 |password|String|
 
+add/update a playerId (push token) for the current user
+```
+POST /api/users/token
+```
+|Key|Value|
+|---|-----|
+|playerId|String|
+
 get a single user by id (with populated neighbourhoods)
 ```
 GET /api/users/:userId
