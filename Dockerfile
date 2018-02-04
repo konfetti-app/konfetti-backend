@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:9
 
 #Create dedicated user to avoid running the app as root + install npm (fixed version)
 RUN useradd --user-group --create-home --shell /bin/false app
