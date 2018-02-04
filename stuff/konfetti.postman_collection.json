@@ -688,6 +688,40 @@
 					"response": []
 				},
 				{
+					"name": "updatePushTokenForUser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"playerId\" : \"a-player-id\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/users/addToken",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users",
+								"addToken"
+							]
+						},
+						"description": "subscribe current user to a chatChannel"
+					},
+					"response": []
+				},
+				{
 					"name": "unsubscribe",
 					"request": {
 						"method": "DELETE",
