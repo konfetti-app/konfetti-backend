@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const Subscriptions = mongoose.model('Subscriptions');
 const ChatChannel = mongoose.model('ChatChannel');
 
 const request = require('request');
@@ -18,7 +17,6 @@ function getPlayers(channel) {
         //     Subscription.find({parentChannel: channel}).then(subscribed)
         // })
         // .then()
-        // 2. get Subscriptions: Subscription.chatChannels 
         ChatChannel.findOne({ _id: channel }).exec((err, res) => {
             console.log('***', err, res);
         });

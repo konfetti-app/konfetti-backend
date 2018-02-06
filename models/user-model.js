@@ -151,23 +151,6 @@ UserSchema.statics.addUser = function (data, callback) {
   });
 };
 
-UserSchema.pre('save', function(next) {
-  // console.dir(this)
-  if (this.isNew) { // if isNew user, also create a subscription object
-    const Subscriptions = mongoose.model('Subscriptions');
-    let subscriptions = new Subscriptions({
-      parentUser : this._id,
-    }).save((err, doc) => {
-      if (err) console.log(err);
-      console.log('%s has been saved', doc._id);
-      this.subscriptions = doc._id;
-      next();
-    });
-  } else {
-    next();
-  }
-});
-
 UserSchema.statics.getSingleUserFullyPopulated = function (username, callback) {
   const User = mongoose.model('User');
   User.findOne({username: username}).populate('neighbourhoods').exec(function (err, user) {

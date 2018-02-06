@@ -98,25 +98,26 @@ ChatChannelSchema.statics.getChatById = function (chatId, callback) {
 
 ChatChannelSchema.statics.getChatMessagesSince = function (channel, since, user, callback) {
     const ChatMessage = mongoose.model('ChatMessage');
-    const Subscriptions = mongoose.model('Subscriptions');
     ChatMessage.find({parentChannel: channel, date : { $gt: since }}).limit(500).sort('date').populate({path: 'parentUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(chatMessages => {
-        Subscriptions.findOne({parentUser: user._id}).then(subscription => {
-            return new Promise((resolve, reject) => {
-                if (subscription && subscription.chatChannels.indexOf(channel) > -1) {
-                    // console.log('has subscribed');
-                    resolve(true);
-                } else {
-                    // console.log('hasn\'t subscribed');
-                    resolve(false);
-                }
-            }).then(subscribed => {
-                callback(null, chatMessages, subscribed);
-            })
-            .catch(reason => {
-                console.log(reason);
-                callback(reason, undefined);
-            });
-        });
+        // Subscriptions.findOne({parentUser: user._id}).then(subscription => {
+        //     return new Promise((resolve, reject) => {
+        //         if (subscription && subscription.chatChannels.indexOf(channel) > -1) {
+        //             // console.log('has subscribed');
+        //             resolve(true);
+        //         } else {
+        //             // console.log('hasn\'t subscribed');
+        //             resolve(false);
+        //         }
+        //     }).then(subscribed => {
+        //         callback(null, chatMessages, subscribed);
+        //     })
+        //     .catch(reason => {
+        //         console.log(reason);
+        //         callback(reason, undefined);
+        //     });
+        // });
+
+        // TODO: re-add subcription field above
     });
 };
 

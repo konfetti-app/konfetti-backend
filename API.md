@@ -230,10 +230,4 @@ unsubscribe
 DELETE /api/subscriptions/:id
 ```
 
-
-get subscriptions for current user
-```
-GET /api/subscriptions/
-```
-
 * note: Based on the action requested, it is possible to e.g. create a new user and immedately add this user to a neighbourhood (actionType : newNeighbour). Upon success, the result contains the user and the neighbourhood.
