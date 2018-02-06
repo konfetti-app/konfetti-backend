@@ -4,7 +4,7 @@ const passport = require('passport');
 const formatError = require('../../helpers/errors.js').formatError;
 
 const mongoose = require('mongoose');
-const Subscriptions = mongoose.model('Subscriptions');
+const ChatChannel = mongoose.model('ChatChannel');
 
 /*
     api routes
@@ -19,7 +19,7 @@ const Subscriptions = mongoose.model('Subscriptions');
 router.post('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
     // if (req.user.isAdmin) {
-        Subscriptions.subscribe(req.body, req.user, (err, subscriptions) => {
+        ChatChannel.subscribe(req.body, req.user, (err, subscriptions) => {
             if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
             else res.status(200).json({code: 200, status: 'ok', data: {subscriptions: subscriptions}});
         });
@@ -29,20 +29,20 @@ router.post('/', passport.authenticate('jwt', { session: false }), function(req,
 });
 
 router.delete('/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-        Subscriptions.unsubscribe(req.params.id, req.user, (err, subscriptions) => {
+        ChatChannel.unsubscribe(req.params.id, req.user, (err, subscriptions) => {
             if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
             else res.status(200).json({code: 200, status: 'ok', data: {subscriptions: subscriptions}});
         });
 });
 
 /* GET subscriptions for current user. */
-router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-    // console.log(req.body);
-    Subscriptions.getSubscriptionsForUser(req.user, (err, subscriptions) => {
-      if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-      else res.status(200).json({code: 200, status: 'success', data: {subscriptions: subscriptions}});
-    });
-});
+// router.get('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+//     // console.log(req.body);
+//     Subscriptions.getSubscriptionsForUser(req.user, (err, subscriptions) => {
+//       if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+//       else res.status(200).json({code: 200, status: 'success', data: {subscriptions: subscriptions}});
+//     });
+// });
 
 
 module.exports = router;

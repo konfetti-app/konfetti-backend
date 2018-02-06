@@ -65,10 +65,6 @@ const UserSchema = new mongoose.Schema({
   disabled: {
     type: Boolean,
     default: false
-  },
-  subscriptions: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Subscriptions' 
   }
 });
 

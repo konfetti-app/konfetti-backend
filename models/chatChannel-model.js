@@ -29,6 +29,10 @@ const ChatChannelSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'  
     }],
+    subscribers: [{ // Array of members in this channel
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'  
+    }],
     disabled: { // not clear how to manage this yet
         type: Boolean,
         default: false
@@ -157,6 +161,41 @@ ChatChannelSchema.statics.createChatChannel = function (data, user, callback) {
         callback(undefined, doc);
         }
     });
+};
+
+ChatChannelSchema.statics.subscribe = function (body, user, callback) { // requires body.chatChannelId
+    const ChatChannel = mongoose.model('ChatChannel');
+    if (body.type && body.id && user._id) {
+        ChatChannel.findOneAndUpdate({_id: body.id}, {$addToSet:{subscribers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+            if (err) {
+                console.log(err);
+                callback(err, undefined);
+            } else {
+                console.log(`subscribed user ${user._id} to channel ${body._id}`);
+                callback(err, 'subscribed');
+            }
+        });
+    } else {
+        callback('invalid input', undefined);
+    }
+};
+
+ChatChannelSchema.statics.unsubscribe = function (someId, user, callback) { // requires body.chatChannelId
+    const ChatChannel = mongoose.model('ChatChannel');
+    if (someId && user._id) {
+        ChatChannel.findOneAndUpdate({_id: someId}, {$pull:{subscribers: user._id}}, {upsert: true, new: true},
+            (err, subscriptions) => {
+                if (err) {
+                    console.log(err);
+                    callback(err, undefined);
+                } else {
+                    console.log(`unsubscribed ${user._id} from channel ${someId}`);
+                    callback(undefined, 'unsubscribed');
+                }
+            });
+    } else {
+        callback('invalid input', undefined);
+    }
 };
 
 

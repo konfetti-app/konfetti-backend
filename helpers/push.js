@@ -19,7 +19,7 @@ function getPlayers(channel) {
         // })
         // .then()
         // 2. get Subscriptions: Subscription.chatChannels 
-        Subscriptions.find({ chatChannels: { $in: [channel] } }).exec((err, res) => {
+        ChatChannel.findOne({ _id: channel }).exec((err, res) => {
             console.log('***', err, res);
         });
         // *IF* User has subscribed to Channel
