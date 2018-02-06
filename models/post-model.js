@@ -11,7 +11,7 @@ const PostSchema = new mongoose.Schema({
     //     unique: true,
     //     index: true
     // },
-    content: {
+    content: { // TODO: allow events here. Probably another content-type?
         title: {
             type: String,
             default: ''

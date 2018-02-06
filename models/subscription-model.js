@@ -10,7 +10,7 @@ const SubscriptionsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'  
     },
-    chatChannels: [{ // Array of messages (items in this channel)
+    chatChannels: [{ // Array of chatChannels
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatChannel'  
     }],
