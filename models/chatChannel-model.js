@@ -118,6 +118,7 @@ ChatChannelSchema.statics.getChatMessagesSince = function (channel, since, user,
         // });
 
         // TODO: re-add subcription field above
+        callback(null, chatMessages);
     });
 };
 
