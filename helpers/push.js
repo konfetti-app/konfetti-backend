@@ -26,7 +26,7 @@ function createPushMessage(channel) {
             }
         }).lean().exec((err, res) => {
             console.log('***', err, res);
-            if (res.subscribers.length < 1) {
+            if (!res || !res.subscribers || res.subscribers.length < 1) {
                 reject('no subscribers. aborting.');
             } else {
                 resolve({recipients: res.subscribers, data: {message: res.chatMessages[0], channelDescription: res.description}});
