@@ -1,46 +1,68 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const ChatChannel = mongoose.model('ChatChannel');
 
 const request = require('request');
 
 // basic account setup
-// set ONESIGNAL_URL, ONESIGNAL_APPID and ONESIGNAL_KEY in docker environment
+// set process.env.ONESIGNAL_URL, process.env.ONESIGNAL_APPID and process.env.ONESIGNAL_KEY in docker environment
 
-function getPlayers(channel) {
+function createPushMessage(channel) {
     return new Promise((resolve, reject) => {
-        // 1 ChatChannel.members.subscriptionTokens .populate('pushTokens')
-        // ChatChannel.find({_id: channel})
-        // .populate('members')
-        // .populate('pushTokens')
-        // .then(result => {
-        //     Subscription.find({parentChannel: channel}).then(subscribed)
-        // })
-        // .then()
-        ChatChannel.findOne({ _id: channel }).exec((err, res) => {
+        const ChatChannel = mongoose.model('ChatChannel');
+
+        ChatChannel.findOne({ _id: channel })
+        .populate({
+            path:'chatMessages',
+            options: {
+                limit: 1,
+                sort: { created: -1}
+            }
+        })
+        .populate({
+            path:'subscribers',
+            select:'pushTokens',
+            options: {
+                populate: 'pushTokens'
+            }
+        }).lean().exec((err, res) => {
             console.log('***', err, res);
+            if (res.subscribers.length < 1) {
+                reject('no subscribers. aborting.');
+            } else {
+                resolve({recipients: res.subscribers, data: {message: res.chatMessages[0], channelDescription: res.description}});
+            }
         });
-        // *IF* User has subscribed to Channel
-        // 3. resolve as an Array
-        let recipients = 'result of extensive DB query';
-        resolve(recipients);
+    })
+    .then(data => {
+        return new Promise((resolve, reject) => {
+            data.subscribers = [];
+            data.recipients.forEach((recipient, index, array) => {
+                recipient.pushTokens.forEach(token => {
+                    data.subscribers.push(token.playerId);
+                });
+                // data.subscribers.push(recipient.pushTokens.playerId); // can have multiple pushTokens
+                if (array.lenght = index + 1) {
+                    resolve(data);
+                }
+            });
+        }).then(data => {
+            console.log('creating notificaton - recipients:', JSON.stringify(data.recipients), 'data:', JSON.stringify(data.data));
+        createNotification(data.subscribers, data.data); // where does message come from?
+        });
     })
     .catch((reason) => {console.log(reason);});
 } 
 
-getPlayers.then(recipients => {
-    createNotifications(recipients, message); // where does message come from?
-})
-.catch((reason) => {console.log(reason);});
-
 function createNotification(recipients, message) {
     // returns notificationId https://documentation.onesignal.com/reference#create-notification
-    return new Promise(resolve, reject => {
+    return new Promise((resolve, reject) => {
         let data = {
-            include_player_ids: recipients, // Array
-            app_id: '', // String
-            contents: {}, // Object {"en": "English Message", "es": "Spanish Message"}
-            headings: {} // Object {"en": "English Title", "es": "Spanish Title"}
+                body: {
+                include_player_ids: recipients, // Array
+                app_id: process.env.ONESIGNAL_APPID, // String
+                contents: {"en": `${message.message.text}`}, // Object {"en": "English Message", "es": "Spanish Message"}
+                headings: {"en": `${message.channelDescription}`} // Object {"en": "English Title", "es": "Spanish Title"}
+            }
         };
         data.metaData = {
             uri: '/notifications',
@@ -49,6 +71,7 @@ function createNotification(recipients, message) {
         resolve(data);
     })
     .then((data) => {
+        console.log(`dispatching to oneSignal: ${JSON.stringify(data)}`);
         sendRequest(data).then(res => {
             console.log(`notification sent: ${JSON.stringify(res)}`); // TODO: continue here.
         });
@@ -59,35 +82,6 @@ function createNotification(recipients, message) {
 function cancelNotification(recipient, notificationId) {
     // returns status
 }
-
-
-// function addDevice(data, user, callback) { // removed. Seems to be handled by cordova-plugin on device.
-//     // returns playerid (recipient) https://documentation.onesignal.com/reference#add-a-device
-//     return new Promise(resolve, reject => {
-//         let outData = {
-//             app_id: '', // String
-//             device_type: data.type || '', // Int
-//             identifier: data.id || '', // see doc
-//             language: '' // 'en', 'de', ...
-//         };
-//         outData.metaData = {
-//             uri: '/players',
-//             reqType: 'POST'
-//         };
-//         resolve(outData);
-//     })
-//     .then((data) => {
-//         sendRequest(data).then(res => {
-//             console.log(`adddevice: ${JSON.stringify(res)}`);
-//             if (res.success) User.addDevice(res.id, user);
-//             callback(null, res.id);
-//         });
-//     })
-//     .catch(reason => {
-//         console.log(reason);
-//         callback(err, null);
-//     });
-// }
 
 
 function sendRequest(data) { // data is expected as {body: JSON payload, metaData: {uri: specific uri} ()}
@@ -101,7 +95,7 @@ function sendRequest(data) { // data is expected as {body: JSON payload, metaDat
             method: data.metaData.reqType,
             json: data.body,
             headers: {
-                'Authorization': 'Basic ONESIGNAL_KEY',
+                'Authorization': 'Basic ' + process.env.ONESIGNAL_KEY,
                 'Content-Type': 'application/json; charset=utf-8'
             }
         };
@@ -118,4 +112,4 @@ function sendRequest(data) { // data is expected as {body: JSON payload, metaDat
         .catch(reason => console.log('onsignal call failed due to rejected promise:', reason));
 }
 
-exports.getPlayers = getPlayers;
+exports.createPushMessage = createPushMessage;

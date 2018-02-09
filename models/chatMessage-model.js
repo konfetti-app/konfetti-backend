@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 
 const mubsub = require('mubsub');
-// const pushHelper = require('../helpers/push.js');
+const pushHelper = require('../helpers/push.js');
 const mubsubClient = mubsub(`mongodb://${process.env.RUNS_IN_DOCKER ? 'mongo' : 'localhost'}/konfetti-mubsub`);
 
 const ChatMessageSchema = new mongoose.Schema({
@@ -93,14 +93,12 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
                 }
             } else {
                 console.log(`added chatMessages ${doc._id} to Channel ${channel ? channel._id : undefined}`);
+                pushHelper.createPushMessage(doc.parentChannel);
                 if(callback && typeof callback === "function") {
                     callback(err, doc);
                 }
             }
         });
-
-        // pushHelper.getPlayers(doc.parentChannel);
-
         }
     });
   };
