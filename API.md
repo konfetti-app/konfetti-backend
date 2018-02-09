@@ -214,20 +214,18 @@ delete a ChatChannel (actually mark as disabled, must be authenticated user who 
 DELETE /api/chats/channel/:chatChannelId
 ```
 
-### Subscriptions
-
 subscribe
 ```
-POST /api/subscriptions/
+POST /api/chats/subscriptions
 ```
 |Key|Value|
 |---|-----|
 |type|String 'chatChannel'|
-|id|String (Id of chatChannel (same as neighbourhood, post, etc.))|
+|id|String (Id of chatChannel)|
 
 unsubscribe
 ```
-DELETE /api/subscriptions/:id
+DELETE /api/chats/subscriptions/:chatChannelId
 ```
 
 * note: Based on the action requested, it is possible to e.g. create a new user and immedately add this user to a neighbourhood (actionType : newNeighbour). Upon success, the result contains the user and the neighbourhood.

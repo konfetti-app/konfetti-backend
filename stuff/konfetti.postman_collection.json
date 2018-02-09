@@ -635,16 +635,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"type\": \"chatChannel\",\n\"id\" : \"5a5d10643c53d6eb482e2661\"\n}"
+							"raw": "{\n\"id\" : \"5a5d10643c53d6eb482e2661\"\n}"
 						},
 						"url": {
-							"raw": "localhost:3000/api/subscriptions/",
+							"raw": "localhost:3000/api/chats/subscriptions/",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"api",
+								"chats",
 								"subscriptions",
 								""
 							]
@@ -706,13 +707,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "localhost:3000/api/subscriptions/5a5d10643c53d6eb482e2661",
+							"raw": "localhost:3000/api/chats/subscriptions/5a5d10643c53d6eb482e2661",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"api",
+								"chats",
 								"subscriptions",
 								"5a5d10643c53d6eb482e2661"
 							]

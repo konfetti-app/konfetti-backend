@@ -167,13 +167,13 @@ ChatChannelSchema.statics.createChatChannel = function (data, user, callback) {
 
 ChatChannelSchema.statics.subscribe = function (body, user, callback) { // requires body.chatChannelId
     const ChatChannel = mongoose.model('ChatChannel');
-    if (body.type && body.id && user._id) {
+    if (body.id && user._id) {
         ChatChannel.findOneAndUpdate({_id: body.id}, {$addToSet:{subscribers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
             if (err) {
                 console.log(err);
                 callback(err, undefined);
             } else {
-                console.log(`subscribed user ${user._id} to channel ${body._id}`);
+                console.log(`subscribed user ${user._id} to channel ${body.id}`);
                 callback(err, 'subscribed');
             }
         });

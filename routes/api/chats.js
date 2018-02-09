@@ -49,5 +49,25 @@ router.get('/channel/:chatChannelId/since/:since', passport.authenticate('jwt', 
   });
 });
 
+/* POST subscribe to channel. */
+router.post('/subscriptions', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  console.log(req.body);
+  // if (req.user.isAdmin) {
+      ChatChannel.subscribe(req.body, req.user, (err, subscription) => {
+          if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
+          else res.status(200).json({code: 200, status: 'ok', data: {subscription}});
+      });
+  // } else {
+  //     res.status(403).json({code: 403, status: 'error', errors: ['not allowed to subscribe to this channel']});
+  // }
+});
+/* DELETE unsubscribe from channel */
+router.delete('/subscriptions/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+      ChatChannel.unsubscribe(req.params.id, req.user, (err, subscription) => {
+          if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
+          else res.status(200).json({code: 200, status: 'ok', data: {subscription}});
+      });
+});
+
 
 module.exports = router;
