@@ -93,7 +93,7 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
                 }
             } else {
                 console.log(`added chatMessages ${doc._id} to Channel ${channel ? channel._id : undefined}`);
-                pushHelper.createPushMessage(doc.parentChannel);
+                pushHelper.createChatPushMessage(doc.parentChannel);
                 if(callback && typeof callback === "function") {
                     callback(err, doc);
                 }

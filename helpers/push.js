@@ -6,7 +6,7 @@ const request = require('request');
 // basic account setup
 // set process.env.ONESIGNAL_URL, process.env.ONESIGNAL_APPID and process.env.ONESIGNAL_KEY in docker environment
 
-function createPushMessage(channel) {
+function createChatPushMessage(channel) {
     return new Promise((resolve, reject) => {
         const ChatChannel = mongoose.model('ChatChannel');
 
@@ -25,7 +25,7 @@ function createPushMessage(channel) {
                 populate: 'pushTokens'
             }
         }).lean().exec((err, res) => {
-            console.log('***', err, res);
+            // console.log('***', err, res); 
             if (!res || !res.subscribers || res.subscribers.length < 1) {
                 reject('no subscribers. aborting.');
             } else {
@@ -37,17 +37,21 @@ function createPushMessage(channel) {
         return new Promise((resolve, reject) => {
             data.subscribers = [];
             data.recipients.forEach((recipient, index, array) => {
-                recipient.pushTokens.forEach(token => {
-                    data.subscribers.push(token.playerId);
-                });
+                if (!(data.data.message.parentUser.equals(recipient._id))) { // don't notify parentUser
+                    recipient.pushTokens.forEach(token => {
+                        data.subscribers.push(token.playerId);
+                    });
+                } else {
+                    console.log('skipping', recipient._id, '(parentUser)');
+                }
                 // data.subscribers.push(recipient.pushTokens.playerId); // can have multiple pushTokens
                 if (array.lenght = index + 1) {
                     resolve(data);
                 }
             });
         }).then(data => {
-            console.log('creating notificaton - recipients:', JSON.stringify(data.recipients), 'data:', JSON.stringify(data.data));
-        createNotification(data.subscribers, data.data); // where does message come from?
+            // console.log('creating notificaton - recipients:', JSON.stringify(data.recipients), 'data:', JSON.stringify(data.data));
+            createNotification(data.subscribers, data.data); // where does message come from?
         });
     })
     .catch((reason) => {console.log(reason);});
@@ -56,19 +60,23 @@ function createPushMessage(channel) {
 function createNotification(recipients, message) {
     // returns notificationId https://documentation.onesignal.com/reference#create-notification
     return new Promise((resolve, reject) => {
-        let data = {
-                body: {
-                include_player_ids: recipients, // Array
-                app_id: process.env.ONESIGNAL_APPID, // String
-                contents: {"en": `${message.message.text}`}, // Object {"en": "English Message", "es": "Spanish Message"}
-                headings: {"en": `${message.channelDescription}`} // Object {"en": "English Title", "es": "Spanish Title"}
-            }
-        };
-        data.metaData = {
-            uri: '/notifications',
-            reqType: 'POST'
-        };
-        resolve(data);
+        if (recipients.length > 0) {
+            let data = {
+                    body: {
+                    include_player_ids: recipients, // Array
+                    app_id: process.env.ONESIGNAL_APPID, // String
+                    contents: {"en": `${message.message.text}`}, // Object {"en": "English Message", "es": "Spanish Message"}
+                    headings: {"en": `${message.channelDescription}`} // Object {"en": "English Title", "es": "Spanish Title"}
+                }
+            };
+            data.metaData = {
+                uri: '/notifications',
+                reqType: 'POST'
+            };
+            resolve(data);
+        } else {
+            reject('no playerIds to be notified. Aborted.');
+        }
     })
     .then((data) => {
         console.log(`dispatching to oneSignal: ${JSON.stringify(data)}`);
@@ -112,4 +120,4 @@ function sendRequest(data) { // data is expected as {body: JSON payload, metaDat
         .catch(reason => console.log('onsignal call failed due to rejected promise:', reason));
 }
 
-exports.createPushMessage = createPushMessage;
+exports.createChatPushMessage = createChatPushMessage;
