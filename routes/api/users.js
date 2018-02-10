@@ -67,7 +67,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), function(req, 
 
 /* GET single user with populated neighbourhoods (trimmed to user perspective) via token auth. */
 router.get('/:userId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-  console.log(req.body);
+  // console.log(req.body);
   if (req.user._id.toString() === req.params.userId || req.user.isAdmin) { // only the logged in user or a sys-admin may get his full user object
     // console.log('congrats! same user.');
     User.getSingleUser(req.params.userId, (err, user) => {

@@ -4,7 +4,7 @@ const moment = require('moment');
 const ThreadSchema = new mongoose.Schema({
     type: {
         type: String,
-        default: 'thread'
+        default: 'thread' // also: 'newsfeed'
     },
     title: {
         type: String
@@ -64,17 +64,23 @@ ThreadSchema.statics.createThread = function (data, user, callback) {
     const Neighbourhood = mongoose.model('Neighbourhood');
     let thread = new Thread({
         title : data.title,
+        type : data.type,
         parentNeighbourhood : data.parentNeighbourhood,
         created: {byUser : user._id},
       }).save((err, thread) => {
-        Neighbourhood.findOneAndUpdate({_id: data.parentNeighbourhood}, {$addToSet:{threads: thread._id}}, {upsert: true}, (err, doc) => {
-                    if (err) console.log(err);
-                    console.log(`added thread ${thread._id} to neighbourhood ${doc._id}`);
-                    callback(err, thread);
-                  });
-
-    //     if (err) console.log(err);
-    //     
+          if (data.parentNeighbourhood) {
+            Neighbourhood.findOneAndUpdate({_id: data.parentNeighbourhood}, {$addToSet:{threads: thread._id}}, {upsert: true}, (err, doc) => {
+                if (err) {
+                console.log(err);
+                } else {
+                    console.log(`added thread ${thread._id} to neighbourhood ${doc ? doc._id + 'to neighbourhood' : ''}`);
+                callback(undefined, thread);
+                }
+            });
+          } else {
+            callback(undefined, thread);
+          }
+        
       });
 };
 

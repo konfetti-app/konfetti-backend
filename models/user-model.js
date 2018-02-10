@@ -58,6 +58,10 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Neighbourhood'   
   }],
+  newsfeed: [{ // Array of neighbourhoods
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Thread'   
+  }],
   isAdmin: { // system level
     type: Boolean,
     default: false
@@ -135,6 +139,24 @@ function genHashedPassword (clearPassword) {
   return hash;
 }
 
+function createNewsfeed(user) {
+  const Thread = mongoose.model('Thread');
+  let data = {
+    type: 'newsfeed',
+    title: user._id + ' \'s newsfeed' 
+  }
+  Thread.createThread(data, user, (err, res) => {
+    // console.log('created newsfeed for ', user.id, err, res);
+    if (err) {
+      console.log(err);
+    } else {
+      // user.newsfeed = res._id
+      console.log('success');
+      // user.save();
+    }
+  });
+}
+
 UserSchema.statics.addUser = function (data, callback) {
   const User = mongoose.model('User');
   let now = moment(new Date).unix();
@@ -145,9 +167,10 @@ UserSchema.statics.addUser = function (data, callback) {
     preferredLanguage: data.body ? data.body.locale : 'en',
     spokenLanguages: data.body ? [data.body.locale] : ['en'],
     created : now
-  }).save((err, doc) => {
+  }).save((err, user) => {
     if (err) console.log(err);
-    callback(err, doc, data.password);
+    createNewsfeed(user, callback(err, user));
+    // callback(err, user, data.password);
   });
 };
 
