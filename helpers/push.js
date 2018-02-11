@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Post = mongoose.model('Post');
 
 const request = require('request');
 
@@ -15,7 +16,11 @@ function createChatPushMessage(channel) {
             path:'chatMessages',
             options: {
                 limit: 1,
-                sort: { created: -1}
+                sort: { created: -1},
+                populate: {
+                    path: 'parentUser',
+                    select: 'nickname'
+                }
             }
         })
         .populate({
@@ -24,7 +29,7 @@ function createChatPushMessage(channel) {
             options: {
                 populate: 'pushTokens'
             }
-        }).lean().exec((err, res) => {
+        }).exec((err, res) => {
             // console.log('***', err, res); 
             if (!res || !res.subscribers || res.subscribers.length < 1) {
                 reject('no subscribers. aborting.');
@@ -37,9 +42,13 @@ function createChatPushMessage(channel) {
         return new Promise((resolve, reject) => {
             data.subscribers = [];
             data.recipients.forEach((recipient, index, array) => {
-                if (!(data.data.message.parentUser.equals(recipient._id))) { // don't notify parentUser
+                if (!(data.data.message.parentUser.equals(recipient))) { // don't notify parentUser
+                // console.log('generating newsfeed entry:' + JSON.stringify({title: 'New chat activity in ' + data.channelDescription, text: data.message.parentUser.nickname + ': ' + data.message.text}, user, callback));
+                console.log('generating newsfeed entry:' + JSON.stringify(data.data));
+
+                    Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelDescription, text: data.data.message.parentUser.nickname + ': ' + data.data.message.text}, recipient, (err, res) => {console.log(err, res);});
                     recipient.pushTokens.forEach(token => {
-                        data.subscribers.push(token.playerId);
+                    data.subscribers.push(token.playerId);
                     });
                 } else {
                     console.log('skipping', recipient._id, '(parentUser)');
@@ -51,7 +60,7 @@ function createChatPushMessage(channel) {
             });
         }).then(data => {
             // console.log('creating notificaton - recipients:', JSON.stringify(data.recipients), 'data:', JSON.stringify(data.data));
-            createNotification(data.subscribers, data.data); // where does message come from?
+            createNotification(data.subscribers, data.data);
         });
     })
     .catch((reason) => {console.log(reason);});
@@ -67,7 +76,7 @@ function createNotification(recipients, message) {
                     app_id: process.env.ONESIGNAL_APPID, // String
                     contents: {"en": `${message.message.text}`}, // Object {"en": "English Message", "es": "Spanish Message"}
                     headings: {"en": `${message.channelDescription}`} // Object {"en": "English Title", "es": "Spanish Title"}
-                }
+                } // TODO: add refs to neighbourhoodId, moduleId (context), Origin "chat", OriginId -- data: {"abc": "123", "foo": "bar"}
             };
             data.metaData = {
                 uri: '/notifications',
