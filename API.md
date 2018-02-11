@@ -228,4 +228,29 @@ unsubscribe
 DELETE /api/chats/subscriptions/:chatChannelId
 ```
 
+### newsfeed
+
+get
+```
+GET /api/newsfeed/
+```
+|Key|Value|
+|---|-----|
+|type|String 'chatChannel'|
+|id|String (Id of chatChannel)|
+
+delete (mark as read)
+```
+DELETE /api/newsfeed/:postId
+```
+
+createNewsfeedEntry (only in NODE_ENV=development)
+```
+POST /api/newsfeed/
+```
+|Key|Value|
+|---|-----|
+|title|String 'myTitle'|
+|text|String 'myText'|
+
 * note: Based on the action requested, it is possible to e.g. create a new user and immedately add this user to a neighbourhood (actionType : newNeighbour). Upon success, the result contains the user and the neighbourhood.
