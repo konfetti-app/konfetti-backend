@@ -143,7 +143,7 @@ function createNewsfeed(user) {
   const Thread = mongoose.model('Thread');
   let data = {
     type: 'newsfeed',
-    title: user._id + ' \'s newsfeed' 
+    title: user._id + '\'s newsfeed' 
   }
   Thread.createThread(data, user, (err, res) => {
     // console.log('created newsfeed for ', user.id, err, res);

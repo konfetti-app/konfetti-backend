@@ -53,6 +53,53 @@ PostSchema.statics.getPostById = function (postId, callback) {
       });
 };
 
+PostSchema.statics.createNewsfeedEntry = function (data, user, callback) {
+    const Post = mongoose.model('Post');
+    const Thread = mongoose.model('Thread');
+
+    let now = moment(new Date).unix();
+    let newPost = new Post({
+      content : {
+          title: data.title || '',
+          text: data.text || ''
+      },
+      type: 'newsfeed',
+      parentThread : user._id,
+      created : {
+          date: now,
+          byUser: user._id
+      }
+    }).save((err, doc) => {
+      if (err) {
+        console.log('Error saving new post: ' + err.message);
+        callback(err, undefined);
+      } else {
+        Thread.findOneAndUpdate({type: 'newsfeed', 'created.byUser': user._id}, {$addToSet:{posts: doc._id}}, {upsert: true}, (err, thread) => {
+            if (err) console.log(err);
+            if (!thread) {
+                callback('parenttread not found', null);
+            } else {
+                console.log(`added post ${doc._id} to thread ${thread ? thread._id : undefined}`);
+                callback(err, doc);
+            }
+            });
+      }
+    });
+  };
+  
+PostSchema.statics.deletePost = function (postId, user, callback) {
+    const Post = mongoose.model('Post');
+    Post.findOne({_id: postId},
+        function(err, foundEntry){
+            if (err) console.log(err);
+            foundEntry.disabled = true;
+            callback(err, foundEntry);
+            console.log(`removed ${foundEntry._id}`);
+        });
+    // .then(foundEntry => {
+    //     foundEntry.disabled = true;
+};
+
 PostSchema.statics.createPost = function (data, user, callback) {
     const Post = mongoose.model('Post');
     const Thread = mongoose.model('Thread');

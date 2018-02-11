@@ -110,4 +110,14 @@ ThreadSchema.statics.getThreadById = function (threadId, callback) {
       });
 };
 
+ThreadSchema.statics.getNewsfeed = function (user, callback) {
+    const Thread = mongoose.model('Thread');
+    // console.log(user._id);
+    Thread.findOne({type: 'newsfeed', 'created.byUser': user._id}).populate({path: 'posts', options: {where: {disabled: false}, sort: {'created.date': -1}, limit: 100}}).exec(function (err, res) {
+        if (err) console.log(err);
+        // console.log(err, res);
+        callback(err, res);
+      });
+};
+
 mongoose.model('Thread', ThreadSchema);
