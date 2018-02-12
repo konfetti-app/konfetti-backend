@@ -21,6 +21,9 @@ const PostSchema = new mongoose.Schema({
             default: ''
         }
     },
+    meta: {
+        type: Object
+    },
     assets: [{ // Array of assets (items in this post)
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Asset'  
@@ -53,7 +56,7 @@ PostSchema.statics.getPostById = function (postId, callback) {
       });
 };
 
-PostSchema.statics.createNewsfeedEntry = function (data, user, callback) {
+PostSchema.statics.createNewsfeedEntry = function (data, user, meta, callback) {
     const Post = mongoose.model('Post');
     const Thread = mongoose.model('Thread');
 
@@ -63,6 +66,7 @@ PostSchema.statics.createNewsfeedEntry = function (data, user, callback) {
           title: data.title || '',
           text: data.text || ''
       },
+      meta: meta,
       type: 'newsfeed',
       parentThread : user._id,
       created : {

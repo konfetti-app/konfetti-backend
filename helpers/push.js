@@ -21,6 +21,11 @@ function createChatPushMessage(channel) {
                     path: 'parentUser',
                     model: 'User',
                     select: 'nickname'
+                // },
+                // populate: {
+                //     path: 'parentChannel',
+                //     model: 'ChatChannel',
+                //     select: 'parentNeighbourhood'
                 }
             }
         })
@@ -30,12 +35,25 @@ function createChatPushMessage(channel) {
             options: {
                 populate: 'pushTokens'
             }
-        }).exec((err, res) => {
+        })
+        .populate('parentChannel')
+        .exec((err, res) => {
             // console.log('***', err, res); 
             if (!res || !res.subscribers || res.subscribers.length < 1) {
                 reject('no subscribers. aborting.');
             } else {
-                resolve({recipients: res.subscribers, data: {message: res.chatMessages[0], channelDescription: res.description}});
+                resolve({
+                    recipients: res.subscribers, 
+                    data: {message: res.chatMessages[0], channelDescription: res.description,
+                    meta: {
+                        pushIDs: [],//['xxxx1', 'xxxx2'],
+                        neighbourhood: res.parentNeighbourhood,
+                        module: res.context,//'groupchats',
+                        itemID: res._id,//'5a61d10d11adf00fcb7c3452',
+                        subID: null
+                        }
+                    }
+                });
             }
         });
     })
@@ -45,9 +63,9 @@ function createChatPushMessage(channel) {
             data.recipients.forEach((recipient, index, array) => {
                 if (!(data.data.message.parentUser.equals(recipient))) { // don't notify parentUser
                 // console.log('generating newsfeed entry:' + JSON.stringify({title: 'New chat activity in ' + data.channelDescription, text: data.message.parentUser.nickname + ': ' + data.message.text}, user, callback));
-                console.log('generating newsfeed entry:' + JSON.stringify(data.data));
+                // console.log('generating newsfeed entry:' + JSON.stringify(data.data));
 
-                    Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelDescription, text: data.data.message.parentUser.nickname + ': ' + data.data.message.text}, recipient, (err, res) => {console.log(err, res);});
+                    Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelDescription, text: data.data.message.parentUser.nickname + ': ' + data.data.message.text}, recipient, data.meta, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
                     recipient.pushTokens.forEach(token => {
                     data.subscribers.push(token.playerId);
                     });
@@ -61,13 +79,13 @@ function createChatPushMessage(channel) {
             });
         }).then(data => {
             // console.log('creating notificaton - recipients:', JSON.stringify(data.recipients), 'data:', JSON.stringify(data.data));
-            createNotification(data.subscribers, data.data);
+            createNotification(data.subscribers, data.data, data.meta);
         });
     })
     .catch((reason) => {console.log(reason);});
 } 
 
-function createNotification(recipients, message) {
+function createNotification(recipients, message, meta) {
     // returns notificationId https://documentation.onesignal.com/reference#create-notification
     return new Promise((resolve, reject) => {
         if (recipients.length > 0) {
@@ -76,7 +94,8 @@ function createNotification(recipients, message) {
                     include_player_ids: recipients, // Array
                     app_id: process.env.ONESIGNAL_APPID, // String
                     contents: {"en": `${message.message.text}`}, // Object {"en": "English Message", "es": "Spanish Message"}
-                    headings: {"en": `${message.channelDescription}`} // Object {"en": "English Title", "es": "Spanish Title"}
+                    headings: {"en": `${message.channelDescription}`}, // Object {"en": "English Title", "es": "Spanish Title"}
+                    data: JSON.stringify(meta)
                 } // TODO: add refs to neighbourhoodId, moduleId (context), Origin "chat", OriginId -- data: {"abc": "123", "foo": "bar"}
             };
             data.metaData = {
