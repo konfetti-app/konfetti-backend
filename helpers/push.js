@@ -15,10 +15,11 @@ function createChatPushMessage(channel) {
         .populate({
             path:'chatMessages',
             options: {
+                sort: { 'date': -1},
                 limit: 1,
-                sort: { created: -1},
                 populate: {
                     path: 'parentUser',
+                    model: 'User',
                     select: 'nickname'
                 }
             }
