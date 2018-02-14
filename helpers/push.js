@@ -65,7 +65,7 @@ function createChatPushMessage(channel) {
                 // console.log('generating newsfeed entry:' + JSON.stringify({title: 'New chat activity in ' + data.channelDescription, text: data.message.parentUser.nickname + ': ' + data.message.text}, user, callback));
                 // console.log('generating newsfeed entry:' + JSON.stringify(data.data));
 
-                    Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelDescription, text: data.data.message.parentUser.nickname + ': ' + data.data.message.text}, recipient, data.meta, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
+                    Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelDescription, text: data.data.message.parentUser.nickname + ': ' + data.data.message.text}, recipient, data.data.meta, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
                     recipient.pushTokens.forEach(token => {
                     data.subscribers.push(token.playerId);
                     });
