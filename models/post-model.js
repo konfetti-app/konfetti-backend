@@ -56,7 +56,7 @@ PostSchema.statics.getPostById = function (postId, callback) {
       });
 };
 
-PostSchema.statics.createNewsfeedEntry = function (data, user, meta, callback) {
+PostSchema.statics.createNewsfeedEntry = function (data, user, type, meta, callback) {
     const Post = mongoose.model('Post');
     const Thread = mongoose.model('Thread');
 
@@ -67,7 +67,7 @@ PostSchema.statics.createNewsfeedEntry = function (data, user, meta, callback) {
           text: data.text || ''
       },
       meta: meta,
-      type: 'newsfeed',
+      type: type,
       parentThread : user._id,
       created : {
           date: now,
