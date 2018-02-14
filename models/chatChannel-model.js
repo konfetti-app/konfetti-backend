@@ -17,7 +17,7 @@ const ChatChannelSchema = new mongoose.Schema({
         type: String,
         index: true
     },
-    parentNeighbourhood: { // reference to parentNeighbourhood if one
+    parentNeighbourhood: { // reference to parentNeighbourhood
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Neighbourhood'  
     },
