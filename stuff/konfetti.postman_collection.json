@@ -827,6 +827,41 @@
 					"response": []
 				},
 				{
+					"name": "getNewsfeedByNeighbourhood",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"name\": \"hallo-chat\",\n\"description\": \"my first chat\",\n\"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n\"context\": \"module/groupchat\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/newsfeed/neighbourhood/59d4f88177416a5db030ddc8",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"newsfeed",
+								"neighbourhood",
+								"59d4f88177416a5db030ddc8"
+							]
+						},
+						"description": "get ChatChannel resp/ parentneighbourhood and context"
+					},
+					"response": []
+				},
+				{
 					"name": "get chatMessagesSince",
 					"request": {
 						"method": "GET",

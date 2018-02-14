@@ -234,10 +234,11 @@ get
 ```
 GET /api/newsfeed/
 ```
-|Key|Value|
-|---|-----|
-|type|String 'chatChannel'|
-|id|String (Id of chatChannel)|
+
+getByNeighbourhood
+```
+GET /api/newsfeed/neighbourhood/:neighbourhoodId
+```
 
 delete (mark as read)
 ```

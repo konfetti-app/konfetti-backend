@@ -4,13 +4,16 @@ const moment = require('moment');
 const ThreadSchema = new mongoose.Schema({
     type: {
         type: String,
-        default: 'thread' // also: 'newsfeed'
+        default: 'thread' // also: 'newsfeed', 'idea'
     },
     title: {
         type: String
         // ,
         // unique: true,
         // index: true
+    },
+    meta: {
+        type: {} // TODO: type-specific data
     },
     parentNeighbourhood: {
         type: mongoose.Schema.Types.ObjectId,
@@ -115,6 +118,17 @@ ThreadSchema.statics.getNewsfeed = function (user, callback) {
     // console.log(user._id);
     Thread.findOne({type: 'newsfeed', 'created.byUser': user._id}).populate({path: 'posts', options: {where: {disabled: false}, sort: {'created.date': -1}, limit: 100}}).exec(function (err, res) {
         if (err) console.log(err);
+        // console.log(err, res);
+        callback(err, res);
+      });
+};
+
+ThreadSchema.statics.getNewsfeedByNeighbourhood = function (neighbourhoodId, user, callback) {
+    const Thread = mongoose.model('Thread');
+    console.log(user._id, neighbourhoodId);
+    Thread.findOne({type: 'newsfeed', 'created.byUser': user._id}).populate({path: 'posts', match: {disabled: false, 'meta.neighbourhood': neighbourhoodId}, options: {sort: {'created.date': -1}, limit: 100}}).exec(function (err, res) {
+
+    if (err) console.log(err);
         // console.log(err, res);
         callback(err, res);
       });
