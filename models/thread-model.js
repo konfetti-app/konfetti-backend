@@ -126,8 +126,8 @@ ThreadSchema.statics.getNewsfeed = function (user, callback) {
 ThreadSchema.statics.getNewsfeedByNeighbourhood = function (neighbourhoodId, user, callback) {
     const Thread = mongoose.model('Thread');
     console.log(user._id, neighbourhoodId);
-    Thread.findOne({type: 'newsfeed', 'created.byUser': user._id}).populate({path: 'posts', match: {disabled: false, 'meta.neighbourhood': neighbourhoodId}, options: {sort: {'created.date': -1}, limit: 100}}).exec(function (err, res) {
-
+    Thread.findOne({type: 'newsfeed', 'created.byUser': user._id}).populate({path: 'posts', match: {'disabled': false, 'meta.neighbourhood': mongoose.Types.ObjectId(neighbourhoodId)}, options: {sort: {'created.date': -1}, limit: 100}}).exec(function (err, res) {
+        // console.log('res from getNewsfeedByNeighbourhood', JSON.stringify(res));
     if (err) console.log(err);
         // console.log(err, res);
         callback(err, res);
