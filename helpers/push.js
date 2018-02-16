@@ -21,11 +21,6 @@ function createChatPushMessage(channel) {
                     path: 'parentUser',
                     model: 'User',
                     select: 'nickname'
-                // },
-                // populate: {
-                //     path: 'parentChannel',
-                //     model: 'ChatChannel',
-                //     select: 'parentNeighbourhood'
                 }
             }
         })
@@ -44,12 +39,12 @@ function createChatPushMessage(channel) {
             } else {
                 resolve({
                     recipients: res.subscribers, 
-                    data: {message: res.chatMessages[0], channelDescription: res.description,
+                    data: {message: res.chatMessages[0], channelName: res.name,
                     meta: {
-                        pushIDs: [],//['xxxx1', 'xxxx2'],
+                        pushIDs: [],
                         neighbourhood: res.parentNeighbourhood,
-                        module: res.context,//'groupchats',
-                        itemID: res._id,//'5a61d10d11adf00fcb7c3452',
+                        module: res.context,
+                        itemID: res._id,
                         subID: null
                         }
                     }
@@ -62,11 +57,7 @@ function createChatPushMessage(channel) {
             data.subscribers = [];
             data.recipients.forEach((recipient, index, array) => {
                 if (!(data.data.message.parentUser.equals(recipient))) { // don't notify parentUser
-                // console.log('generating newsfeed entry:' + JSON.stringify({title: 'New chat activity in ' + data.channelDescription, text: data.message.parentUser.nickname + ': ' + data.message.text}, user, callback));
-                // console.log('generating newsfeed entry:' + JSON.stringify(data.data));
-
-                    // Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelDescription, text: data.data.message.parentUser.nickname + ': ' + data.data.message.text}, recipient, 'notification', data.data.meta, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
-                    Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelDescription, text: data.data.message.parentUser.nickname + ' hat im Chat ' + data.data.channelDescription + ' etwas Neues geschieben.'}, recipient, 'notification', data.data.meta, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
+                Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelName, text: data.data.message.parentUser.nickname + ' hat im Chat ' + data.data.channelName + ' etwas Neues geschieben.'}, recipient, 'notification', data.data.meta, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
                     recipient.pushTokens.forEach(token => {
                     data.subscribers.push(token.playerId);
                     });
@@ -95,9 +86,9 @@ function createNotification(recipients, message, meta) {
                     include_player_ids: recipients, // Array
                     app_id: process.env.ONESIGNAL_APPID, // String
                     contents: {"en": `${message.parentUser.nickname}: ${message.message.text}`, "de": `${message.parentUser.nickname}: ${message.message.text}`}, // Object {"en": "English Message", "es": "Spanish Message"}
-                    headings: {"en": `New chat activity in ${message.channelDescription}`, "de": `Neue Aktivität in Chat ${message.channelDescription}`}, // Object {"en": "English Title", "es": "Spanish Title"}
+                    headings: {"en": `New chat activity in ${message.channelName}`, "de": `Neue Aktivität in Chat ${message.channelName}`}, // Object {"en": "English Title", "es": "Spanish Title"}
                     data: JSON.stringify(meta)
-                } // TODO: add refs to neighbourhoodId, moduleId (context), Origin "chat", OriginId -- data: {"abc": "123", "foo": "bar"}
+                }
             };
             data.metaData = {
                 uri: '/notifications',
@@ -111,7 +102,7 @@ function createNotification(recipients, message, meta) {
     .then((data) => {
         console.log(`dispatching to oneSignal: ${JSON.stringify(data)}`);
         sendRequest(data).then(res => {
-            console.log(`notification sent: ${JSON.stringify(res)}`); // TODO: continue here.
+            console.log(`notification sent: ${JSON.stringify(res)}`);
         });
     })
     .catch(reason => {console.log(reason);});
