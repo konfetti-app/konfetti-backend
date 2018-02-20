@@ -38,6 +38,14 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), function
   });
 });
 
+/* POST user's status for existing idea. */
+router.post('/:id/status', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  Idea.updateIdeaStatus(req.params.id, req.body, req.user, (err, idea) => {
+    if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+    else res.status(200).json({code: 200, status: 'success', data: {status: status}});
+  });
+});
+
 // /* GET chatChannels for current user. */
 // router.get('/:parentNeighbourhood/:context', passport.authenticate('jwt', { session: false }), function(req, res, next) {
 //     // console.log(req.body);

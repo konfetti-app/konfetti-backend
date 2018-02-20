@@ -148,6 +148,38 @@ IdeaSchema.statics.updateIdea = function (ideaId, data, user, callback) {
     });
 };
 
+IdeaSchema.statics.updateIdeaStatus = function (ideaId, data, user, callback) {
+    const Idea = mongoose.model('Idea');
+    console.log(JSON.stringify(data));
+    // let now = moment(new Date).unix();
+
+    return new Promise((resolve, reject) => {
+        let status = {isAttending: data.isAttending, isHelping: data.isHelping};
+        if (String(data.isAttending) === 'true') {
+            Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                console.log(`attendence of user ${user._id} updated for idea ${ideaId}- true`);
+            });
+        } else {
+            Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                console.log(`attendence of user ${user._id} updated for idea ${ideaId} - false`);
+            });
+        }
+        if (String(data.isHelping) === 'true') {
+            Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{helpers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                console.log(`help-status of user ${user._id} updated for idea ${ideaId} - true`);
+            });
+        } else {
+            Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                console.log(`help-status of user ${user._id} updated for idea ${ideaId} - false`);
+            });
+        }
+        resolve(status); // TODO: no error-handling here.
+    })
+
+    .then(status => {callback(null, status);})
+    .catch(reason => {callback(reason, null);});
+};
+
 IdeaSchema.statics.getIdeas = function (params, callback) {
 
     // TODO: remove Messages from results

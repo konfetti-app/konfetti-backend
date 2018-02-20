@@ -267,6 +267,15 @@ deleteIdea (must be creator or admin)
 DELETE /api/ideas/:ideaId
 ```
 
+updateIdeaStatus
+```
+POST /api/ideas/:ideaId/status
+```
+|Key|Value|
+|---|-----|
+|isHelping|Boolean|
+|isAttending|Boolean|
+
 ### newsfeed
 
 get
