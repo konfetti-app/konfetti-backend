@@ -228,6 +228,39 @@ unsubscribe
 DELETE /api/chats/subscriptions/:chatChannelId
 ```
 
+### ideas
+
+createIdea
+```
+POST /api/ideas/
+```
+|Key|Value|
+|---|-----|
+|title|String|
+|address|String|
+|date|Integer|
+|description|String|
+|helpDescription|String|
+|wantsGuest|Boolean|
+|wantsHelper|Boolean|
+|geoData|Object containing "longitude", "latitude", optionally: "radius"|
+
+
+updateIdea
+```
+POST /api/newsfeed/:ideaId
+```
+|Key|Value|
+|---|-----|
+|title|String|
+|address|String|
+|date|Integer|
+|description|String|
+|helpDescription|String|
+|wantsGuest|Boolean|
+|wantsHelper|Boolean|
+|geoData|Object containing "longitude", "latitude", optionally: "
+
 ### newsfeed
 
 get

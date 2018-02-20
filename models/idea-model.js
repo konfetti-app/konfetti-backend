@@ -93,7 +93,7 @@ const IdeaSchema = new mongoose.Schema({
 
 IdeaSchema.statics.createIdea = function (data, user, callback) {
     const Idea = mongoose.model('Idea');
-    console.log(JSON.stringify(data));
+    // console.log(JSON.stringify(data));
     let now = moment(new Date).unix();
     let newIdea= new Idea({
         title : data.title,
@@ -116,6 +116,35 @@ IdeaSchema.statics.createIdea = function (data, user, callback) {
         } else {
         callback(undefined, doc);
         }
+    });
+};
+
+IdeaSchema.statics.updateIdea = function (ideaId, data, user, callback) {
+    const Idea = mongoose.model('Idea');
+    // console.log(JSON.stringify(data));
+    // let now = moment(new Date).unix();
+
+    Idea.findOne({_id : ideaId}).exec((err, idea) => {
+        return new Promise((resolve, reject) => {
+        idea.title = data.title || idea.title;
+        idea.parentNeighbourhood = data.parentNeighbourhood || idea.parentNeighbourhood;
+        idea.geoData = data.geoData || idea.geoData;
+        idea.date = data.date || idea.date;
+        idea.address = data.address || idea.address;
+        idea.wantsHelper = data.wantsHelper;
+        idea.wantsGuest = data.wantsGuest;
+        idea.description = data.description || idea.description;
+        idea.helpDescription = data.helpDescription || idea.helpDescription;
+        idea.save((err, savedIdea) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(idea);
+            }
+        });
+    })
+    .then(savedIdea => {callback(null, savedIdea);})
+    .catch(reason => {callback(reason, null);});
     });
 };
 

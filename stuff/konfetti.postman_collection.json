@@ -185,7 +185,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\":\"GeoGroup\",\n\t\"geoData\":{\n\t\t\"longitude\":52.521633,\n\t\t\"latitude\":13.411088,\n\t\t\"radius\":2.5\n\t}\n}"
+							"raw": "{\n  \"name\":\"GeoGroup\",\n  \"geoData\":{\n    \"longitude\":52.521633,\n    \"latitude\":13.411088,\n    \"radius\":2.5\n  }\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/neighbourhoods/",
@@ -219,7 +219,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"actionType\":\"newNeighbour\",\n\t\"neighbourhood\":\"59d4f88177416a5db030ddc8\",\n\t\"token\":\"123\",\n\t\"leftCount\":\"50\"\n}"
+							"raw": "{\n  \"actionType\":\"newNeighbour\",\n  \"neighbourhood\":\"59d4f88177416a5db030ddc8\",\n  \"token\":\"123\",\n  \"leftCount\":\"50\"\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/codes/",
@@ -252,9 +252,9 @@
 							"formdata": [
 								{
 									"key": "avatar",
-									"value": "",
 									"description": "",
-									"type": "file"
+									"type": "file",
+									"src": "Bildschirmfoto 2017-10-18 um 17.28.02.png"
 								},
 								{
 									"key": "parentThread",
@@ -303,9 +303,9 @@
 							"formdata": [
 								{
 									"key": "image",
-									"value": "",
 									"description": "",
-									"type": "file"
+									"type": "file",
+									"src": "Katze.jpg"
 								},
 								{
 									"key": "parentThread",
@@ -430,7 +430,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"nickname\": \"icke\",\n\t\"username\": \"patrick\",\n\t\"preferredLanguage\":\"de\",\n\t\"spokenLanguages\":[\"en\",\"de\",\"ar\"],\n\t\"description\":\"I'm a very active user!\",\n\t\"password\": \"test\",\n\t\"email\": \"patrick-konfetti-test-user@isnogood.de\"\n}"
+							"raw": "{\n  \"nickname\": \"icke\",\n  \"username\": \"patrick\",\n  \"preferredLanguage\":\"de\",\n  \"spokenLanguages\":[\"en\",\"de\",\"ar\"],\n  \"description\":\"I'm a very active user!\",\n  \"password\": \"test\",\n  \"email\": \"patrick-konfetti-test-user@isnogood.de\"\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/users/59e0bb5f8fad942ea8b46704",
@@ -464,7 +464,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"password\": \"test\"\n}"
+							"raw": "{\n  \"password\": \"test\"\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/users/resetPassword/Hs97hF2g0sN4YlD7oQOglrNsKQOBYEv0A3bM",
@@ -977,6 +977,74 @@
 							]
 						},
 						"description": "add new Newsfeed entry (post) - only in devmode"
+					},
+					"response": []
+				},
+				{
+					"name": "createIdea",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"address\": \"Beipsielplatz 3\",\n  \"date\": 1521559800000,\n  \"description\": \"Am Spielplatz am Beispielplatz wollen wir ein oder mehrere Vogelhäuser bauen. Wer ist dabei?\",\n  \"helpDescription\": \"Jeder der einen Hammer Schwingen will. Wer eine kleine Motorstichsäge hat - das wäre super.\",\n  \"title\": \"Vogelhaus bauen\",\n  \"wantsGuest\": false,\n  \"wantsHelper\": true,\n  \"geoData\": {\n        \"longitude\": 0.00,\n        \"latitude\": 0.00\n\t}\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/ideas/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"ideas",
+								""
+							]
+						},
+						"description": "add new ChatChannel"
+					},
+					"response": []
+				},
+				{
+					"name": "updateIdea",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"address\": \"Beipsielplatz 3\",\n  \"date\": 1521559800000,\n  \"description\": \"Am Spielplatz am Beispielplatz wollen wir ein oder mehrere Vogelhäuser bauen. Wer ist dabei?\",\n  \"helpDescription\": \"Jeder der einen Hammer Schwingen will. Wer eine kleine Motorstichsäge hat - das wäre super.\",\n  \"title\": \"Vogelhaus bauen, alter...\",\n  \"wantsGuest\": true,\n  \"wantsHelper\": true,\n  \"geoData\": {\n        \"longitude\": 0.00,\n        \"latitude\": 0.00\n\t}\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/ideas/5a8c27fe8fd58e77160ac8e2",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"ideas",
+								"5a8c27fe8fd58e77160ac8e2"
+							]
+						},
+						"description": "add new ChatChannel"
 					},
 					"response": []
 				}

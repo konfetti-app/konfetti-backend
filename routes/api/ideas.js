@@ -17,10 +17,17 @@ const Idea = mongoose.model('Idea');
 
 /* POST create a new idea. */
 router.post('/', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-  console.log('pling')
   Idea.createIdea(req.body, req.user, (err, idea) => {
     if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
     else res.status(201).json({code: 201, status: 'success', data: {idea: idea}});
+  });
+});
+
+/* POST update existing idea. */
+router.post('/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  Idea.updateIdea(req.params.id, req.body, req.user, (err, idea) => {
+    if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+    else res.status(200).json({code: 200, status: 'success', data: {idea: idea}});
   });
 });
 
