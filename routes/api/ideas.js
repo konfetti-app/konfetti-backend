@@ -31,12 +31,12 @@ router.post('/:id', passport.authenticate('jwt', { session: false }), function(r
   });
 });
 
-// router.delete('/channel/:chatChannelId', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-//   ChatChannel.deleteChatChannel(req.params.chatChannelId, req.user, (err, chatChannel) => {
-//     if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-//     else res.status(200).json({code: 200, status: 'success', data: {chatChannel: chatChannel}});
-//   });
-// });
+router.delete('/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  Idea.deleteIdea(req.params.id, req.user, (err, idea) => {
+    if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+    else res.status(200).json({code: 200, status: 'success', data: {idea: idea}});
+  });
+});
 
 // /* GET chatChannels for current user. */
 // router.get('/:parentNeighbourhood/:context', passport.authenticate('jwt', { session: false }), function(req, res, next) {

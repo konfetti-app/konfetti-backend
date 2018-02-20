@@ -159,55 +159,28 @@ IdeaSchema.statics.getIdeas = function (params, callback) {
     });
 };
 
-IdeaSchema.statics.getChatById = function (chatId, callback) {
+IdeaSchema.statics.getIdeaById = function (ideaId, callback) {
     const Idea = mongoose.model('Idea');
-    Idea.findOne({_id: chatId}).exec(function (err, res) {
+    Idea.findOne({_id: ideaId}).exec(function (err, res) {
         if (err) console.log(err);
         callback(err, res);
     });
 };
 
-// IdeaSchema.statics.createIdea = function (channelName, userId, callback) {
+// IdeaSchema.statics.getChatMessagesSince = function (channel, since, user, callback) {
+//     const ChatMessage = mongoose.model('ChatMessage');
 //     const Idea = mongoose.model('Idea');
-//     Idea.findOne({name: channelName})
-//     .then((channel) => {
-//         if (!channel) {
-//             console.log('channelName not found. creating new channelName: ' + channelName);
-//             let now = moment(new Date).unix();
-//             let newChat = new Idea({
-//                 name : channelName,
-//                 created : {
-//                     date: now,
-//                     byUser: userId
-//                 }
-//             }).save((err, doc) => {
-//               if (err) {
-//                 console.log('Error saving new chat: ' + err.message);
-//                 callback(err, undefined);
-//               } else {
-//                 callback(undefined, doc);
-//               }
-//             });
-//     } else { // channel is already present
-//         callback(undefined, callback);
-//     }
-//   });
+//     ChatMessage.find({parentChannel: channel, date : { $gt: since }}).limit(500).sort('date').populate({path: 'parentUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(chatMessages => {
+//         Idea.findOne({_id: channel}).select('subscribers').then(result =>{
+//             // console.log('result:', JSON.stringify(result));
+//             callback(null, chatMessages, result.subscribers.indexOf(user._id) > -1 ? true : false);
+//         });
+//     });
 // };
 
-IdeaSchema.statics.getChatMessagesSince = function (channel, since, user, callback) {
-    const ChatMessage = mongoose.model('ChatMessage');
+IdeaSchema.statics.deleteIdea = function (ideaId, user, callback) {
     const Idea = mongoose.model('Idea');
-    ChatMessage.find({parentChannel: channel, date : { $gt: since }}).limit(500).sort('date').populate({path: 'parentUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(chatMessages => {
-        Idea.findOne({_id: channel}).select('subscribers').then(result =>{
-            // console.log('result:', JSON.stringify(result));
-            callback(null, chatMessages, result.subscribers.indexOf(user._id) > -1 ? true : false);
-        });
-    });
-};
-
-IdeaSchema.statics.deleteIdea = function (channel, user, callback) {
-    const Idea = mongoose.model('Idea');
-    Idea.findOne({_id: channel}).populate({path: 'created.byUser'}).then(idea => {
+    Idea.findOne({_id: ideaId}).then(idea => {
         if (idea.created.byUser.equals(user) || user.isAdmin) {
             idea.disabled = true;
             idea.save((err, doc) => {
@@ -220,68 +193,45 @@ IdeaSchema.statics.deleteIdea = function (channel, user, callback) {
                 }
             });
         } else {
-            callback('You are not allowed to delete this Channel', undefined);
+            callback('You are not allowed to delete this Idea', undefined);
         }
     });
 };
 
-// IdeaSchema.statics.createIdea = function (data, user, callback) {
+// IdeaSchema.statics.subscribe = function (body, user, callback) { // requires body.ideaId
 //     const Idea = mongoose.model('Idea');
-
-//     let now = moment(new Date).unix();
-//     let newChat = new Idea({
-//         // name : data.name,
-//         // parentNeighbourhood: data.parentNeighbourhood,
-//         // context: data.context,
-//         description: data.description,
-//         created : {
-//             date: now,
-//             byUser: user._id
-//         }
-//     }).save((err, doc) => {
-//         if (err) {
-//         console.log('Error saving new chat: ' + err.message);
-//         callback(err, undefined);
-//         } else {
-//         callback(undefined, doc);
-//         }
-//     });
+//     if (body.id && user._id) {
+//         Idea.findOneAndUpdate({_id: body.id}, {$addToSet:{subscribers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+//             if (err) {
+//                 console.log(err);
+//                 callback(err, undefined);
+//             } else {
+//                 console.log(`subscribed user ${user._id} to idea ${body.id}`);
+//                 callback(err, 'subscribed');
+//             }
+//         });
+//     } else {
+//         callback('invalid input', undefined);
+//     }
 // };
 
-IdeaSchema.statics.subscribe = function (body, user, callback) { // requires body.ideaId
-    const Idea = mongoose.model('Idea');
-    if (body.id && user._id) {
-        Idea.findOneAndUpdate({_id: body.id}, {$addToSet:{subscribers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-            if (err) {
-                console.log(err);
-                callback(err, undefined);
-            } else {
-                console.log(`subscribed user ${user._id} to idea ${body.id}`);
-                callback(err, 'subscribed');
-            }
-        });
-    } else {
-        callback('invalid input', undefined);
-    }
-};
-
-IdeaSchema.statics.unsubscribe = function (someId, user, callback) { // requires body.ideaId
-    const Idea = mongoose.model('Idea');
-    if (someId && user._id) {
-        Idea.findOneAndUpdate({_id: someId}, {$pull:{subscribers: user._id}}, {upsert: true, new: true},
-            (err, subscriptions) => {
-                if (err) {
-                    console.log(err);
-                    callback(err, undefined);
-                } else {
-                    console.log(`unsubscribed ${user._id} from channel ${someId}`);
-                    callback(undefined, 'unsubscribed');
-                }
-            });
-    } else {
-        callback('invalid input', undefined);
-    }
-};
+// IdeaSchema.statics.unsubscribe = function (someId, user, callback) { // requires body.ideaId
+//     const Idea = mongoose.model('Idea');
+//     if (someId && user._id) {
+//         Idea.findOneAndUpdate({_id: someId}, {$pull:{subscribers: user._id}}, {upsert: true, new: true},
+//             (err, subscriptions) => {
+//                 if (err) {
+//                     console.log(err);
+//                     callback(err, undefined);
+//                 } else {
+//                     console.log(`unsubscribed ${user._id} from channel ${someId}`);
+//                     callback(undefined, 'unsubscribed');
+//                 }
+//             });
+//     } else {
+//         callback('invalid input', undefined);
+//     }
+// };
 
 
 mongoose.model('Idea', IdeaSchema);

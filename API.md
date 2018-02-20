@@ -248,7 +248,7 @@ POST /api/ideas/
 
 updateIdea
 ```
-POST /api/newsfeed/:ideaId
+POST /api/ideas/:ideaId
 ```
 |Key|Value|
 |---|-----|
@@ -259,7 +259,13 @@ POST /api/newsfeed/:ideaId
 |helpDescription|String|
 |wantsGuest|Boolean|
 |wantsHelper|Boolean|
-|geoData|Object containing "longitude", "latitude", optionally: "
+|geoData|Object containing "longitude", "latitude", optionally: "radius"|
+
+
+deleteIdea (must be creator or admin)
+```
+DELETE /api/ideas/:ideaId
+```
 
 ### newsfeed
 
