@@ -139,7 +139,7 @@ IdeaSchema.statics.updateIdea = function (ideaId, data, user, callback) {
             if (err) {
                 reject(err);
             } else {
-                resolve(idea);
+                resolve(savedIdea);
             }
         });
     })
@@ -153,36 +153,42 @@ IdeaSchema.statics.updateIdeaStatus = function (ideaId, data, user, callback) {
     console.log(JSON.stringify(data));
     // let now = moment(new Date).unix();
 
-    return new Promise((resolve, reject) => {
-        let status = {isAttending: data.isAttending, isHelping: data.isHelping};
-        if (String(data.isAttending) === 'true') {
-            Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-                console.log(`attendence of user ${user._id} updated for idea ${ideaId}- true`);
-            });
-        } else {
-            Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-                console.log(`attendence of user ${user._id} updated for idea ${ideaId} - false`);
-            });
-        }
-        if (String(data.isHelping) === 'true') {
-            Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{helpers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-                console.log(`help-status of user ${user._id} updated for idea ${ideaId} - true`);
-            });
-        } else {
-            Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-                console.log(`help-status of user ${user._id} updated for idea ${ideaId} - false`);
-            });
-        }
+    return new Promise(async(resolve, reject) => {
+        //  function() {
+            if (String(data.isAttending) === 'true') {
+                await Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                    console.log(`attendence of user ${user._id} updated for idea ${ideaId}- true`);
+                });
+            } else {
+                await Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                    console.log(`attendence of user ${user._id} updated for idea ${ideaId} - false`);
+                });
+            }
+            if (String(data.isHelping) === 'true') {
+                await Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{helpers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                    console.log(`help-status of user ${user._id} updated for idea ${ideaId} - true`);
+                });
+            } else {
+                await Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                    console.log(`help-status of user ${user._id} updated for idea ${ideaId} - false`);
+                });
+            }
+            let status = await {isAttending: data.isAttending, isHelping: data.isHelping};
+        // }
+        
         resolve(status); // TODO: no error-handling here.
     })
 
-    .then(status => {callback(null, status);})
-    .catch(reason => {callback(reason, null);});
+    .then(status => {
+        callback(null, status);
+    })
+    .catch(reason => {
+        console.log('rejected: ' + reason);
+        callback(reason, null);
+    });
 };
 
 IdeaSchema.statics.getIdeas = function (params, callback) {
-
-    // TODO: remove Messages from results
 
     const Idea = mongoose.model('Idea');
     Idea.find({context: params.context, parentNeighbourhood: params.parentNeighbourhood, disabled: false}).populate({path: 'created.byUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).exec(function (err, res) {
@@ -199,16 +205,35 @@ IdeaSchema.statics.getIdeaById = function (ideaId, callback) {
     });
 };
 
-// IdeaSchema.statics.getChatMessagesSince = function (channel, since, user, callback) {
-//     const ChatMessage = mongoose.model('ChatMessage');
-//     const Idea = mongoose.model('Idea');
-//     ChatMessage.find({parentChannel: channel, date : { $gt: since }}).limit(500).sort('date').populate({path: 'parentUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(chatMessages => {
-//         Idea.findOne({_id: channel}).select('subscribers').then(result =>{
-//             // console.log('result:', JSON.stringify(result));
-//             callback(null, chatMessages, result.subscribers.indexOf(user._id) > -1 ? true : false);
-//         });
-//     });
-// };
+IdeaSchema.statics.getIdeasForNeighbourhood = function (neighbourhoodId, user, callback) {
+    const Idea = mongoose.model('Idea');
+    Idea.find({parentNeighbourhood: neighbourhoodId}).limit(500).sort('date').populate({path: 'created.byUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(results => {
+        return new Promise(async(resolve, reject) => {
+            await results.forEach((result, index, array) => {
+
+                if (result.helpers.indexOf(user._id) > -1) {
+                    results[index].userIsHelping = true;
+                } else {
+                    results[index].userIsHelping = false;
+                }
+                if (result.guests.indexOf(user._id) > -1) {
+                    results[index].userIsAttending = true;
+                } else {
+                    results[index].userIsAttending = false;
+                }
+                delete results[index].helpers
+                results[index].guests = undefined;
+            });
+            resolve(results);
+        })
+        .then(modifiedIdeas => {
+            callback(null, modifiedIdeas);
+        })
+        .catch(reason => {
+            callback(reason, null);
+        });
+    });
+};
 
 IdeaSchema.statics.deleteIdea = function (ideaId, user, callback) {
     const Idea = mongoose.model('Idea');

@@ -261,6 +261,10 @@ POST /api/ideas/:ideaId
 |wantsHelper|Boolean|
 |geoData|Object containing "longitude", "latitude", optionally: "radius"|
 
+getIdeasForNeighbourhood
+```
+GET /api/ideas/neighbourhood/:neighbourhoodId
+```
 
 deleteIdea (must be creator or admin)
 ```

@@ -40,20 +40,20 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), function
 
 /* POST user's status for existing idea. */
 router.post('/:id/status', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-  Idea.updateIdeaStatus(req.params.id, req.body, req.user, (err, idea) => {
+  Idea.updateIdeaStatus(req.params.id, req.body, req.user, (err, status) => {
     if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
     else res.status(200).json({code: 200, status: 'success', data: {status: status}});
   });
 });
 
-// /* GET chatChannels for current user. */
-// router.get('/:parentNeighbourhood/:context', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-//     // console.log(req.body);
-//     ChatChannel.getChatChannels(req.params, (err, chatChannels) => {
-//       if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-//       else res.status(200).json({code: 200, status: 'success', data: {chatChannels: chatChannels}});
-//     });
-// });
+/* GET ideas for neighbourhood. */
+router.get('/neighbourhood/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+    // console.log(req.body);
+    Idea.getIdeasForNeighbourhood(req.params.id, req.user, (err, modifiedIdeas) => {
+      if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+      else res.status(200).json({code: 200, status: 'success', data: {ideas: modifiedIdeas}});
+    });
+});
 
 // /* GET chatMessages since timestamp for channel. */
 // router.get('/channel/:chatChannelId/since/:since', passport.authenticate('jwt', { session: false }), function(req, res, next) {
