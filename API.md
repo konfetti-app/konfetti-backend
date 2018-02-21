@@ -280,6 +280,16 @@ POST /api/ideas/:ideaId/status
 |isHelping|Boolean|
 |isAttending|Boolean|
 
+
+upvoteIdea
+```
+POST /api/ideas/:ideaId/vote
+```
+|Key|Value|
+|---|-----|
+|amount|Integer|
+
+
 ### newsfeed
 
 get

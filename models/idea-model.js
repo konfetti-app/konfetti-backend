@@ -65,15 +65,15 @@ const IdeaSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'  
     }],
-    // konfettiSpent: [{ // TODO: not implemented yet
-    //     byUser: { // Array of members in this channel
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'User'  
-    //     },
-    //     amount: {
-    //         type: Number
-    //     }
-    // }],
+    konfettiSpent: [{ // TODO: connected to wallet-model, one konfetti is free, others mach agains users wallet
+        byUser: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'  
+        },
+        amount: {
+            type: Number
+        }
+    }],
     disabled: {
         type: Boolean,
         default: false
@@ -253,6 +253,12 @@ IdeaSchema.statics.deleteIdea = function (ideaId, user, callback) {
             callback('You are not allowed to delete this Idea', undefined);
         }
     });
+};
+
+IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
+
+    // TODO: implement Wallet
+
 };
 
 // IdeaSchema.statics.subscribe = function (body, user, callback) { // requires body.ideaId

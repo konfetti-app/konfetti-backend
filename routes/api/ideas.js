@@ -46,6 +46,14 @@ router.post('/:id/status', passport.authenticate('jwt', { session: false }), fun
   });
 });
 
+/* POST user's status for existing idea. */
+router.post('/:id/vote', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  Idea.upvoteIdea(req.params.id, req.body, req.user, (err, result) => {
+    if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+    else res.status(200).json({code: 200, status: 'success', data: {result: result}});
+  });
+});
+
 /* GET ideas for neighbourhood. */
 router.get('/neighbourhood/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
     // console.log(req.body);
