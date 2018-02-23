@@ -341,19 +341,23 @@ IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
 
 IdeaSchema.statics.distributeKonfettiForIdea = function (ideaId, data, user, callback) {
     const Idea = mongoose.model('Idea');
+    const Post = mongoose.model('Post');
     const Wallet = mongoose.model('Wallet');
 
     Idea.findOne({_id: ideaId})
         .then(idea => {
             return new Promise((resolve, reject) => {
-
+                let konfettiTotal = getTotalKonfetti(idea.konfettiSpent)
                 if (!idea.created.byUser.equals(user._id) || !user.isAdmin) {
                     reject('not allowed')
-                } else if (data.amount && data.amount > getTotalKonfetti(idea.konfettiSpent)){
+                } else if (data.amount && data.amount > konfettiTotal){
                     reject('not allowed to distribute more konfetti than spent on idea')
                 } else { // ok to distribute.
                     // let numberOfRecipients = data.recipients.length; // <- temporaily disabled to get the economy running.
                     data.recipients.forEach(recipient => {
+                        // create a newsfeed-entry
+                        Post.createNewsfeedEntry({title: 'Konfetti für ' + idea.title + ' verteilt', text: 'Du hast für deine Hilfe bei ' + idea.title + ' ' + konfettiTotal + ' Konfetti erhalten.'}, recipient, 'notification', {}, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
+                        // handle wallet of recipient
                         Wallet.findOne({parentUser: recipient, parentNeighbourhood: idea.parentNeighbourhood})
                         .then(wallet => {
                             if (!wallet) { // create a wallet.

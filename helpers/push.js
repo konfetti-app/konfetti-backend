@@ -57,7 +57,7 @@ function createChatPushMessage(channel) {
             data.subscribers = [];
             data.recipients.forEach((recipient, index, array) => {
                 if (!(data.data.message.parentUser.equals(recipient))) { // don't notify parentUser
-                Post.createNewsfeedEntry({title: 'New chat activity in ' + data.data.channelName, text: data.data.message.parentUser.nickname + ' hat im Chat ' + data.data.channelName + ' etwas Neues geschieben.'}, recipient, 'notification', data.data.meta, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
+                Post.createNewsfeedEntry({title: 'Neue Aktivität in ' + data.data.channelName, text: data.data.message.parentUser.nickname + ' hat im Chat ' + data.data.channelName + ' etwas Neues geschieben.'}, recipient, 'notification', data.data.meta, (err, res) => {console.log('newsfeed entry generated.', res ? res._id : err);});
                     recipient.pushTokens.forEach(token => {
                     data.subscribers.push(token.playerId);
                     });
