@@ -238,7 +238,7 @@ IdeaSchema.statics.getIdeasForNeighbourhood = function (neighbourhoodId, user, c
 IdeaSchema.statics.deleteIdea = function (ideaId, user, callback) {
     const Idea = mongoose.model('Idea');
     Idea.findOne({_id: ideaId}).then(idea => {
-        if (idea.created.byUser.equals(user) || user.isAdmin) {
+        if (idea.created.byUser.equals(user._id) || user.isAdmin) {
             idea.disabled = true;
             idea.save((err, doc) => {
                 if (err) {
