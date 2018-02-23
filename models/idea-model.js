@@ -349,10 +349,8 @@ IdeaSchema.statics.distributeKonfettiForIdea = function (ideaId, data, user, cal
             return new Promise((resolve, reject) => {
                 let konfettiTotal = getTotalKonfetti(idea.konfettiSpent)
                 // if (!idea.created.byUser.equals(user._id) || !user.isAdmin) {
-                if (!idea.created.byUser.equals(user._id) || !user.isAdmin) {
-                    console.log('konfetti distribution: user is not owner', JSON.stringify(idea.created.byUser), JSON.stringify(user), 'equal: ' + idea.created.byUser.equals(user._id));
-
-                reject('not allowed')
+                if (!idea.created.byUser.equals(user._id)) {
+                    reject('not allowed')
                 } else if (data.amount && data.amount > konfettiTotal){
                     reject('not allowed to distribute more konfetti than spent on idea')
                 } else { // ok to distribute.
