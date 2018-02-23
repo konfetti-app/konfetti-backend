@@ -295,7 +295,6 @@ POST /api/ideas/:ideaId/distribute
 ```
 |Key|Value|
 |---|-----|
-|amount|Integer (optional - distribute all konfettiSpent if empty)|
 |recipients|Array of UserIds|
 
 
