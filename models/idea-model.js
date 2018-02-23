@@ -225,7 +225,7 @@ IdeaSchema.statics.getIdeaById = function (ideaId, callback) {
 
 IdeaSchema.statics.getIdeasForNeighbourhood = function (neighbourhoodId, user, callback) {
     const Idea = mongoose.model('Idea');
-    Idea.find({parentNeighbourhood: neighbourhoodId}).limit(500).sort('date').populate({path: 'created.byUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(results => {
+    Idea.find({parentNeighbourhood: neighbourhoodId, disabled: false}).limit(500).sort('date').populate({path: 'created.byUser', select: 'nickname avatar', populate: {path: 'avatar', select: 'filename'}}).then(results => {
         return new Promise(async(resolve, reject) => {
             await results.forEach((result, index, array) => {
 
