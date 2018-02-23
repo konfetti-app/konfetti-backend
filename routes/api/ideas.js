@@ -63,35 +63,5 @@ router.get('/neighbourhood/:id', passport.authenticate('jwt', { session: false }
     });
 });
 
-// /* GET chatMessages since timestamp for channel. */
-// router.get('/channel/:chatChannelId/since/:since', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-//   // if no timestamp -> get all. result is array of ChatMessages.
-//   // console.log(req.body);
-//   ChatChannel.getChatMessagesSince(req.params.chatChannelId, req.params.since, req.user, (err, chatMessages, subscribed) => {
-//     if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-//     else res.status(200).json({code: 200, status: 'success', data: {chatMessages: chatMessages, subscribed: subscribed}});
-//   });
-// });
-
-// /* POST subscribe to channel. */
-// router.post('/subscriptions', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-//   console.log(req.body);
-//   // if (req.user.isAdmin) {
-//       ChatChannel.subscribe(req.body, req.user, (err, subscription) => {
-//           if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
-//           else res.status(200).json({code: 200, status: 'ok', data: {subscription}});
-//       });
-//   // } else {
-//   //     res.status(403).json({code: 403, status: 'error', errors: ['not allowed to subscribe to this channel']});
-//   // }
-// });
-// /* DELETE unsubscribe from channel */
-// router.delete('/subscriptions/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-//       ChatChannel.unsubscribe(req.params.id, req.user, (err, subscription) => {
-//           if (err) res.status(500).json({code: 500, status: 'error', errors: [formatError(err)]});
-//           else res.status(200).json({code: 200, status: 'ok', data: {subscription}});
-//       });
-// });
-
 
 module.exports = router;
