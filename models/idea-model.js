@@ -53,6 +53,10 @@ const IdeaSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Neighbourhood'  
     },
+    orgaChat: { // reference to orga chat
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChatChannel'  
+    },
     helpers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'  
@@ -110,13 +114,25 @@ IdeaSchema.statics.createIdea = function (data, user, callback) {
             date: now,
             byUser: user._id
         }
-    }).save((err, doc) => {
+    }).save((err, idea) => {
         if (err) {
         console.log('Error saving new idea: ' + err.message);
         callback(err, undefined);
         } else {
-            ChatChannel.createChatChannel({name: doc.title, parentNeighbourhood: doc.parentNeighbourhood, context: 'IdeaChat', description: doc.description, parentIdea: doc._id}, user, callback)
-        callback(undefined, doc);
+            ChatChannel.createChatChannel({name: idea.title, parentNeighbourhood: idea.parentNeighbourhood, context: 'IdeaChat', description: idea.description, parentIdea: idea._id}, user, (err, chatChannel) => {
+                if (err) {
+                    console.log('Error saving new ideaChatChannel: ' + err.message);
+                } else {
+                    idea.orgaChat = chatChannel._id;
+                    idea.save((err, idea) => {
+                        if (err) {
+                            console.log('Error saving new ideaChatChannel: ' + err.message);
+                        } else {
+                            callback(undefined, idea);
+                        }
+                    })
+                }
+            })
         }
     });
 };
