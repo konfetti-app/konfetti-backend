@@ -221,8 +221,8 @@ IdeaSchema.statics.getIdeasForNeighbourhood = function (neighbourhoodId, user, c
                 } else {
                     results[index].userIsAttending = false;
                 }
-                delete results[index].helpers
-                results[index].guests = undefined;
+                results[index].helpers;
+                results[index].guests;
             });
             resolve(results);
         })
@@ -256,8 +256,47 @@ IdeaSchema.statics.deleteIdea = function (ideaId, user, callback) {
 };
 
 IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
+    const Idea = mongoose.model('Idea');
+    const Wallet = mongoose.model('Wallet');
+    // deduct from user's wallet
+    return new Promise((resolve, reject) => {
+        Wallet.findOne({parentUser: user._id})
+        .then(wallet => {
+            if (wallet && wallet.amount >= amount) {
+                wallet.amount = wallet.amount - amount;
+                resolve('ok');
+            } else {
+                // insufficient balance. one konfetti is free
+                amount = 1;
+                resolve('ok, amount changed to 1');
+            }
+        })
+    })
 
-    // TODO: implement Wallet
+    .then(() => {
+        // add to idea
+        return new Promise((resolve, reject) => {
+            Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{konfettiSpent: {byUser: user._id, amount: amount}}}, {upsert: true, new: true}, (err, idea) => {
+                if (!idea) {
+                    reject('idea not found');
+                } else {
+                    let konfettiTotal = 0;
+                    idea.konfettiSpent.forEach(el => {
+                        konfettiTotal = konfettiTotal + el.amount;
+                    });
+                    resolve(konfettiTotal);
+                }
+            }) 
+        })
+    })
+    .then(konfettiTotal => {
+        // console.log('konfettiTotal:', konfettiTotal);
+        callback(null, {konfettiIdea: konfettiTotal});
+    })
+    .catch(reason => {
+        console.log('rejected:', reason);
+        callback(reason, null);
+    });
 
 };
 
