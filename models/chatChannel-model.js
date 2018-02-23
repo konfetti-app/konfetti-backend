@@ -21,6 +21,10 @@ const ChatChannelSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Neighbourhood'  
     },
+    parentIdea: { // reference to parentIdea, if any
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Idea'  
+    },
     chatMessages: [{ // Array of messages (items in this channel)
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatMessage'  
@@ -136,6 +140,7 @@ ChatChannelSchema.statics.createChatChannel = function (data, user, callback) {
         parentNeighbourhood: data.parentNeighbourhood,
         context: data.context,
         description: data.description,
+        parentIdea: data.parentIdea,
         created : {
             date: now,
             byUser: user._id

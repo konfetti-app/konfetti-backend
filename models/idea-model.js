@@ -93,6 +93,7 @@ const IdeaSchema = new mongoose.Schema({
 
 IdeaSchema.statics.createIdea = function (data, user, callback) {
     const Idea = mongoose.model('Idea');
+    const ChatChannel = mongoose.model('ChatChannel');
     // console.log(JSON.stringify(data));
     let now = moment(new Date).unix();
     let newIdea= new Idea({
@@ -114,6 +115,7 @@ IdeaSchema.statics.createIdea = function (data, user, callback) {
         console.log('Error saving new idea: ' + err.message);
         callback(err, undefined);
         } else {
+            ChatChannel.createChatChannel({name: doc.title, parentNeighbourhood: doc.parentNeighbourhood, context: 'IdeaChat', description: doc.description, parentIdea: doc._id}, user, callback)
         callback(undefined, doc);
         }
     });
