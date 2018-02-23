@@ -260,19 +260,17 @@ IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
     const Wallet = mongoose.model('Wallet');
     // deduct from user's wallet
     return new Promise((resolve, reject) => {
-        Wallet.findOne({parentUser: user._id})
+        Wallet.findOne({parentUser: user._id, parentNeighbourhood: user.parentNeighbourhood})
         .then(wallet => {
-            if (wallet && wallet.amount >= amount) {
+            if (wallet && wallet.amount >= amount) { // TODO: Handle case wallet not found
                 wallet.amount = wallet.amount - amount;
-                resolve('ok');
+                resolve({konfettiIdea: -1, konfettiWallet: wallet ? wallet.amount : 0});
             } else {
                 // insufficient balance. one konfetti is free
-                // TODO: this is only free if user did not vote already.
                 Idea.findOne({_id: ideaId})
                 .then(idea => {
                     return new Promise((resolve, reject) => {
                         let alreadyVoted = false;
-
                         idea.konfettiSpent.forEach(el => {
                             if (el.byUser.equals(user._id)) alreadyVoted = true;
                         })
@@ -284,14 +282,14 @@ IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
                         reject('alreadyVoted');
                     } else {
                         amount = 1;
-                        resolve('ok, amount changed to 1');
+                        resolve({konfettiIdea: -1, konfettiWallet: 0});
                     }
                 })
             }
         })
     })
 
-    .then(() => {
+    .then((konfetti) => {
         // add to idea
         return new Promise((resolve, reject) => {
             Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{konfettiSpent: {byUser: user._id, amount: amount}}}, {upsert: true, new: true}, (err, idea) => {
@@ -302,7 +300,7 @@ IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
                     idea.konfettiSpent.forEach(el => {
                         konfettiTotal = konfettiTotal + el.amount;
                     });
-                    resolve(konfettiTotal);
+                    resolve({konfettiIdea: konfettiTotal, konfettiWallet: konfetti.konfettiWallet});
                 }
             }) 
         })

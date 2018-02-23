@@ -21,6 +21,10 @@ const WalletSchema = new mongoose.Schema({
     parentUser: { // reference to parentUser
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'  
+    },
+    parentNeighbourhood: { // reference to parentUser
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Neighbourhood'  
     }
 });
 
