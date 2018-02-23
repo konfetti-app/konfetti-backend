@@ -65,11 +65,11 @@ ChatChannelSchema.statics.getChatChannels = function (params, callback) {
     });
 };
 
-ChatChannelSchema.statics.getChatById = function (chatId, callback) {
+ChatChannelSchema.statics.getChatChannelById = function (chatChannelId, callback) {
     const ChatChannel = mongoose.model('ChatChannel');
-    ChatChannel.findOne({_id: chatId}).exec(function (err, res) {
+    ChatChannel.find({_id: chatChannelId}).exec(function (err, chatChannel) {
         if (err) console.log(err);
-        callback(err, res);
+        callback(err, chatChannel);
     });
 };
 

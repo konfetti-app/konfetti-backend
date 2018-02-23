@@ -199,6 +199,12 @@ POST /api/chats/
 |parentNeighbourhood|String neighbourhoodId|
 |context|String 'module_groupchat|
 
+getChatChannelById
+```
+GET /api/chats/:chatChannelId
+```
+(also retuns disabled channels)
+
 get all channels with respect to Neighbourhood and context
 ```
 GET /api/chats/:parentNeighbourhood/:context
