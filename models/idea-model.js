@@ -267,8 +267,26 @@ IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
                 resolve('ok');
             } else {
                 // insufficient balance. one konfetti is free
-                amount = 1;
-                resolve('ok, amount changed to 1');
+                // TODO: this is only free if user did not vote already.
+                Idea.findOne({_id: ideaId})
+                .then(idea => {
+                    return new Promise((resolve, reject) => {
+                        let alreadyVoted = false;
+
+                        idea.konfettiSpent.forEach(el => {
+                            if (el.byUser.equals(user._id)) alreadyVoted = true;
+                        })
+                        resolve(alreadyVoted);
+                    })
+                })
+                .then(alreadyVoted => {
+                    if (alreadyVoted) {
+                        reject('alreadyVoted');
+                    } else {
+                        amount = 1;
+                        resolve('ok, amount changed to 1');
+                    }
+                })
             }
         })
     })
