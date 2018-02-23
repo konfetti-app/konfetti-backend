@@ -42,9 +42,9 @@ router.get('/:parentNeighbourhood/:context', passport.authenticate('jwt', { sess
 /* GET chatChannel by id. */
 router.get('/:id', passport.authenticate('jwt', { session: false }), function(req, res, next) {
   // console.log(req.body);
-  ChatChannel.getChatChannelById(req.params.id, (err, chatChannel) => {
+  ChatChannel.getChatChannelById(req.params.id, (err, chatChannels) => {
     if (err) res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-    else res.status(200).json({code: 200, status: 'success', data: {chatChannel: chatChannel}});
+    else res.status(200).json({code: 200, status: 'success', data: {chatChannel: chatChannels[0]}});
   });
 });
 

@@ -67,9 +67,9 @@ ChatChannelSchema.statics.getChatChannels = function (params, callback) {
 
 ChatChannelSchema.statics.getChatChannelById = function (chatChannelId, callback) {
     const ChatChannel = mongoose.model('ChatChannel');
-    ChatChannel.find({_id: chatChannelId}).exec(function (err, chatChannel) {
+    ChatChannel.find({_id: chatChannelId}).exec(function (err, chatChannels) {
         if (err) console.log(err);
-        callback(err, chatChannel);
+        callback(err, chatChannels);
     });
 };
 
