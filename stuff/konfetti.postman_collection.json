@@ -1229,7 +1229,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"amount\": 2,\n\"recipients\": [\"59e0bb5f8fad942ea8b46704\"]\n}"
+							"raw": "{\n\"recipients\": [\"59e0bb5f8fad942ea8b46704\"]\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/ideas/5a8ff8cc808ae6773b8a0fbe/distribute",
@@ -1277,41 +1277,6 @@
 								"ideas",
 								"5a8c7eae25849f10f4d7bad0",
 								"status"
-							]
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "upvoteIdea",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\"amount\": 2\n}"
-						},
-						"url": {
-							"raw": "localhost:3000/api/ideas/5a8c27fe8fd58e77160ac8e2/vote",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"api",
-								"ideas",
-								"5a8c27fe8fd58e77160ac8e2",
-								"vote"
 							]
 						},
 						"description": ""
