@@ -111,7 +111,7 @@ IdeaSchema.statics.createIdea = function (data, user, callback) {
         }
     }).save((err, doc) => {
         if (err) {
-        console.log('Error saving new chat: ' + err.message);
+        console.log('Error saving new idea: ' + err.message);
         callback(err, undefined);
         } else {
         callback(undefined, doc);
@@ -254,6 +254,14 @@ IdeaSchema.statics.deleteIdea = function (ideaId, user, callback) {
         }
     });
 };
+function getTotalKonfetti (konfettiSpent) {
+    let konfettiTotal = 0;
+    konfettiSpent.forEach(el => {
+        konfettiTotal = konfettiTotal + el.amount;
+    });
+    console.log('konfettiTotal', konfettiTotal);
+    return konfettiTotal;
+}
 
 IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
     const Idea = mongoose.model('Idea');
@@ -264,6 +272,7 @@ IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
         .then(wallet => {
             if (wallet && wallet.amount >= amount) { // TODO: Handle case wallet not found
                 wallet.amount = wallet.amount - amount;
+                wallet.save();
                 resolve({konfettiIdea: -1, konfettiWallet: wallet ? wallet.amount : 0});
             } else {
                 // insufficient balance. one konfetti is free
@@ -296,11 +305,8 @@ IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
                 if (!idea) {
                     reject('idea not found');
                 } else {
-                    let konfettiTotal = 0;
-                    idea.konfettiSpent.forEach(el => {
-                        konfettiTotal = konfettiTotal + el.amount;
-                    });
-                    resolve({konfettiIdea: konfettiTotal, konfettiWallet: konfetti.konfettiWallet});
+                    let konfettiIdea = getTotalKonfetti(idea.konfettiSpent);
+                    resolve({konfettiIdea: konfettiIdea, konfettiWallet: konfetti.konfettiWallet});
                 }
             }) 
         })
@@ -313,6 +319,61 @@ IdeaSchema.statics.upvoteIdea = function (ideaId, amount, user, callback) {
         console.log('rejected:', reason);
         callback(reason, null);
     });
+
+};
+
+
+IdeaSchema.statics.distributeKonfettiForIdea = function (ideaId, data, user, callback) {
+    const Idea = mongoose.model('Idea');
+    const Wallet = mongoose.model('Wallet');
+
+    Idea.findOne({_id: ideaId})
+        .then(idea => {
+            return new Promise((resolve, reject) => {
+
+                if (!idea.created.byUser.equals(user._id) || !user.isAdmin) {
+                    reject('not allowed')
+                } else if (data.amount && data.amount > getTotalKonfetti(idea.konfettiSpent)){
+                    reject('not allowed to distribute more konfetti than spent on idea')
+                } else { // ok to distribute.
+                    // let numberOfRecipients = data.recipients.length; // <- temporaily disabled to get the economy running.
+                    data.recipients.forEach(recipient => {
+                        Wallet.findOne({parentUser: recipient, parentNeighbourhood: idea.parentNeighbourhood})
+                        .then(wallet => {
+                            if (!wallet) { // create a wallet.
+                                Wallet.createWalletWithBalance({parentUser: recipient, parentNeighbourhood: idea.parentNeighbourhood, amount: data.amount}, recipient, (err, doc) => console.log('created new wallet:', JSON.stringify(doc)));
+                            } else { // update existing wallet.
+
+                                wallet.amount = wallet.amount + data.amount;
+                                wallet.save()
+                            }
+                        })
+                        .catch(reason => {
+                            console.log('rejected: unable to distribute to ', recipient, JSON.stringify(reason));
+                        });
+                    })
+                    idea.konfettiSpent = []; // reset.
+                    idea.save((err, doc) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(doc.konfettiSpent); // TODO adapt.
+                        }
+                        
+                    });
+                }
+                
+            })
+        })
+        .then(konfettiTotal => {
+            console.log('konfettiTotal:', konfettiTotal);
+            callback(null, {konfettiIdea: konfettiTotal});
+        })
+        .catch(reason => {
+            console.log('rejected:', reason);
+            callback(reason, null);
+        });
+
 
 };
 

@@ -28,4 +28,25 @@ const WalletSchema = new mongoose.Schema({
     }
 });
 
+
+
+WalletSchema.statics.createWalletWithBalance = function (data, userId, callback) {
+    // const Idea = mongoose.model('Idea');
+    const Wallet = mongoose.model('Wallet');
+    // console.log(JSON.stringify(data));
+    // let now = moment(new Date).unix();
+    let newWallet= new Wallet({
+        title : data.title,
+        parentNeighbourhood: data.parentNeighbourhood,
+        parentUser: data.parentUser,
+        amount: data.amount
+    }).save((err, doc) => {
+        if (err) {
+        console.log('Error saving new wallet: ' + err.message);
+        callback(err, undefined);
+        } else {
+        callback(undefined, doc);
+        }
+    });
+};
 mongoose.model('Wallet', WalletSchema);

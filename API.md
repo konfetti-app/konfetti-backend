@@ -289,6 +289,15 @@ POST /api/ideas/:ideaId/vote
 |---|-----|
 |amount|Integer|
 
+distributeIdea
+```
+POST /api/ideas/:ideaId/distribute
+```
+|Key|Value|
+|---|-----|
+|amount|Integer (optional - distribute all konfettiSpent if empty)|
+|recipients|Array of UserIds|
+
 
 ### newsfeed
 
