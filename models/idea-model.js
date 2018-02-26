@@ -168,33 +168,33 @@ IdeaSchema.statics.updateIdea = function (ideaId, data, user, callback) {
 
 IdeaSchema.statics.updateIdeaStatus = function (ideaId, data, user, callback) {
     const Idea = mongoose.model('Idea');
-    console.log(JSON.stringify(data));
-    // let now = moment(new Date).unix();
-
-    return new Promise(async(resolve, reject) => {
-        //  function() {
-            if (String(data.isAttending) === 'true') {
-                await Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-                    console.log(`attendence of user ${user._id} updated for idea ${ideaId}- true`);
-                });
-            } else {
-                await Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-                    console.log(`attendence of user ${user._id} updated for idea ${ideaId} - false`);
-                });
-            }
-            if (String(data.isHelping) === 'true') {
-                await Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{helpers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-                    console.log(`help-status of user ${user._id} updated for idea ${ideaId} - true`);
-                });
-            } else {
-                await Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
-                    console.log(`help-status of user ${user._id} updated for idea ${ideaId} - false`);
-                });
-            }
-            let status = await {isAttending: data.isAttending, isHelping: data.isHelping};
-        // }
-        
-        resolve(status); // TODO: no error-handling here.
+    // console.log(JSON.stringify(data));
+    return new Promise((resolve, reject) => {
+        if (String(data.isAttending) === 'true' && String(data.isHelping) === 'true') {
+                Idea.findByIdAndUpdate({_id: ideaId}, {$addToSet:{guests: user._id, helpers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                console.log(`attendence of user ${user._id} updated for idea ${ideaId}- true`);
+                let status = {isAttending: data.isAttending, isHelping: data.isHelping};
+                resolve(status); // TODO: no error-handling here.
+            });
+        } else if (String(data.isAttending) === 'false' && String(data.isHelping) === 'true') {
+                Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id}, $addToSet:{helpers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                console.log(`attendence of user ${user._id} updated for idea ${ideaId} - false`);
+                let status = {isAttending: data.isAttending, isHelping: data.isHelping};
+                resolve(status); // TODO: no error-handling here.
+            });
+        } else if (String(data.isAttending) === 'true' && String(data.isHelping) === 'false') {
+                Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{helpers: user._id}, $addToSet:{guests: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                console.log(`attendence of user ${user._id} updated for idea ${ideaId} - false`);
+                let status = {isAttending: data.isAttending, isHelping: data.isHelping};
+                resolve(status); // TODO: no error-handling here.
+            });
+        } else {
+                Idea.findByIdAndUpdate({_id: ideaId}, {$pull:{guests: user._id, helpers: user._id}}, {upsert: true, new: true}, (err, subscriptions) => {
+                console.log(`attendence of user ${user._id} updated for idea ${ideaId}- true`);
+                let status = {isAttending: data.isAttending, isHelping: data.isHelping};
+                resolve(status); // TODO: no error-handling here.
+            });
+        }
     })
 
     .then(status => {
