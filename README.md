@@ -2,7 +2,7 @@
 
 This is the work-in-progress rewrite of the Konfetti App backend.
 Find the App (frontend) at [https://github.com/konfetti-app/konfetti-app](https://github.com/konfetti-app/konfetti-app)
-and the current (production) version at [https://github.com/rootzoll/konfetti-app](https://github.com/rootzoll/konfetti-app)
+and the earlier prototype version at [https://github.com/rootzoll/konfetti-app](https://github.com/rootzoll/konfetti-app)
 
 ## Usage (Docker)
 
@@ -29,6 +29,7 @@ $ npm install
 $ docker-compose up -d mongo
 $ node bin/www
 ```
+Please note that nodejs >=8 is required to run this code.
 
 ## Features
 
