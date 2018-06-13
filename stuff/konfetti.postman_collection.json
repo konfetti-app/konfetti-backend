@@ -45,6 +45,61 @@
 								"value": "Basic cGF0cmljazp0ZXN0"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"password\":\"test2\", \"email\":\"patrick-r@isnogood.de\"}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/authenticate/email",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"authenticate",
+								"email"
+							]
+						},
+						"description": "authenticate (basic auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "authenticate email/pw",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "patrick",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "test",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic cGF0cmljazp0ZXN0"
+							}
+						],
 						"body": {},
 						"url": {
 							"raw": "localhost:3000/api/authenticate",
