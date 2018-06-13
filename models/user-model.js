@@ -107,12 +107,17 @@ UserSchema.statics.triggerPasswordReset = function (email, data, callback) {
 
   User.findOne({email: email}).exec((err, user) => {
     if (err) console.log(err);
-    user.passwordReset = randomValueBase64(36);
-    user.save((err, savedUser) => {
-      if (err) console.log(err);
-      sendPasswordEmail(savedUser.email, savedUser.passwordReset);
-      callback(err, null); // dont return a user here (unauthenticated route).
-    });
+    if (user) {
+      user.passwordReset = randomValueBase64(36);
+      user.save((err, savedUser) => {
+        if (err) console.log(err);
+        sendPasswordEmail(savedUser.email, savedUser.passwordReset);
+        callback(err, null); // dont return a user here (unauthenticated route).
+      });
+    } else {
+      console.log("password reset requested for unknown user: ", email);
+      callback(err, null);
+    }
   });
 };
 
@@ -220,5 +225,13 @@ UserSchema.statics.getAllUsers = function (callback) {
     callback(err, users);
   });
 };
+
+UserSchema.statics.findByEmailPassword = function(email, password, callback) {
+  const User = mongoose.model('User');
+  // TODO: implement.
+  User.findOne({email: email})
+  .then(user => {callback(null, user);})
+  .catch(reason => {callback(reason, null);})
+}
 
 mongoose.model('User', UserSchema);
