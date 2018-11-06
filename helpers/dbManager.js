@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const mongoURL = `mongodb://${process.env.RUNS_IN_DOCKER ? 'mongo' : 'localhost'}/konfetti`;
-mongoose.connect(mongoURL, {useMongoClient: true});
+mongoose.connect(mongoURL, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 const db = mongoose.connection;
