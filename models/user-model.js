@@ -115,7 +115,7 @@ UserSchema.statics.triggerPasswordReset = function (email, data, callback) {
         callback(err, null); // dont return a user here (unauthenticated route).
       });
     } else {
-      console.log("password reset requested for unknown user: ", email);
+      console.log("failed to trigger password-reset; user not found by email: ", email);
       callback(err, null);
     }
   });
