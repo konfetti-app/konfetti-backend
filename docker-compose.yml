@@ -5,10 +5,12 @@ services:
       - NODE_ENV=production
       - RUNS_IN_DOCKER=true
       - MAILGUN_API_KEY=set-api-key-in-docker-compose.override.yml
+      - MAILGUN_DOMAIN=set-in-docker-compose.override.yml
+      - MAILGUN_FROM=set-in-docker-compose.override.yml
       - BASEURL=http://localhost:3000
-      - ONESIGNAL_URL=set-api-key-in-docker-compose.override.yml
+      - ONESIGNAL_URL=set-in-docker-compose.override.yml
       - ONESIGNAL_KEY=set-api-key-in-docker-compose.override.yml
-      - ONESIGNAL_APPID=set-api-key-in-docker-compose.override.yml
+      - ONESIGNAL_APPID=set-in-docker-compose.override.yml
     build: .
     ports:
       - "3000:3000"

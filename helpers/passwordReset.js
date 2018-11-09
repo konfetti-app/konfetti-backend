@@ -5,8 +5,8 @@ const mg = mailgun.client({username: 'api', key: process.env.MAILGUN_API_KEY || 
 
 function sendPasswordEmail (email, magicKey) {
     console.log(`sending password reset link to ${email}`);
-    mg.messages.create('sandbox-123.mailgun.org', {
-        from: "Excited User <mailgun@sandbox-123.mailgun.org>",
+    mg.messages.create(process.env.MAILGUN_DOMAIN, {
+        from: process.env.MAILGUN_FROM,
         to: [email],
         subject: "Password reset requested",
         text: "Testing some Mailgun awesomness!",
@@ -18,7 +18,7 @@ function sendPasswordEmail (email, magicKey) {
         <p>Cheers!<br/>Your Konfetti Team</p>`
       })
       .then(msg => console.log(msg)) // logs response data
-      .catch(err => console.log(err)); // logs any error
+      .catch(err => console.log('failed while talking to mailgun: ' + JSON.stringify(err))); // logs any error
 }
 
 exports.sendPasswordEmail = sendPasswordEmail;

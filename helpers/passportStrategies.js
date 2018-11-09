@@ -26,7 +26,7 @@ const comparePassword = function (clearPassword, user) {
 // set lastSeen property of user upon successful auth 
 function updateLastSeen (username) {
   const User = mongoose.model('User');
-  User.update({username: username},{$set: {lastSeen: moment(new Date).unix()}}, (err, data) => {
+  User.updateOne({username: username},{$set: {lastSeen: moment(new Date).unix()}}, (err, data) => {
     if (err) console.log(err);
     console.log(`lastSeen timestamp updated for user ${username}`);
   });

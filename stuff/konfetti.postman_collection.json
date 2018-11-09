@@ -1,14 +1,12 @@
 {
 	"info": {
-		"name": "konfetti",
 		"_postman_id": "446f8274-ba54-5cce-b41e-02b0769ec6d8",
-		"description": "",
+		"name": "konfetti",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "api",
-			"description": "",
 			"item": [
 				{
 					"name": "authenticate",
@@ -43,18 +41,26 @@
 							{
 								"key": "Authorization",
 								"value": "Basic cGF0cmljazp0ZXN0"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": "{\"password\":\"test2\", \"email\":\"patrick@isnogood.de\"}"
+						},
 						"url": {
-							"raw": "localhost:3000/api/authenticate",
+							"raw": "localhost:3000/api/authenticate/email",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
 								"api",
-								"authenticate"
+								"authenticate",
+								"email"
 							]
 						},
 						"description": "authenticate (basic auth)"
@@ -71,7 +77,10 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/api/users",
 							"host": [
@@ -97,7 +106,10 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/api/neighbourhoods/",
 							"host": [
@@ -124,7 +136,10 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/api/users/59e0bb5f8fad942ea8b46704",
 							"host": [
@@ -151,7 +166,10 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/api/users/patrick-konfetti-test-user@isnogood.de/resetPassword",
 							"host": [
@@ -252,21 +270,18 @@
 							"formdata": [
 								{
 									"key": "avatar",
-									"value": "",
-									"description": "",
-									"type": "file"
+									"type": "file",
+									"src": "Bildschirmfoto 2017-10-18 um 17.28.02.png"
 								},
 								{
 									"key": "parentThread",
 									"value": "59fc912c052a83285157a264",
-									"description": "",
 									"type": "text",
 									"disabled": true
 								},
 								{
 									"key": "parentNeighbourhood",
 									"value": "59e0bb768fad942ea8b46705",
-									"description": "",
 									"type": "text",
 									"disabled": true
 								}
@@ -303,28 +318,24 @@
 							"formdata": [
 								{
 									"key": "image",
-									"value": "",
-									"description": "",
-									"type": "file"
+									"type": "file",
+									"src": "Katze.jpg"
 								},
 								{
 									"key": "parentThread",
 									"value": "59fc912c052a83285157a264",
-									"description": "",
 									"type": "text",
 									"disabled": true
 								},
 								{
 									"key": "parentNeighbourhood",
 									"value": "59e0bb768fad942ea8b46705",
-									"description": "",
 									"type": "text",
 									"disabled": true
 								},
 								{
 									"key": "parentPost",
 									"value": "5a16e8f84974cd2964cd4944",
-									"description": "",
 									"type": "text"
 								}
 							]
@@ -567,7 +578,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"title\": \"hallo\",\n\"text\" : \"text body\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "localhost:3000/api/posts/59f9c2f6547e0d9edf252745",
@@ -601,7 +612,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"title\": \"hallo\",\n\"text\" : \"text body\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "localhost:3000/api/threads/59fc6c4fa27de71a10aef9d7",
@@ -773,7 +784,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"name\": \"hallo-chat\",\n\"description\": \"my first chat\",\n\"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n\"context\": \"module/groupchat\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "localhost:3000/api/chats/5a905c6e9e5cd5c0ca7b804f",
@@ -807,7 +818,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"name\": \"hallo-chat\",\n\"description\": \"my first chat\",\n\"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n\"context\": \"module/groupchat\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "localhost:3000/api/chats/5a905c6e9e5cd5c0ca7b804f",
@@ -841,7 +852,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"name\": \"hallo-chat\",\n\"description\": \"my first chat\",\n\"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n\"context\": \"module/groupchat\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "localhost:3000/api/newsfeed/",
@@ -875,7 +886,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"name\": \"hallo-chat\",\n\"description\": \"my first chat\",\n\"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n\"context\": \"module/groupchat\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "localhost:3000/api/newsfeed/neighbourhood/59d4f88177416a5db030ddc8",
@@ -904,7 +915,10 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/api/chats/channel/5a5d10643c53d6eb482e2661/since/0",
 							"host": [
@@ -1014,7 +1028,7 @@
 					"response": []
 				},
 				{
-					"name": "createIdea",
+					"name": "createChatChannel copy",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1029,7 +1043,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"address\": \"Beipsielplatz 2\",\n  \"date\": 1521559800000,\n  \"description\": \"Am Spielplatz am Beispielplatz wollen wir ein oder mehrere Vogelhäuser bauen. Wer ist dabei?\",\n  \"helpDescription\": \"Jeder der einen Hammer Schwingen will. Wer eine kleine Motorstichsäge hat - das wäre super.\",\n  \"title\": \"Vogelhaus bauen\",\n  \"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n  \"wantsGuest\": false,\n  \"wantsHelper\": true,\n  \"geoData\": {\n        \"longitude\": 0.00,\n        \"latitude\": 0.00\n\t}\n}"
+							"raw": "{\n  \"address\": \"Beipsielplatz 2\",\n  \"date\": 1521559800000,\n  \"description\": \"Am Spielplatz am Beispielplatz wollen wir ein oder mehrere Vogelhäuser bauen. Wer ist dabei?\",\n  \"helpDescription\": \"Jeder der einen Hammer Schwingen will. Wer eine kleine Motorstichsäge hat - das wäre super.\",\n  \"title\": \"Vogelhaus bauen\",\n  \"parentNeighbourhood\": \"59e0bb768fad942ea8b46705\",\n  \"wantsGuest\": false,\n  \"wantsHelper\": true,\n  \"geoData\": {\n        \"longitude\": 0.00,\n        \"latitude\": 0.00\n  }\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/ideas/",
@@ -1048,7 +1062,7 @@
 					"response": []
 				},
 				{
-					"name": "updateIdea",
+					"name": "createIdea copy",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1063,7 +1077,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"address\": \"Beipsielplatz 3\",\n  \"date\": 1521559800000,\n  \"description\": \"Am Spielplatz am Beispielplatz wollen wir ein oder mehrere Vogelhäuser bauen. Wer ist dabei?\",\n  \"helpDescription\": \"Jeder der einen Hammer Schwingen will. Wer eine kleine Motorstichsäge hat - das wäre super.\",\n  \"title\": \"Vogelhaus bauen, alter...\",\n  \"wantsGuest\": true,\n  \"wantsHelper\": true,\n  \"geoData\": {\n        \"longitude\": 0.00,\n        \"latitude\": 0.00\n\t}\n}"
+							"raw": "{\n  \"address\": \"Beipsielplatz 3\",\n  \"date\": 1521559800000,\n  \"description\": \"Am Spielplatz am Beispielplatz wollen wir ein oder mehrere Vogelhäuser bauen. Wer ist dabei?\",\n  \"helpDescription\": \"Jeder der einen Hammer Schwingen will. Wer eine kleine Motorstichsäge hat - das wäre super.\",\n  \"title\": \"Vogelhaus bauen, alter...\",\n  \"wantsGuest\": true,\n  \"wantsHelper\": true,\n  \"geoData\": {\n        \"longitude\": 0.00,\n        \"latitude\": 0.00\n  }\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/ideas/5a8c27fe8fd58e77160ac8e2",
@@ -1116,7 +1130,7 @@
 					"response": []
 				},
 				{
-					"name": "updateIdeaStatus",
+					"name": "updateIdea copy",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1160,7 +1174,10 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1ODI4MTR9.hlQR8UFr7R3-l_Pirk4-ve1cNHjs61f5H1zLJoA9wdo"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/api/ideas/neighbourhood/59e0bb768fad942ea8b46705",
 							"host": [
@@ -1278,8 +1295,7 @@
 								"5a8c7eae25849f10f4d7bad0",
 								"status"
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				}
@@ -1287,7 +1303,6 @@
 		},
 		{
 			"name": "users",
-			"description": "",
 			"item": [
 				{
 					"name": "get users",
@@ -1324,7 +1339,10 @@
 								"value": "Basic cGF0cmljazp0ZXN0"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/users/",
 							"host": [
@@ -1430,7 +1448,10 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE1MDU0OTA3MzB9.eQrTrup2pj4xN2oC7yFA9ePVYXHcQPIchQ9wRH2omiI"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/users/listJWT",
 							"host": [
@@ -1456,7 +1477,10 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdHJpY2siLCJpYXQiOjE1MDU1NTg0MjQsImV4cCI6MTUwNTU1ODYwNH0.Nj50IXxBb50wqt-5g-skSS7LdtO39IHmK3WqcQAcQHw"
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "localhost:3000/users/listJWT",
 							"host": [

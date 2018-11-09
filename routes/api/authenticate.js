@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const mongoose = require('mongoose');
 const jwt = require('../../helpers/jwt');
 const formatError = require('../../helpers/errors.js').formatError;
 
@@ -14,15 +15,15 @@ const formatError = require('../../helpers/errors.js').formatError;
 */
 
 router.post('/', passport.authenticate('basic', { session: false }), function(req, res, next) {
-    // console.log(req.body);
-    jwt.issueToken(req.user)
-    .then(token => {
-      res.status(200).json({code: 200, status: 'success', data: {token: token}});
-    })
-    .catch(err => {
-      console.log(`auth error: ${req.body.username}`);
-      res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-    });
+  // console.log(req.body);
+  jwt.issueToken(req.user)
+  .then(token => {
+    res.status(200).json({code: 200, status: 'success', data: {token: token}});
+  })
+  .catch(err => {
+    console.log(`auth error: ${req.body.username}`);
+    res.status(500).json({code: 500, status: 'error', errors: [{err}]});
   });
+});
 
 module.exports = router;

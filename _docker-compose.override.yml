@@ -5,9 +5,19 @@ services:
       - NODE_ENV=development
       - RUNS_IN_DOCKER=true
       - JWT_SECRET=shhhhh
+      - MAILGUN_API_KEY=
+      - MAILGUN_DOMAIN=
+      - MAILGUN_FROM=Konfettiapp <noreply@domain.com>
+      - BASEURL=http://localhost:3000
+      - ONESIGNAL_URL=http://
+      - ONESIGNAL_APPID=foo
+      - ONESIGNAL_KEY=bar
     build: .
     ports:
       - "3000:3000"
+    volumes:
+      - .:/home/app
+    command: "./node_modules/nodemon/bin/nodemon.js bin/www"
   mongo:
     logging:
       driver: "none"
