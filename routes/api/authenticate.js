@@ -30,18 +30,17 @@ router.post('/email', function(req, res, next) {
   // console.log(req.body);
   const User = mongoose.model('User');
   User.findByEmailPassword(req.body.email, req.body.password, (err, user) => {
-
-    // TODO: implement.
-
-    jwt.issueToken(user)
-  .then(token => {
-    res.status(200).json({code: 200, status: 'success', data: {token: token}});
-  })
-  .catch(err => {
-    console.log(`auth error via email/pw: ${JSON.stringify(err)}`);
-    res.status(500).json({code: 500, status: 'error', errors: [{err}]});
-  });
-
+    if (!user) {res.status(500).json({ code: 500, status: 'error', errors: [{ error: 'user not found.' }] });
+    } else {
+      jwt.issueToken(user)
+      .then(token => {
+        res.status(200).json({code: 200, status: 'success', data: {token: token}});
+      })
+      .catch(err => {
+        console.log(`auth error via email/pw: ${JSON.stringify(err)}`);
+        res.status(500).json({code: 500, status: 'error', errors: [{err}]});
+      });
+    }
   });
   
 });
