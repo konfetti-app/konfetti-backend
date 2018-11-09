@@ -16,7 +16,7 @@ If that fails because of dependencies not being available, do a:
 $ docker-compose down && docker-compose build --no-cache && docker-compose up
 ```
 
-To run the server outside of a docker-container (for connecting a debugger), you still have to run a mongodb and expose the database-port to :27017 (e.g. via docker-compose override) and have nodejs (>v8.5) installed, then do: 
+To run the server outside of a docker-container (for connecting a debugger), you still have to run a mongodb and expose the database-port to :27017 (e.g. via docker-compose override) and have nodejs (>v10) installed, then do: 
 ```
 $ docker-compose up -d mongo && node --inspect bin/www
 ```
@@ -29,7 +29,7 @@ $ npm install
 $ docker-compose up -d mongo
 $ node bin/www
 ```
-Please note that nodejs >=8 is required to run this code.
+Please note that nodejs >=10 is required to run this code.
 
 ## Features
 
