@@ -9,9 +9,9 @@ services:
       - MAILGUN_DOMAIN=
       - MAILGUN_FROM=Konfettiapp <noreply@domain.com>
       - BASEURL=http://localhost:3000
-      - ONESIGNAL_URL=http://
-      - ONESIGNAL_APPID=foo
-      - ONESIGNAL_KEY=bar
+      - TWILIO_URL=http://
+      - TWILIO_SID=foo
+      - TWILIO_KEY=bar
     build: .
     ports:
       - "3000:3000"

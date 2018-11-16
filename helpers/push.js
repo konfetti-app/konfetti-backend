@@ -5,7 +5,7 @@ const Post = mongoose.model('Post');
 const request = require('request');
 
 // basic account setup
-// set process.env.ONESIGNAL_URL, process.env.ONESIGNAL_APPID and process.env.ONESIGNAL_KEY in docker environment
+// set process.env.TWILIO_URL, process.env.TWILIO_APPID and process.env.TWILIO_KEY in docker environment
 
 function createChatPushMessage(channel) {
     return new Promise((resolve, reject) => {
@@ -77,7 +77,7 @@ function createChatPushMessage(channel) {
     .catch((reason) => {console.log(reason);});
 } 
 
-function createNotification(recipients, message, meta) {
+function createNotification(recipients, message, meta) { // indingDEPRECATED. use twilio create b
     // returns notificationId https://documentation.onesignal.com/reference#create-notification
     return new Promise((resolve, reject) => {
         if (recipients.length > 0) {
@@ -100,7 +100,7 @@ function createNotification(recipients, message, meta) {
         }
     })
     .then((data) => {
-        console.log(`dispatching to oneSignal: ${JSON.stringify(data)}`);
+        console.log(`dispatching to twilio: ${JSON.stringify(data)}`);
         sendRequest(data).then(res => {
             console.log(`notification sent: ${JSON.stringify(res)}`);
         });
@@ -120,11 +120,11 @@ function sendRequest(data) { // data is expected as {body: JSON payload, metaDat
         }
 
         let options = {
-            url: `${process.env.ONESIGNAL_URL}${data.metaData.uri}`,
+            url: `${process.env.TWILIO_URL}${data.metaData.uri}`,
             method: data.metaData.reqType,
             json: data.body,
             headers: {
-                'Authorization': 'Basic ' + process.env.ONESIGNAL_KEY,
+                'Authorization': `${process.env.TWILIO_SID}:${process.env.TWILIO_KEY}`,
                 'Content-Type': 'application/json; charset=utf-8'
             }
         };
@@ -133,12 +133,12 @@ function sendRequest(data) { // data is expected as {body: JSON payload, metaDat
             if (err || res.statusCode > 201) {
                 console.log(`${data.metaData.reqType} ${data.metaData.uri} failed with error: ${err}, code: ${res ? JSON.stringify(res.statusCode) + ' res.body: ' + JSON.stringify(res.body) : 'no statusCode'} type: ${process.env.HTTP_CONNECTOR_TYPE} req.body: ${JSON.stringify(data.body)}`);
             } else {
-                console.log(`onesignal:`, `${data.metaData.reqType} ${data.metaData.uri} :: ExternalID: ${data.metaData.ExternalID} result: ${res.statusCode}`);
+                console.log(`twilio:`, `${data.metaData.reqType} ${data.metaData.uri} :: ExternalID: ${data.metaData.ExternalID} result: ${res.statusCode}`);
                 resolve(res.statusCode);
             }
         });
     })
-        .catch(reason => console.log('onsignal call failed due to rejected promise:', reason));
+        .catch(reason => console.log('twilio call failed due to rejected promise:', reason));
 }
 
 exports.createChatPushMessage = createChatPushMessage;
