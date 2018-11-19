@@ -104,21 +104,13 @@ UserSchema.statics.triggerPasswordReset = function (email, data, callback) {
   const User = mongoose.model('User');
 
   const sendPasswordEmail = require('../helpers/passwordReset').sendPasswordEmail;
+  let passwordReset = randomValueBase64(36)
+  User.findOneAndUpdate({email: email}, {passwordReset : passwordReset}, {returnNewDocument: true})
+  .then(user => {
+    sendPasswordEmail(user.email, user.passwordReset);
+    callback(null, null); // dont return a user here (unauthenticated route).
+  })
 
-  User.findOne({email: email}).exec((err, user) => {
-    if (err) console.log(err);
-    if (user) {
-      user.passwordReset = randomValueBase64(36);
-      user.save((err, savedUser) => {
-        if (err) console.log(err);
-        sendPasswordEmail(savedUser.email, savedUser.passwordReset);
-        callback(err, null); // dont return a user here (unauthenticated route).
-      });
-    } else {
-      console.log("failed to trigger password-reset; user not found by email: ", email);
-      callback(err, null);
-    }
-  });
 };
 
 UserSchema.statics.setPassword = function (magicKey, data, callback) {
