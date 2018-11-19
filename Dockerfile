@@ -7,7 +7,8 @@ RUN useradd --user-group --create-home --shell /bin/false app
 ENV HOME=/home/app
 
 #Change to the new user
-COPY . /home/app
+# COPY . /home/app
+ADD package.json $HOME/
 
 USER app
 WORKDIR $HOME

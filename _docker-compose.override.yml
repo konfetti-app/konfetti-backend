@@ -8,15 +8,17 @@ services:
       - MAILGUN_API_KEY=
       - MAILGUN_DOMAIN=
       - MAILGUN_FROM=Konfettiapp <noreply@domain.com>
-      - BASEURL=http://localhost:3000
+      - BASEURL=http://localhost
       - TWILIO_URL=http://
       - TWILIO_SID=foo
       - TWILIO_KEY=bar
+      - TWILIO_NOTIFICATION_SERVICE_SID=foobar
     build: .
     ports:
       - "3000:3000"
     volumes:
       - .:/home/app
+      - /home/app/uploads
     command: "./node_modules/nodemon/bin/nodemon.js bin/www"
   mongo:
     logging:
