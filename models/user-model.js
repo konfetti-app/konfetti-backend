@@ -130,6 +130,29 @@ UserSchema.statics.setPassword = function (magicKey, data, callback) {
   });
 };
 
+UserSchema.statics.setPassword = function (magicKey, data, callback) {
+  const User = mongoose.model('User');
+  User.findOneAndUpdate({passwordReset: magicKey}, {passwordReset : undefined, password : genHashedPassword(data.password)}, {returnNewDocument: true})
+  .then(user => {
+    console.log(`111: ${JSON.stringify(user)}`)
+    callback(null, null); // dont return a user here (unauthenticated route).
+  })
+  // .exec((err, user) => {
+  //   if (err) console.log(err);
+  //   if (user) {
+  //     user.passwordReset = undefined;
+  //     user.password = genHashedPassword(data.password);
+  //     user.save((err, savedUser) => {
+  //       if (err) console.log(err);
+  //       callback(err, null); // dont return a user here (unauthenticated route).
+  //     });
+  //   } else {
+  //     callback('magicKey not found', null);
+  //   }
+  // });
+};
+
+
 function genHashedPassword (clearPassword) {
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(clearPassword, salt);
