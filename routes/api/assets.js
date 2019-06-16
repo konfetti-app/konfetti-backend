@@ -39,7 +39,7 @@ const upload = multer({ storage: storage });
 
 function isImage (file) {
   // console.log(JSON.stringify(file));
-  let ext = path.extname(file.originalname);
+  let ext = path.extname(file.originalname).toLowerCase();
   if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') { // accept only images
     fs.unlink(`${UPLOAD_PATH}/temp/${file.filename}`, (err) => {
       if (err) throw err;
