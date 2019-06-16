@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 
 const mubsub = require('mubsub');
-const pushHelper = require('../helpers/push.js');
+// const pushHelper = require('../helpers/push.js');
 const mubsubClient = mubsub(`mongodb://${process.env.RUNS_IN_DOCKER ? 'mongo' : 'localhost'}/konfetti-mubsub`);
 
 const ChatMessageSchema = new mongoose.Schema({
@@ -24,11 +24,11 @@ const ChatMessageSchema = new mongoose.Schema({
     },
     // assets: [{ // Array of assets (items linked to this chatMessage)
     //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Asset'  
+    //     ref: 'Asset'
     // }],
     parentUser: { // reference to parentUser
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'  
+        ref: 'User'
     },
     // disabled: {
     //     type: Boolean,
@@ -72,13 +72,13 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
     const ChatMessage = mongoose.model('ChatMessage');
     const ChatChannel = mongoose.model('ChatChannel');
 //     const Thread = mongoose.model('Thread');
-   
+
     let now = moment(new Date).unix();
     let newChatMessage = new ChatMessage({ // TODO: add user-data: nickname, avatar
     text : data,
     parentChannel : channel,
     parentUser: userId,
-    date : now 
+    date : now
     }).save((err, doc) => {
     if (err) {
         console.log('Error saving new chat: ' + err.message);
@@ -93,7 +93,7 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
                 }
             } else {
                 console.log(`added chatMessages ${doc._id} to Channel ${channel ? channel._id : undefined}`);
-                pushHelper.createChatPushMessage(doc.parentChannel);
+                // pushHelper.createChatPushMessage(doc.parentChannel);
                 if(callback && typeof callback === "function") {
                     callback(err, doc);
                 }
@@ -102,6 +102,6 @@ ChatMessageSchema.statics.createChatMessage = function (data, channel, userId, c
         }
     });
   };
-  
+
 
 mongoose.model('ChatMessage', ChatMessageSchema);
