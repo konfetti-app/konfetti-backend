@@ -21,7 +21,7 @@ router.post('/', passport.authenticate('basic', { session: false }), function(re
     res.status(200).json({code: 200, status: 'success', data: {token: token, username: user.username}});
   })
   .catch(err => {
-    console.log(`auth error: ${req.body.username}`);
+    console.log(`auth error: ${err}`);
     res.status(500).json({code: 500, status: 'error', errors: [{err}]});
   });
 });
