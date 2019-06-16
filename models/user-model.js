@@ -230,7 +230,12 @@ UserSchema.statics.findByEmailPassword = function(email, password, callback) {
   const User = mongoose.model('User');
   // TODO: implement.
   User.findOne({email: email})
-  .then(user => {callback(null, user);})
+  .then(user => {
+    bcrypt.compare(password, user.password).then(res => {
+      if (res) callback(null, user)
+      else callback('wrong password', null)
+    })
+  })
   .catch(reason => {callback(reason, null);})
 }
 
