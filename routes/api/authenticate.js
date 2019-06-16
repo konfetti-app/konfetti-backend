@@ -18,7 +18,7 @@ router.post('/', passport.authenticate('basic', { session: false }), function(re
   // console.log(req.body);
   jwt.issueToken(req.user)
   .then(token => {
-    res.status(200).json({code: 200, status: 'success', data: {token: token}, {username: user.username}});
+    res.status(200).json({code: 200, status: 'success', data: {token: token, username: user.username}});
   })
   .catch(err => {
     console.log(`auth error: ${req.body.username}`);
@@ -34,7 +34,7 @@ router.post('/email', function(req, res, next) {
     } else {
       jwt.issueToken(user)
       .then(token => {
-        res.status(200).json({code: 200, status: 'success', data: {token: token}, {username: user.username}});
+        res.status(200).json({code: 200, status: 'success', data: {token: token, username: user.username}});
       })
       .catch(err => {
         console.log(`auth error via email/pw: ${JSON.stringify(err)}`);
@@ -42,7 +42,7 @@ router.post('/email', function(req, res, next) {
       });
     }
   });
-  
+
 });
 
 module.exports = router;
