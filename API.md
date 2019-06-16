@@ -45,6 +45,14 @@ Key: Authorization, Value: Bearer <Token>
 * Examples are provided in /stuff/ as a Postman-collection containing example requests for adding the first user (not documented here) and for acquireing tokens and sample requests.
 * For development, there is an JWT in /stuff/ which does not expire.
 
+* To receive a new JWT using email/password (once set inside the app): 
+```
+/api/authenticate/email
+```
+|Key|Value|
+|---|-----|
+|email|String|
+|password|String|
 ### Users
 
 update a single user by ID
