@@ -18,7 +18,7 @@ router.post('/', passport.authenticate('basic', { session: false }), function(re
   // console.log(req.body);
   jwt.issueToken(req.user)
   .then(token => {
-    res.status(200).json({code: 200, status: 'success', data: {token: token, username: user.username}});
+    res.status(200).json({code: 200, status: 'success', data: {token: token}});
   })
   .catch(err => {
     console.log(`auth error: ${err}`);
